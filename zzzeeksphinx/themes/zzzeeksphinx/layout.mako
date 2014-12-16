@@ -171,21 +171,17 @@ withsidebar = bool(toc) and current_page_name != 'index'
 
         <div id="docs-sidebar">
 
-        <h3><a href="${parents[-1]['link'] if parents else '#'}">\
+        <h3><a href="${parents[-1]['link'] if parents else pathto('index') | h}">\
             <%block name="show_title">
                 % if parents:
                     ${parents[-1]['title']}
                 % else:
-                    ${title}
+                    ${docstitle | h}
                 % endif
             </%block>
         </a></h3>
 
-        % if parents:
-            ${parent_toc(current_page_name, title)}
-        % else:
-            ${toc}
-        % endif
+        ${parent_toc(current_page_name, title)}
 
         % if rtd:
         <h4>Project Versions</h4>

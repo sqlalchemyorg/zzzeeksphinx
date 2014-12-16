@@ -38,6 +38,11 @@ class TOCMixin(object):
 
                 name = None
                 if refuri is not None:
+                    # TODO: need to do better than this
+                    # as if there is RST in the link, there's more nodes
+                    # than this.  need to look at other sphinx code
+                    # to remember how to roll up all the markup into HTML
+                    # here.
                     name = elem.children[0].rawsource
                     remainders = elem.children[1:]
                     # a little bit of extra filtering of when/where
