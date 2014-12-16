@@ -1,0 +1,6 @@
+recursive-include zzzeeksphinx *.py *.scss *.js *.conf *.mako
+
+include README* LICENSE
+
+
+
