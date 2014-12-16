@@ -5,7 +5,6 @@
 
     default_css_files = [
         '_static/pygments.css',
-        '_static/docs.css',
     ]
 %>
 
