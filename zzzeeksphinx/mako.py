@@ -36,7 +36,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
 
         if rtd and builder.config['site_base']:
             import urllib2
-            if builder.config['site_adapter_file']:
+            if builder.config['site_adapter_template']:
                 # remote site layout / startup files
                 template_name = builder.config['site_adapter_template']
 
@@ -47,7 +47,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
             py_name = builder.config['site_adapter_py']
             if py_name:
                 setup_ctx = urllib2.urlopen(
-                    builder.config['site_base'] + "/", py_name).read()
+                    builder.config['site_base'] + "/" + py_name).read()
                 lcls = {}
                 exec(setup_ctx, lcls)
                 self.setup_ctx = lcls['setup_context']
