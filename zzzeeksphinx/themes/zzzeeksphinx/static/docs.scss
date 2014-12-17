@@ -61,7 +61,8 @@ h3:hover > a.headerlink,
 h4:hover > a.headerlink,
 h5:hover > a.headerlink,
 h6:hover > a.headerlink,
-dt:hover > a.headerlink {
+dt:hover > a.headerlink,
+li:hover > a.headerlink {
     visibility: visible;
 }
 
@@ -112,20 +113,6 @@ a.headerlink:hover {
   padding:10px;
 }
 
-#docs-sidebar-popout {
-  font-size:.75em;
-}
-
-#docs-sidebar-popout p,
-#docs-sidebar-popout form {
-  margin:5px 0 5px 0px;
-}
-
-#docs-sidebar-popout h3 {
-  margin:0 0 10px 0;
-}
-
-
 #docs-version-header {
   position: absolute;
   right: 8px;
@@ -162,17 +149,15 @@ a.headerlink:hover {
   position: absolute;
   right: 20px;
   bottom: 14px;
-}
-
-#docs-top-page-control ul {
-  padding:0;
-  margin:0;
-}
-
-#docs-top-page-control li {
-    font-size:.9em;
-    list-style-type:none;
-    padding:1px 8px;
+  ul {
+    padding:0;
+    margin:0;
+  }
+  li {
+      font-size:.9em;
+      list-style-type:none;
+      padding:1px 8px;
+  }
 }
 
 
@@ -256,7 +241,7 @@ a.headerlink:hover {
 }
 
 #docs-sidebar {
-  top: 132px;
+  top: 118px;
   bottom: 0;
   min-height: 0;
   overflow-y: auto;
@@ -280,6 +265,37 @@ a.headerlink:hover {
   }
   .one-level-ancestor {
   }
+
+  h3, h4 {
+    background-color: $sidebar-header-background-color;
+    color: $sidebar-header-color;
+    font-family: $primary-font-family;
+    font-size: 1.1em;
+    font-weight: normal;
+    margin: 10px 0 0 -15px;
+    padding: 5px 10px 5px 15px;
+    text-shadow: 1px 1px 0 white;
+
+    a {
+      color: $sidebar-header-color;
+    }
+  }
+
+  h3:first-child {
+    margin-top: 0px;
+  }
+
+  ul {
+    margin: 10px 10px 10px 0px;
+    padding: 0;
+    list-style: none outside none;
+    ul {
+        margin-bottom: 0;
+        margin-top: 0;
+        list-style: square outside none;
+        margin-left: 20px;
+    }
+  }
 }
 
 #docs-sidebar-popout {
@@ -289,6 +305,17 @@ a.headerlink:hover {
   padding-left:10px;
   padding-top:10px;
   position: relative;
+
+  font-size:.75em;
+
+  p, form {
+    margin:5px 0 5px 0px;
+  }
+
+  h3 {
+    margin:0 0 10px 0;
+  }
+
 }
 
 
@@ -314,43 +341,6 @@ a.headerlink:hover {
     top: 120px;
     min-height: 0;
 }
-
-
-#docs-sidebar h3, #docs-sidebar h4 {
-    background-color: $sidebar-header-background-color;
-    color: $sidebar-header-color;
-    font-family: $primary-font-family;
-    font-size: 1.1em;
-    font-weight: normal;
-    margin: 10px 0 0 -15px;
-    padding: 5px 10px 5px 15px;
-    text-shadow: 1px 1px 0 white;
-    /*width:210px;*/
-}
-
-#docs-sidebar h3:first-child {
-  margin-top: 0px;
-}
-
-#docs-sidebar h3 a, #docs-sidebar h4 a {
-  color: $sidebar-header-color;
-}
-#docs-sidebar ul {
-  margin: 10px 10px 10px 0px;
-  padding: 0;
-  list-style: none outside none;
-}
-
-
-#docs-sidebar ul ul {
-    margin-bottom: 0;
-    margin-top: 0;
-    list-style: square outside none;
-    margin-left: 20px;
-}
-
-
-
 
 #docs-body {
   background-color:#FFFFFF;
@@ -400,22 +390,56 @@ a.headerlink:hover {
   background:none;
 }
 
-#docs-container pre {
-  font-size:1.2em;
-}
+#docs-container {
+  .pre {
+    font-size:1.1em;
+  }
 
-#docs-container .pre {
-  font-size:1.1em;
-}
+  pre {
+    font-size:1.2em;
+    background-color: #f0f0f0;
+    border: $border-style;
+    box-shadow: 2px 2px 3px #DFDFDF;
+    padding:10px;
+    margin: 5px 0px 5px 0px;
+    overflow:auto;
+    line-height:1.3em;
+  }
 
-#docs-container pre {
-  background-color: #f0f0f0;
-  border: $border-style;
-  box-shadow: 2px 2px 3px #DFDFDF;
-  padding:10px;
-  margin: 5px 0px 5px 0px;
-  overflow:auto;
-  line-height:1.3em;
+  /* the [SQL] links used to display SQL */
+  .sql_link
+  {
+    font-weight:normal;
+    font-family: helvetica, arial, sans-serif;
+    font-size:.9em;
+    text-transform: uppercase;
+    color:#990000;
+    border:1px solid;
+    padding:1px 2px 1px 2px;
+    margin:0px 10px 0px 15px;
+    float:right;
+    line-height:1.2em;
+  }
+
+  a.sql_link, .sql_link
+  {
+      text-decoration: none;
+      padding:1px 2px;
+  }
+
+  a.sql_link:hover {
+      text-decoration: none;
+      color:#fff;
+      border:1px solid #900;
+      background-color: #900;
+  }
+
+  a.changeset-link {
+      font-size: 0.8em;
+      padding: 0 4px 0 4px;
+      text-decoration: none;
+  }
+
 }
 
 .popup_sql, .show_sql
@@ -426,42 +450,6 @@ a.headerlink:hover {
     border:1px dashed;
 }
 
-/* the [SQL] links used to display SQL */
-#docs-container .sql_link
-{
-  font-weight:normal;
-  font-family: helvetica, arial, sans-serif;
-  font-size:.9em;
-  text-transform: uppercase;
-  color:#990000;
-  border:1px solid;
-  padding:1px 2px 1px 2px;
-  margin:0px 10px 0px 15px;
-  float:right;
-  line-height:1.2em;
-}
-
-#docs-container a.sql_link,
-#docs-container .sql_link
-{
-    text-decoration: none;
-    padding:1px 2px;
-}
-
-#docs-container a.sql_link:hover {
-    text-decoration: none;
-    color:#fff;
-    border:1px solid #900;
-    background-color: #900;
-}
-
-/* changeset stuff */
-
-#docs-container a.changeset-link {
-    font-size: 0.8em;
-    padding: 0 4px 0 4px;
-    text-decoration: none;
-}
 
 /* docutils-specific elements */
 
