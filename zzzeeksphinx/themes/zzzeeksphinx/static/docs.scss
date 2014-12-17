@@ -200,9 +200,6 @@ a.headerlink:hover {
   min-height: 700px;
 }
 
-#docs-sidebar > ul {
-  font-size:.85em;
-}
 
 #fixed-sidebar {
   position: relative;
@@ -228,14 +225,6 @@ a.headerlink:hover {
 }
 
 
-#docs-sidebar {
-  font-size:.85em;
-
-  border: $border-style;
-
-  z-index: 3;
-  background-color: $sidebar-color;
-}
 
 #index-nav {
   position: relative;
@@ -274,11 +263,28 @@ a.headerlink:hover {
   margin-top:5px;
   width:212px;
   padding-left:10px;
+
+  font-size:.85em;
+
+  border: $border-style;
+
+  z-index: 3;
+  background-color: $sidebar-color;
+
+  > ul {
+    font-size:.85em;
+  }
+
+  .two-level-ancestor {
+    font-size: .8em;
+  }
+  .one-level-ancestor {
+  }
 }
 
 #docs-sidebar-popout {
-  height:120px;
-  max-height: 120px;
+  height:105px;
+  max-height: 105px;
   width:212px;
   padding-left:10px;
   padding-top:10px;
@@ -575,7 +581,8 @@ h3:hover > a.headerlink,
 h4:hover > a.headerlink,
 h5:hover > a.headerlink,
 h6:hover > a.headerlink,
-dt:hover > a.headerlink {
+dt:hover > a.headerlink,
+li:hover > a.headerlink {
     visibility: visible;
 }
 

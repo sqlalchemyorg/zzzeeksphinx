@@ -48,6 +48,10 @@ withsidebar = bool(toc) and current_page_name != 'index'
     ${docstitle|h}
 </%block>
 
+<%def name="show_title()">
+    ${title}
+</%def>
+
 
 <div id="docs-container">
 
@@ -122,7 +126,7 @@ withsidebar = bool(toc) and current_page_name != 'index'
             </form>
 
             <p>
-            <a href="${pathto('index')}">Contents</a> |
+            <a href="${pathto('contents') or pathto('index')}">Contents</a> |
             <a href="${pathto('genindex')}">Index</a>
             % if pdf_url:
             | <a href="${pdf_url}">Download as PDF</a>
@@ -136,23 +140,8 @@ withsidebar = bool(toc) and current_page_name != 'index'
         <div id="docs-sidebar-popout">
             <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
 
-            <p id="sidebar-paginate">
-                % if parents:
-                    <a href="${parents[-1]['link']|h}" title="${parents[-1]['title']}">Up</a> |
-                % else:
-                    <a href="${pathto('index')}" title="${docstitle|h}">Up</a> |
-                % endif
-
-                % if prevtopic:
-                    <a href="${prevtopic['link']|h}" title="${prevtopic['title']}">Prev</a> |
-                % endif
-                % if nexttopic:
-                    <a href="${nexttopic['link']|h}" title="${nexttopic['title']}">Next</a>
-                % endif
-            </p>
-
             <p id="sidebar-topnav">
-                <a href="${pathto('index')}">Contents</a> |
+                <a href="${pathto('contents') or pathto('index')}">Contents</a> |
                 <a href="${pathto('genindex')}">Index</a>
                 % if pdf_url:
                 | <a href="${pdf_url}">PDF</a>
@@ -171,17 +160,27 @@ withsidebar = bool(toc) and current_page_name != 'index'
 
         <div id="docs-sidebar">
 
-        <h3><a href="${parents[-1]['link'] if parents else pathto('index') | h}">\
-            <%block name="show_title">
-                % if parents:
-                    ${parents[-1]['title']}
-                % else:
-                    ${docstitle | h}
-                % endif
-            </%block>
-        </a></h3>
+        <h3>
 
-        ${parent_toc(current_page_name, title)}
+        <%
+            breadcrumb = parents[-2:]
+            if not breadcrumb or breadcrumb[0]['link'] != pathto('index'):
+                breadcrumb = [{'link': pathto('index'), 'title': docstitle}] + breadcrumb
+        %>
+        % for elem in breadcrumb[-2:]:
+            % if not loop.last:
+                <span class="two-level-ancestor">
+            % else:
+                <span class="one-level-ancestor">
+            % endif
+                <a href="${elem['link']|h}" title="${elem['title']}">${elem['title']}</a>
+            </span><br/>
+
+        % endfor
+
+        </h3>
+
+        ${parent_toc(current_page_name)}
 
         % if rtd:
         <h4>Project Versions</h4>

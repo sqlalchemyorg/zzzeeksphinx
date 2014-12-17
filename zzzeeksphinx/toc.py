@@ -1,9 +1,11 @@
+#!coding: utf-8
+
 from docutils import nodes as docutils_nodes
 from sphinx import addnodes
 
 
 class TOCMixin(object):
-    def get_current_subtoc(self, current_page_name, current_page_title):
+    def get_current_subtoc(self, current_page_name):
         """Return a TOC for sub-files and sub-elements of the current file.
 
         This is to provide a "contextual" navbar that shows the current page
@@ -19,7 +21,7 @@ class TOCMixin(object):
         """
 
         raw_tree = self.app.env.get_toctree_for(
-            current_page_name, self.app.builder, True, maxdepth=0)
+            current_page_name, self.app.builder, True, maxdepth=-1)
         local_tree = self.app.env.get_toc_for(
             current_page_name, self.app.builder)
 
@@ -78,7 +80,7 @@ class TOCMixin(object):
                 # try to embed the item-level get_toc_for() inside
                 # the file-level get_toctree_for(), otherwise if we
                 # just get the full get_toctree_for(), it's enormous.
-                if outer and name == current_page_title:
+                if outer and refuri == '':
                     if local_tree is not None:
                         for ent in _locate_nodes(
                                 [local_tree], level + 1, False):
@@ -113,13 +115,13 @@ class TOCMixin(object):
             return stack
 
         def _render_nodes(
-                stack, searchfor, level=0, nested_element=False,
+                stack, level=0, nested_element=False,
                 parent_element=None):
 
             printing = False
             if stack:
-                printing = nested_element or searchfor in [
-                    elem[0:2] for elem in stack
+                printing = nested_element or '' in [
+                    elem[0] for elem in stack
                     if isinstance(elem, tuple)
                 ]
                 if printing:
@@ -131,38 +133,42 @@ class TOCMixin(object):
                 while stack:
                     elem = stack.pop(0)
                     as_links = not isinstance(elem, tuple) or \
-                        searchfor != elem[0:2]
+                        elem[0] != ''
                     if isinstance(elem, tuple):
                         refuri, name, text_nodes = elem
                         if not stack or isinstance(stack[0], tuple):
                             if printing:
-                                list_item = docutils_nodes.list_item()
+                                list_item = docutils_nodes.list_item(
+                                    classes=['selected']
+                                    if not as_links else [])
                                 list_item.append(
                                     self._link_node(refuri, text_nodes)
                                     if as_links else
-                                    self._strong_node(text_nodes)
+                                    self._strong_node(refuri, text_nodes)
                                 )
                                 parent_element.append(list_item)
                         elif isinstance(stack[0], list):
                             if printing:
-                                list_item = docutils_nodes.list_item()
+                                list_item = docutils_nodes.list_item(
+                                    classes=['selected']
+                                    if not as_links else [])
                                 list_item.append(
                                     self._link_node(refuri, text_nodes)
                                     if as_links else
-                                    self._strong_node(text_nodes)
+                                    self._strong_node(refuri, text_nodes)
                                 )
                                 parent_element.append(list_item)
                             else:
                                 list_item = None
                             _render_nodes(
-                                stack[0], searchfor,
+                                stack[0],
                                 level=level + 1,
                                 nested_element=nested_element or
-                                searchfor == elem[0:2],
+                                elem[0] == '',
                                 parent_element=list_item or parent_element)
                     elif isinstance(elem, list):
                         _render_nodes(
-                            elem, searchfor,
+                            elem,
                             level=level + 1,
                             nested_element=nested_element,
                             parent_element=parent_element)
@@ -170,7 +176,6 @@ class TOCMixin(object):
         element = docutils_nodes.bullet_list()
         _render_nodes(
             _organize_nodes(_locate_nodes([raw_tree], 0)),
-            ('', current_page_title),
             parent_element=element
         )
         return self.app.builder.render_partial(element)['fragment']
@@ -184,7 +189,20 @@ class TOCMixin(object):
         cp.append(link)
         return cp
 
-    def _strong_node(self, text_nodes):
+    def _strong_node(self, refuri, text_nodes):
+        cp = addnodes.compact_paragraph()
         n1 = docutils_nodes.strong()
         n1.extend(text_nodes)
-        return n1
+        cp.append(n1)
+        paramlink = docutils_nodes.reference(
+            '', '',
+            docutils_nodes.Text(u"¶", u"¶"),
+            refid="",
+            # paramlink is our own CSS class, headerlink
+            # is theirs.  Trying to get everything we can for existing
+            # symbols...
+            classes=['paramlink', 'headerlink']
+        )
+
+        cp.append(paramlink)
+        return cp
