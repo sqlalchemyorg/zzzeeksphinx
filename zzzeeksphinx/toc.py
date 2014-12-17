@@ -1,3 +1,7 @@
+from docutils import nodes as docutils_nodes
+from sphinx import addnodes
+
+
 class TOCMixin(object):
     def get_current_subtoc(self, current_page_name, current_page_title):
         """Return a TOC for sub-files and sub-elements of the current file.
@@ -19,6 +23,13 @@ class TOCMixin(object):
         local_tree = self.app.env.get_toc_for(
             current_page_name, self.app.builder)
 
+        # start with the bullets inside the doc's toc,
+        # not the top level bullet, as we get that from the other tree
+        if len(local_tree.children[0].children) < 2:
+            local_tree = None
+        else:
+            local_tree = local_tree.children[0].children[1]
+
         def _locate_nodes(nodes, level, outer=True):
             # this is a lazy way of getting at all the info in a
             # series of docutils nodes, with an absolute mimimal
@@ -29,6 +40,7 @@ class TOCMixin(object):
             # An official Sphinx feature/extension
             # here would probably make much more use of direct
             # knowledge of the structure
+
             for elem in nodes:
 
                 if hasattr(elem, 'attributes'):
@@ -38,13 +50,18 @@ class TOCMixin(object):
 
                 name = None
                 if refuri is not None:
-                    # TODO: need to do better than this
-                    # as if there is RST in the link, there's more nodes
-                    # than this.  need to look at other sphinx code
-                    # to remember how to roll up all the markup into HTML
-                    # here.
-                    name = elem.children[0].rawsource
-                    remainders = elem.children[1:]
+                    for index, sub_elem in enumerate(elem.children, 1):
+                        if isinstance(
+                                sub_elem,
+                                (docutils_nodes.Text, docutils_nodes.literal)):
+                            continue
+                        else:
+                            break
+
+                    local_text = elem.children[0:index]
+                    name = local_text[0].rawsource
+                    remainders = elem.children[index:]
+
                     # a little bit of extra filtering of when/where
                     # we want internal nodes vs. page-level nodes,
                     # this is usually not needed except in a certain
@@ -54,7 +71,7 @@ class TOCMixin(object):
                     ) or (
                         outer and "#" not in refuri
                     ):
-                        yield level, refuri, name
+                        yield level, refuri, name, local_text
                 else:
                     remainders = elem.children
 
@@ -62,17 +79,22 @@ class TOCMixin(object):
                 # the file-level get_toctree_for(), otherwise if we
                 # just get the full get_toctree_for(), it's enormous.
                 if outer and name == current_page_title:
-                    for ent in _locate_nodes([local_tree], level + 1, False):
-                        yield ent
+                    if local_tree is not None:
+                        for ent in _locate_nodes(
+                                [local_tree], level + 1, False):
+                            yield ent
                 else:
                     for ent in _locate_nodes(
-                        remainders, level + 1, outer):
+                            remainders, level + 1, outer):
                         yield ent
 
         def _organize_nodes(nodes):
+            """organize the nodes that we've grabbed with non-contiguous
+            'level' numbers into a clean hierarchy"""
+
             stack = []
             levels = []
-            for level, refuri, name in nodes:
+            for level, refuri, name, text_nodes in nodes:
                 if not levels or levels[-1] < level:
                     levels.append(level)
                     new_collection = []
@@ -87,59 +109,82 @@ class TOCMixin(object):
                         else:
                             stack.pop(-1)
 
-                stack[-1].append((refuri, name))
+                stack[-1].append((refuri, name, text_nodes))
             return stack
 
-        def _render_nodes(stack, searchfor, level=0, nested_element=False):
-            # this is me being lazy about dealing with docutils renderers,
-            # and just programmatically rendering out.  A real Sphinx
-            # extension / feature would obviously need to use the idiomatic
-            # docutils renderers.
+        def _render_nodes(
+                stack, searchfor, level=0, nested_element=False,
+                parent_element=None):
+
+            printing = False
             if stack:
-                indent = " " * level
-                printing = nested_element or searchfor in stack
+                printing = nested_element or searchfor in [
+                    elem[0:2] for elem in stack
+                    if isinstance(elem, tuple)
+                ]
                 if printing:
-                    yield (" " * level) + "<ul>"
+                    if not isinstance(
+                            parent_element, docutils_nodes.bullet_list):
+                        new_list = docutils_nodes.bullet_list()
+                        parent_element.append(new_list)
+                        parent_element = new_list
                 while stack:
                     elem = stack.pop(0)
-                    as_links = searchfor != elem
+                    as_links = not isinstance(elem, tuple) or \
+                        searchfor != elem[0:2]
                     if isinstance(elem, tuple):
+                        refuri, name, text_nodes = elem
                         if not stack or isinstance(stack[0], tuple):
                             if printing:
-                                if as_links:
-                                    yield "%s<li><a href='%s'>%s</a></li>" % (
-                                        (indent,) + elem)
-                                else:
-                                    yield "%s<li><strong>%s</strong></li>" % (
-                                        indent, elem[1])
+                                list_item = docutils_nodes.list_item()
+                                list_item.append(
+                                    self._link_node(refuri, text_nodes)
+                                    if as_links else
+                                    self._strong_node(text_nodes)
+                                )
+                                parent_element.append(list_item)
                         elif isinstance(stack[0], list):
                             if printing:
-                                if as_links:
-                                    yield "%s<li><a href='%s'>%s</a>" % (
-                                        (indent,) + elem)
-                                else:
-                                    yield "%s<li><strong>%s</strong>" % (
-                                        indent, elem[1])
-                            for sub in _render_nodes(
-                                    stack[0], searchfor,
-                                    level=level + 1,
-                                    nested_element=nested_element or
-                                    searchfor == elem):
-                                yield sub
-                            if printing:
-                                yield (" " * level) + "</li>"
-                    elif isinstance(elem, list):
-                        for sub in _render_nodes(
-                                elem, searchfor,
+                                list_item = docutils_nodes.list_item()
+                                list_item.append(
+                                    self._link_node(refuri, text_nodes)
+                                    if as_links else
+                                    self._strong_node(text_nodes)
+                                )
+                                parent_element.append(list_item)
+                            else:
+                                list_item = None
+                            _render_nodes(
+                                stack[0], searchfor,
                                 level=level + 1,
-                                nested_element=nested_element):
-                            yield sub
-                if printing:
-                    yield (" " * level) + "</ul>"
+                                nested_element=nested_element or
+                                searchfor == elem[0:2],
+                                parent_element=list_item or parent_element)
+                    elif isinstance(elem, list):
+                        _render_nodes(
+                            elem, searchfor,
+                            level=level + 1,
+                            nested_element=nested_element,
+                            parent_element=parent_element)
 
-        return "\n".join(
-            _render_nodes(
-                _organize_nodes(_locate_nodes([raw_tree], 0)),
-                ('', current_page_title)
-            )
+        element = docutils_nodes.bullet_list()
+        _render_nodes(
+            _organize_nodes(_locate_nodes([raw_tree], 0)),
+            ('', current_page_title),
+            parent_element=element
         )
+        return self.app.builder.render_partial(element)['fragment']
+
+    def _link_node(self, refuri, text_nodes):
+        link = docutils_nodes.reference(
+            '', '', text_nodes[0],
+            refuri=refuri)
+        link.extend(text_nodes[1:])
+        cp = addnodes.compact_paragraph()
+        cp.append(link)
+        return cp
+
+    def _strong_node(self, text_nodes):
+        n1 = docutils_nodes.strong()
+        n1.extend(text_nodes)
+        return n1
