@@ -60,11 +60,17 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                     if attrname in supercls.__dict__:
                         break
                 if supercls is not cls:
+                    adjusted_mod = _adjust_rendered_mod_name(
+                        app.env.config,
+                        supercls.__module__,
+                        supercls.__name__
+                    )
+
                     _inherited_names.add(
-                        "%s.%s" % (supercls.__module__, supercls.__name__))
+                        "%s.%s" % (adjusted_mod, supercls.__name__))
                     _inherited_names.add(
                         "%s.%s.%s" %
-                        (supercls.__module__, supercls.__name__, attrname))
+                        (adjusted_mod, supercls.__name__, attrname))
                     lines[:0] = [
                         ".. container:: inherited_member",
                         "",
@@ -72,17 +78,11 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                         ":%s:`~%s.%s.%s` *%s of* :class:`~%s.%s`" % (
                             "attr" if what == "attribute"
                             else "meth",
-                            _adjust_rendered_mod_name(
-                                app.env.config,
-                                supercls.__module__,
-                                supercls.__name__),
+                            adjusted_mod,
                             supercls.__name__,
                             attrname,
                             what,
-                            _adjust_rendered_mod_name(
-                                app.env.config,
-                                supercls.__module__,
-                                supercls.__name__),
+                            adjusted_mod,
                             supercls.__name__
                         ),
                         ""
