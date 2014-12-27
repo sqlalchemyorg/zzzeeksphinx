@@ -35,11 +35,14 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
         bases = []
         for base in obj.__bases__:
             if base is not object:
+                adjusted_mod = _adjust_rendered_mod_name(
+                    app.env.config, base.__module__, base.__name__)
                 bases.append(
                     ":class:`%s.%s`" % (
-                        _adjust_rendered_mod_name(
-                            app.env.config, base.__module__, base.__name__),
+                        adjusted_mod,
                         base.__name__))
+                _inherited_names.add(
+                    "%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
             lines[:0] = [
