@@ -168,6 +168,7 @@ withsidebar = bool(toc) and current_page_name != 'index'
         % if rtd:
         <h4>Project Versions</h4>
         <ul class="version-listing">
+            <li><a href="${pathto('index')}">${release}</a></li>
         </ul>
         % endif
 
