@@ -173,7 +173,6 @@ withsidebar = bool(toc) and current_page_name != 'index'
         </ul>
         % endif
 
-
         </div>
     % endif
 

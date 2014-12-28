@@ -186,29 +186,6 @@ a.headerlink:hover {
 }
 
 
-#fixed-sidebar {
-  position: relative;
-}
-
-#fixed-sidebar.withsidebar {
-  float: left;
-  width:224px;
-}
-
-#fixed-sidebar.preautomated {
-    position: fixed;
-    float: none;
-    top:0;
-    bottom: 0;
-}
-
-#fixed-sidebar.automated {
-    position: fixed;
-    float: none;
-    top: 120px;
-    min-height: 0;
-}
-
 
 
 #index-nav {
@@ -318,6 +295,22 @@ a.headerlink:hover {
 
 }
 
+#fixed-sidebar {
+  position: relative;
+  box-sizing: border-box;
+}
+
+#fixed-sidebar.withsidebar {
+  float: left;
+  width:224px;
+}
+
+#fixed-sidebar.preautomated {
+    position: fixed;
+    float: none;
+    top:0;
+    bottom: 0;
+}
 
 #fixed-sidebar.preautomated #docs-sidebar,
 #fixed-sidebar.preautomated #docs-sidebar-popout {
@@ -335,12 +328,6 @@ a.headerlink:hover {
   position: fixed;
 }
 
-#docs-sidebar.automated {
-    position: fixed;
-    float: none;
-    top: 120px;
-    min-height: 0;
-}
 
 #docs-body {
   background-color:#FFFFFF;

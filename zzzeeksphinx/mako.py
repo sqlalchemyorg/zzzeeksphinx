@@ -68,6 +68,8 @@ class MakoBridge(TOCMixin, TemplateBridge):
         context['parent_toc'] = self.get_current_subtoc
         context['bridge'] = self
         context.setdefault('toc', None)
+        context.setdefault('pdf_url', None)
+        context.setdefault('metatags', None)
         # override context attributes
         self.setup_ctx(context)
         context.setdefault('_', lambda x: x)
