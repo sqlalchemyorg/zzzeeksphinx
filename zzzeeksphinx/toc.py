@@ -5,7 +5,7 @@ from sphinx import addnodes
 
 
 class TOCMixin(object):
-    def get_current_subtoc(self, current_page_name):
+    def get_current_subtoc(self, current_page_name, start_from=None):
         """Return a TOC for sub-files and sub-elements of the current file.
 
         This is to provide a "contextual" navbar that shows the current page
@@ -115,15 +115,16 @@ class TOCMixin(object):
             return stack
 
         def _render_nodes(
-                stack, level=0, nested_element=False,
+                stack, level=0, start_from=None, nested_element=False,
                 parent_element=None):
 
             printing = False
             if stack:
-                printing = nested_element or '' in [
-                    elem[0] for elem in stack
-                    if isinstance(elem, tuple)
-                ]
+                printing = nested_element or start_from is None or \
+                    start_from in [
+                        elem[0] for elem in stack
+                        if isinstance(elem, tuple)
+                    ]
                 if printing:
                     if not isinstance(
                             parent_element, docutils_nodes.bullet_list):
@@ -163,19 +164,24 @@ class TOCMixin(object):
                             _render_nodes(
                                 stack[0],
                                 level=level + 1,
+                                start_from=start_from,
                                 nested_element=nested_element or
+                                printing or
                                 elem[0] == '',
                                 parent_element=list_item or parent_element)
                     elif isinstance(elem, list):
                         _render_nodes(
                             elem,
                             level=level + 1,
+                            start_from=start_from,
                             nested_element=nested_element,
                             parent_element=parent_element)
 
         element = docutils_nodes.bullet_list()
+        nodes = _organize_nodes(_locate_nodes([raw_tree], 0))
         _render_nodes(
-            _organize_nodes(_locate_nodes([raw_tree], 0)),
+            nodes,
+            start_from=start_from,
             parent_element=element
         )
         return self.app.builder.render_partial(element)['fragment']

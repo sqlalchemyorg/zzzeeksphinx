@@ -8,7 +8,6 @@
     ]
 %>
 
-
 <%doc>
     Structural elements are all prefixed with "docs-"
     to prevent conflicts when the structure is integrated into the
@@ -143,27 +142,27 @@ withsidebar = bool(toc) and current_page_name != 'index'
 
         <div id="docs-sidebar">
 
-        <h3>
-
         <%
-            breadcrumb = parents[-2:]
+            breadcrumb = parents[:]
             if not breadcrumb or breadcrumb[0]['link'] != pathto('index'):
                 breadcrumb = [{'link': pathto('index'), 'title': docstitle}] + breadcrumb
+
+            if len(breadcrumb) > 1:
+                breadcrumb = breadcrumb[1:]
+            h3_toc_item = breadcrumb[0]
+            if len(breadcrumb) > 1:
+                outermost_link_item = breadcrumb[1]['link']
+            else:
+                outermost_link_item = ''
+
         %>
-        % for elem in breadcrumb[-2:]:
-            % if not loop.last:
-                <span class="two-level-ancestor">
-            % else:
-                <span class="one-level-ancestor">
-            % endif
-                <a href="${elem['link']|h}" title="${elem['title']}">${elem['title']}</a>
-            </span><br/>
-
-        % endfor
-
+        <h3>
+            <a href="${h3_toc_item['link']|h}" title="${h3_toc_item['title']}">${h3_toc_item['title']}</a>
         </h3>
 
-        ${parent_toc(current_page_name)}
+        ${parent_toc(
+            current_page_name,
+            outermost_link_item)}
 
         % if rtd:
         <h4>Project Versions</h4>

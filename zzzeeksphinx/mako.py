@@ -25,6 +25,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
             package_dir, 'themes', builder.config.html_theme)
 
         self.lookup = TemplateLookup(
+            strict_undefined=True,
             directories=builder.config.templates_path + [
                 template_path
             ],
@@ -66,6 +67,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
         context['base'] = "static_base.mako"
         context['parent_toc'] = self.get_current_subtoc
         context['bridge'] = self
+        context.setdefault('toc', None)
         # override context attributes
         self.setup_ctx(context)
         context.setdefault('_', lambda x: x)
