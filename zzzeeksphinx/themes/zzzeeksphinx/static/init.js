@@ -12,7 +12,11 @@ var automatedBreakpoint = -1;
 function initFloatyThings() {
 
     automatedBreakpoint = $("#docs-container").position().top + $("#docs-top-navigation-container").height();
-    left = $("#fixed-sidebar.withsidebar").offset().left;
+
+    left = $("#fixed-sidebar.withsidebar").offset()
+    if (left) {
+        left = left.left;
+    } // otherwise might be undefined
 
     // we use a "fixed" positioning for the sidebar regardless
     // of whether or not we are moving with the page or not because
