@@ -152,6 +152,8 @@ withsidebar = bool(toc) and current_page_name != 'index'
             h3_toc_item = breadcrumb[0]
             if len(breadcrumb) > 1:
                 outermost_link_item = breadcrumb[1]['link']
+            elif not parents:
+                outermost_link_item = None
             else:
                 outermost_link_item = ''
 
