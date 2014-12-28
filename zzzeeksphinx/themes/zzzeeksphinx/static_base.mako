@@ -23,6 +23,7 @@
     <body>
         ${next.body()}
         <%block name="footer"/>
+        <%block name="lower_scripts"/>
     </body>
 </html>
 

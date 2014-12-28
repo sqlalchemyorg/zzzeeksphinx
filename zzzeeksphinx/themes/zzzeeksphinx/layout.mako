@@ -62,23 +62,6 @@ withsidebar = bool(toc) and current_page_name != 'index'
 
     <!-- begin layout.mako headers -->
 
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '${pathto("", 1)}',
-          VERSION:     '${release|h}',
-          COLLAPSE_MODINDEX: false,
-          FILE_SUFFIX: '${file_suffix}'
-      };
-    </script>
-
-    <!-- begin iterate through sphinx environment script_files -->
-    % for scriptfile in script_files + self.attr.local_script_files:
-        <script type="text/javascript" src="${pathto(scriptfile, 1)}"></script>
-    % endfor
-    <!-- end iterate through sphinx environment script_files -->
-
-    <script type="text/javascript" src="${pathto('_static/detectmobile.js', 1)}"></script>
-    <script type="text/javascript" src="${pathto('_static/init.js', 1)}"></script>
     % if hasdoc('about'):
         <link rel="author" title="${_('About these documents')}" href="${pathto('about')}" />
     % endif
@@ -244,3 +227,25 @@ withsidebar = bool(toc) and current_page_name != 'index'
 </div>
 
 </div>
+
+<%block name="lower_scripts">
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '${pathto("", 1)}',
+          VERSION:     '${release|h}',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '${file_suffix}'
+      };
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+    % for scriptfile in script_files + self.attr.local_script_files:
+        <script type="text/javascript" src="${pathto(scriptfile, 1)}"></script>
+    % endfor
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="${pathto('_static/detectmobile.js', 1)}"></script>
+    <script type="text/javascript" src="${pathto('_static/init.js', 1)}"></script>
+
+</%block>

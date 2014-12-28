@@ -33,6 +33,8 @@ def generate_stylesheet(app, exception):
     to_gen = app._builder_scss
 
     compiler = Scss(scss_opts={"style": "expanded"})
+    if exception:
+        return
     for static_path, name in to_gen:
 
         css = compiler.compile(

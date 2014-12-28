@@ -27,7 +27,7 @@ class TOCMixin(object):
 
         # start with the bullets inside the doc's toc,
         # not the top level bullet, as we get that from the other tree
-        if len(local_tree.children[0].children) < 2:
+        if not local_tree.children or len(local_tree.children[0].children) < 2:
             local_tree = None
         else:
             local_tree = local_tree.children[0].children[1]
