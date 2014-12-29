@@ -9,6 +9,7 @@ $sidebar-header-background-color: #DDDDDD;
 $sidebar-header-color: #222222;
 $notebox-background-color: #EEFFEF;
 $border-style: 1px solid #CCC;
+$highlighted-nav-link-background-color: #DDD;
 
 /* global */
 
@@ -241,6 +242,15 @@ a.headerlink:hover {
     font-size: .8em;
   }
   .one-level-ancestor {
+  }
+
+  li > a {
+    padding: 1px 5px 1px 1px;
+    margin-right: -5px;
+  }
+
+  li.current > a {
+    background-color: $highlighted-nav-link-background-color;
   }
 
   h3, h4 {
