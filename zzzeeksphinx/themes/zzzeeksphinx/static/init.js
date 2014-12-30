@@ -92,7 +92,6 @@ function highlightLinks() {
         }
 
         if (idx != currentIdx) {
-            //console.debug("got idx: " + idx);
             var effectiveIdx = Math.max(0, idx - 1);
             currentIdx = idx;
 
@@ -103,8 +102,6 @@ function highlightLinks() {
             else {
                 ref = divCollection[effectiveIdx]['id'];
             }
-            console.debug("link: " + ref);
-
             $("#docs-sidebar li.current").removeClass('current');
             $("#docs-sidebar li a.reference[href='#" + ref + "']").parents("li").first().addClass('current');
         }
