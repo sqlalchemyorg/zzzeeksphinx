@@ -36,7 +36,7 @@ function initFloatyThings() {
         else {
             $("#fixed-sidebar.withsidebar").css("top", 0);
             $("#fixed-sidebar.withsidebar").css(
-                "height", $(window).height());
+                "height", $(window).height() - docsBodyOffset + scrolltop);
             $("#fixed-sidebar.withsidebar").css("position", "absolute");
         }
     }
