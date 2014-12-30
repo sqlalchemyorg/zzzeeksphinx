@@ -9,43 +9,80 @@ function initSQLPopups() {
 
 function initFloatyThings() {
 
-    var automatedBreakpoint = $("#docs-container").position().top +
-        $("#docs-top-navigation-container").height();
-
-    left = $("#fixed-sidebar.withsidebar").offset();
-    if (left) {
-        left = left.left;
-    } // otherwise might be undefined
-
     // we use a "fixed" positioning for the sidebar regardless
     // of whether or not we are moving with the page or not because
     // we want it to have an independently-moving scrollbar at all
-    // times.  Otherwise, keeping it with plain positioning before the
-    // page has scrolled works more smoothly on safari, IE
+    // times.
+    // this unfortunately means we have to keep it steady across
+    // page scrolls, vertically and horizontally, in negative scrolls
+    // as well for safari + chrome and also handle resizes.  these browsers
+    // all do something a little different with positioning and jquery
+    // does not seem to abstract against this use case well.
+
+    var automatedBreakpoint = $("#docs-container").position().top +
+        $("#docs-top-navigation-container").height();
+
+    // "top" seems to stay constant...
+    var docsBodyOffset = $("#docs-body").offset().top;
+
+    var top = docsBodyOffset;
+    var left;
+
+    function resize() {
+        // ...while the "left" seems to change based on doc
+        // resizes, e.g. if you make the safari window lots bigger
+        // than the page
+        left = $("#docs-body-container").offset();
+        if (left) {
+            left = left.left;
+        } // otherwise might be undefined
+        else {
+            left = 0;
+        }
+        setScroll();
+    }
+
+    // this turns on the whole thing, without this
+    // we are in graceful degradation assuming no JS
     $("#fixed-sidebar.withsidebar").addClass("preautomated");
 
     function setScroll() {
         var scrolltop = $(window).scrollTop();
-        if (scrolltop < 0) {
-            // safari does this
-            $("#fixed-sidebar.withsidebar").css(
-                "top", $("#docs-body").offset().top - scrolltop);
-        }
-        else if (scrolltop >= automatedBreakpoint) {
+        var scrollleft = $(window).scrollLeft();
+
+        // when page is scrolled down past the top headers,
+        // sidebar stays fixed vertically
+        if (scrolltop >= automatedBreakpoint) {
             $("#fixed-sidebar.withsidebar").css("top", 5);
         }
+        else if (scrolltop < 0) {
+            // special trickery to deal with safari vs. chrome
+            // acting differently in this case, while avoiding using jquery's
+            // weird / slow? offset() setter
+            if ($("#fixed-sidebar.withsidebar").offset().top != docsBodyOffset) {
+                $("#fixed-sidebar.withsidebar").css(
+                    "top", docsBodyOffset - scrolltop);
+            }
+        }
         else {
-          $("#fixed-sidebar.withsidebar").css(
-                "top", $("#docs-body").offset().top - Math.max(scrolltop, 0));
+            $("#fixed-sidebar.withsidebar").css(
+                "top", docsBodyOffset - scrolltop);
         }
 
-        var scrollside = $(window).scrollLeft();
-        // more safari crap, side scrolling
-        $("#fixed-sidebar.withsidebar").css("left", left - scrollside);
+        // adjust left scroll.
+        // chrome has a "springy" zone in its scrollbar that does
+        // not actually move the elements, and this basically means we
+        // are breaking the spacing in those zones,  so the navbar "springs"
+        // around with this action.   jquery needs to provide a
+        // "what is the actual position of the *document* in response to
+        // scrolling" feature, not just the raw value of a scrollbar.
+        $("#fixed-sidebar.withsidebar").css(
+            "left", left - scrollleft);
     }
     $(window).scroll(setScroll);
+    $(window).resize(resize);
 
-    setScroll();
+    resize();
 }
 
 function highlightLinks() {
