@@ -105,8 +105,8 @@ function highlightLinks() {
             }
             console.debug("link: " + ref);
 
-            $("#docs-sidebar li a.reference").parent("li").removeClass('current');
-            $("#docs-sidebar li a.reference[href='#" + ref + "']").parent("li").addClass('current');
+            $("#docs-sidebar li.current").removeClass('current');
+            $("#docs-sidebar li a.reference[href='#" + ref + "']").parents("li").first().addClass('current');
         }
     }
     $(window).scroll(setLink);

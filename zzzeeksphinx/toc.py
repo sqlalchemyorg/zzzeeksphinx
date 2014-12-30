@@ -191,12 +191,12 @@ class TOCMixin(object):
             '', '', text_nodes[0],
             refuri=refuri)
         link.extend(text_nodes[1:])
-        cp = addnodes.compact_paragraph()
+        cp = docutils_nodes.inline(classes=['link-container'])
         cp.append(link)
         return cp
 
     def _strong_node(self, refuri, text_nodes):
-        cp = addnodes.compact_paragraph()
+        cp = docutils_nodes.inline(classes=['link-container'])
         n1 = docutils_nodes.strong()
         n1.extend(text_nodes)
         cp.append(n1)

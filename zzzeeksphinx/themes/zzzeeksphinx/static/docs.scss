@@ -238,18 +238,13 @@ a.headerlink:hover {
     font-size:.85em;
   }
 
-  .two-level-ancestor {
-    font-size: .8em;
-  }
-  .one-level-ancestor {
-  }
-
-  li > a {
-    padding: 1px 5px 1px 1px;
-    margin-right: -5px;
+  span.link-container {
+    display: block;
+    margin-left: -100px;
+    padding-left: 100px;
   }
 
-  li.current > a {
+  li.current > span.link-container {
     background-color: $highlighted-nav-link-background-color;
   }
 
@@ -273,7 +268,7 @@ a.headerlink:hover {
   }
 
   ul {
-    margin: 10px 10px 10px 0px;
+    margin: 10px 0px 10px 0px;
     padding: 0;
     list-style: none outside none;
     ul {
@@ -567,7 +562,8 @@ h4:hover > a.headerlink,
 h5:hover > a.headerlink,
 h6:hover > a.headerlink,
 dt:hover > a.headerlink,
-li:hover > a.headerlink {
+li:hover > a.headerlink,
+li:hover > span > a.headerlink {
     visibility: visible;
 }
 
