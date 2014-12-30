@@ -8,19 +8,17 @@ function initSQLPopups() {
 }
 
 function initFloatyThings() {
+    if (!$("#fixed-sidebar.withsidebar")) {
+        return;
+    }
 
-    // we use a "fixed" positioning for the sidebar regardless
-    // of whether or not we are moving with the page or not because
-    // we want it to have an independently-moving scrollbar at all
-    // times.
-    // this unfortunately means we either have to keep it steady across
-    // page scrolls or deal with the fact that the text is flowing
-    // under it in some resize/side-scroll scenarios.
+    var docsBodyOffset = $("#docs-body").offset().top;
+    var padding = docsBodyOffset -
+            ($("#docs-top-navigation-container").offset().top +
+            $("#docs-top-navigation-container").height());
 
     var automatedBreakpoint = $("#docs-container").position().top +
         $("#docs-top-navigation-container").height();
-
-    var docsBodyOffset = $("#docs-body").offset().top;
 
     // this turns on the whole thing, without this
     // we are in graceful degradation assuming no JS
@@ -30,35 +28,20 @@ function initFloatyThings() {
         var scrolltop = $(window).scrollTop();
         var fix = scrolltop >= automatedBreakpoint;
 
-        // when page is scrolled down past the top headers,
-        // sidebar stays fixed vertically
         if (fix) {
-            $("#fixed-sidebar.withsidebar").css("top", 5);
-        }
-        else if (scrolltop < 0) {
-            // special trickery to deal with safari vs. chrome
-            // acting differently in this case, while avoiding using jquery's
-            // weird / slow? offset() setter
-            if ($("#fixed-sidebar.withsidebar").offset().top != docsBodyOffset) {
-                $("#fixed-sidebar.withsidebar").css(
-                    "top", docsBodyOffset - scrolltop);
-            }
+            $("#fixed-sidebar.withsidebar").css("top", padding);
+            $("#fixed-sidebar.withsidebar").css("position", "fixed");
+            $("#fixed-sidebar.withsidebar").css("height", '');
         }
         else {
+            $("#fixed-sidebar.withsidebar").css("top", 0);
             $("#fixed-sidebar.withsidebar").css(
-                "top", docsBodyOffset - scrolltop);
+                "height", $(window).height());
+            $("#fixed-sidebar.withsidebar").css("position", "absolute");
         }
-
-        // adjusting left scroll is also an option,
-        // but doesn't seem to be worth it, safari is the only browser
-        // that shows much of a change, and overall the adjustment here
-        // is jerky and error-prone esp. on lesser browsers like safari ipad.
-        // looking at our "mentor" documentation, they don't do this;
-        // they just have the whole layout such that you don't really notice
-        // the horizontal squeezing as much (nav is on the right, they don't
-        // have a border around the text making it obvious).
     }
     $(window).scroll(setScroll);
+    $(window).resize(setScroll);
     setScroll();
 }
 

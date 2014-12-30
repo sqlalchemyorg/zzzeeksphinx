@@ -170,6 +170,7 @@ a.headerlink:hover {
 /* content container, sidebar */
 
 #docs-body-container {
+  position: relative;
 }
 
 #docs-body,
@@ -223,6 +224,7 @@ a.headerlink:hover {
   bottom: 0;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-top:5px;
   width:212px;
   padding-left:10px;
