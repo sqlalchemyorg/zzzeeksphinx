@@ -58,7 +58,7 @@ class PyConWithSQLLexer(RegexLexer):
 
 class PythonWithSQLLexer(RegexLexer):
     name = 'Python+SQL'
-    aliases = ['pycon+sql']
+    aliases = ['python+sql']
 
     flags = re.IGNORECASE | re.DOTALL
 
@@ -92,18 +92,19 @@ class PopupSQLFormatter(HtmlFormatter):
         buf = []
         for ttype, value in apply_filters(tokensource, [StripDocTestFilter()]):
             if ttype in Token.Sql:
+
                 for t, v in HtmlFormatter._format_lines(self, iter(buf)):
                     yield t, v
                 buf = []
 
                 if ttype is Token.Sql:
                     yield 1, "<div class='show_sql'>%s</div>" % \
-                        re.sub(r'(?:[{stop}|\n]*)$', '', value)
+                        re.sub(r'(?:{stop}|\n+)$', '', value)
                 elif ttype is Token.Sql.Link:
                     yield 1, "<a href='#' class='sql_link'>sql</a>"
                 elif ttype is Token.Sql.Popup:
                     yield 1, "<div class='popup_sql'>%s</div>" % \
-                        re.sub(r'(?:[{stop}|\n]*)$', '', value)
+                        re.sub(r'(?:{stop}|\n+)$', '', value)
             else:
                 buf.append((ttype, value))
 
