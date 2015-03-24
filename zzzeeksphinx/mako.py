@@ -70,6 +70,9 @@ class MakoBridge(TOCMixin, TemplateBridge):
         context.setdefault('toc', None)
         context.setdefault('pdf_url', None)
         context.setdefault('metatags', None)
+        context.setdefault("canonical_url", None)
+        context.setdefault("single_version", None)
+        context.setdefault("rtd_language", "en")
         # override context attributes
         self.setup_ctx(context)
         context.setdefault('_', lambda x: x)
