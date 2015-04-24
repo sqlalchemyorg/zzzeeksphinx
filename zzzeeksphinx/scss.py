@@ -8,6 +8,11 @@ from scss import Scss
 
 
 def add_stylesheet(app):
+    # TODO: make this inclusive of HTML builders
+    # instead, or something
+    if app.builder.name == 'latex':
+        return
+
     to_gen = []
 
     package_dir = os.path.abspath(os.path.dirname(__file__))
@@ -30,6 +35,11 @@ def add_stylesheet(app):
 
 
 def generate_stylesheet(app, exception):
+    # TODO: make this inclusive of HTML builders
+    # instead, or something
+    if app.builder.name == 'latex':
+        return
+
     to_gen = app._builder_scss
 
     compiler = Scss(scss_opts={"style": "expanded"})

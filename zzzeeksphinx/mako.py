@@ -8,7 +8,6 @@ import os
 
 rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-
 class MakoBridge(TOCMixin, TemplateBridge):
     def init(self, builder, *args, **kw):
         self.jinja2_fallback = BuiltinTemplateLoader()
