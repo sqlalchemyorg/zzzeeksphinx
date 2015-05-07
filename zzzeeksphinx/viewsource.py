@@ -8,7 +8,8 @@ import os
 from docutils.statemachine import StringList
 from sphinx.environment import NoUri
 from sphinx.pycode.pgen2 import token
-
+import warnings
+from . import util
 
 import sys
 
@@ -29,6 +30,22 @@ def view_source(
     return [node], []
 
 
+def _get_sphinx_py_module(env):
+    base_name = env.temp_data.get('autodoc:module', None)
+    if base_name is not None:
+        return base_name
+    if util.SPHINX_VERSION >= (1, 3):
+        base_name = env.ref_context.get('py:module', None)
+        if base_name is not None:
+            return base_name
+    else:
+        base_name = env.temp_data.get('py:module', None)
+        if base_name is not None:
+            return base_name
+
+    return None
+
+
 def _view_source_node(env, text, state):
     # pretend we're using viewcode fully,
     # install the context it looks for
@@ -42,12 +59,15 @@ def _view_source_node(env, text, state):
     if modname.startswith("."):
         # see if the modname needs to be corrected in terms
         # of current module context
-        base_module = env.temp_data.get('autodoc:module')
-        if base_module is None:
-            base_module = env.temp_data.get('py:module')
 
+        base_module = _get_sphinx_py_module(env)
         if base_module:
             modname = base_module + modname
+        else:
+            warnings.warn(
+                "Could not get base module for relative module: %s; "
+                "not generating node" % modname)
+            return None
 
     urito = env.app.builder.get_relative_uri
 
@@ -93,16 +113,19 @@ def _view_source_node(env, text, state):
     else:
         docstring = None
 
-    entry = code, analyzer.tags, {}
-    env._viewcode_modules[modname] = entry
     pagename = '_modules/' + modname.replace('.', '/')
-
     try:
         refuri = urito(env.docname, pagename)
     except NoUri:
         # if we're in the latex builder etc., this seems
         # to be what we get
         refuri = None
+
+    if util.SPHINX_VERSION >= (1, 3):
+        entry = code, analyzer.tags, {}, refuri
+    else:
+        entry = code, analyzer.tags, {}
+    env._viewcode_modules[modname] = entry
 
     if docstring:
         # embed the ref with the doc text so that it isn't
@@ -203,12 +226,12 @@ class AutoSourceDirective(Directive):
             modname = "." + modname
 
             link = _view_source_node(env, modname, self.state)
-
-            list_node = nodes.list_item(
-                '',
-                link
-            )
-            bullets += list_node
+            if link is not None:
+                list_node = nodes.list_item(
+                    '',
+                    link
+                )
+                bullets += list_node
 
         node += bullets
 

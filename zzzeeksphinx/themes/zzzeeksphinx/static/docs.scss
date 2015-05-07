@@ -578,17 +578,19 @@ a.headerlink:hover {
     clear:both;
 }
 
-tt.descname {
+/* sphinx 1.3 now using 'code' and not 'tt' for code / docstring elements */
+
+code.descname, tt.descname {
     background-color:transparent;
     font-size:1.2em;
     font-weight:bold;
 }
 
-tt.descclassname {
+code.descclassname, tt.descclassname {
     background-color:transparent;
 }
 
-tt {
+code, tt {
     background-color:#ECF0F3;
     padding:0 1px;
 }

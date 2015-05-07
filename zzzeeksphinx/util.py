@@ -1,4 +1,10 @@
+import sphinx
 import re
+
+
+SPHINX_VERSION = tuple(
+    int(dig) for dig in re.findall("\d+", sphinx.__version__)
+)
 
 
 def striptags(text):
