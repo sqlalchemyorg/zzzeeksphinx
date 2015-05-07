@@ -56,11 +56,16 @@ def _view_source_node(env, text, state):
     # module by file, not import (though we are importing)
     # the top level module here...
     pathname = None
+
     for tok in modname.split("."):
-        file_, pathname, desc = imp.find_module(
-            tok, [pathname] if pathname else None)
-        if file_:
-            file_.close()
+        try:
+            file_, pathname, desc = imp.find_module(
+                tok, [pathname] if pathname else None)
+        except ImportError as ie:
+            raise ImportError("Error trying to import %s: %s" % (modname, ie))
+        else:
+            if file_:
+                file_.close()
 
     # unlike viewcode which silently traps exceptions,
     # I want this to totally barf if the file can't be loaded.
