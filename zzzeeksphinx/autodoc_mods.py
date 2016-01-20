@@ -50,7 +50,7 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 ""
             ]
 
-    elif what in ("attribute", "method") and options.get("inherited-members"):
+    elif what in ("attribute", "method"):
         m = re.match(r'(.*?)\.([\w_]+)$', name)
         if m:
             clsname, attrname = m.group(1, 2)
