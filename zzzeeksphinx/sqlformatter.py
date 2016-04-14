@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from pygments.lexer import RegexLexer, bygroups, using
 from pygments.token import Token
 from pygments.filter import Filter
@@ -5,7 +7,7 @@ from pygments.filter import apply_filters
 from pygments.lexers import PythonLexer, PythonConsoleLexer
 from sphinx.highlighting import PygmentsBridge
 from pygments.formatters import HtmlFormatter, LatexFormatter
-
+from mako import filters
 import re
 
 
@@ -99,12 +101,14 @@ class PopupSQLFormatter(HtmlFormatter):
 
                 if ttype is Token.Sql:
                     yield 1, "<div class='show_sql'>%s</div>" % \
-                        re.sub(r'(?:{stop}|\n+)$', '', value)
+                        re.sub(
+                            r'(?:{stop}|\n+)$', '', filters.html_escape(value))
                 elif ttype is Token.Sql.Link:
                     yield 1, "<a href='#' class='sql_link'>sql</a>"
                 elif ttype is Token.Sql.Popup:
                     yield 1, "<div class='popup_sql'>%s</div>" % \
-                        re.sub(r'(?:{stop}|\n+)$', '', value)
+                        re.sub(
+                            r'(?:{stop}|\n+)$', '', filters.html_escape(value))
             else:
                 buf.append((ttype, value))
 
