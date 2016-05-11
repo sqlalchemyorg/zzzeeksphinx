@@ -28,7 +28,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
             directories=builder.config.templates_path + [
                 template_path
             ],
-            #format_exceptions=True,
+            # format_exceptions=True,
             imports=[
                 "from zzzeeksphinx import util"
             ]
