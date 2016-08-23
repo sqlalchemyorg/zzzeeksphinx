@@ -37,11 +37,13 @@
 
 
 <%
-withsidebar = bool(toc) and current_page_name != 'index'
+withsidebar = bool(toc) and (
+    theme_index_sidebar is True or current_page_name != 'index'
+)
 %>
 
 <%block name="head_title">
-    % if current_page_name != 'index':
+    % if theme_index_sidebar or current_page_name != 'index':
     ${capture(self.show_title) | util.striptags} &mdash;
     % endif
     ${docstitle|h}
@@ -132,7 +134,7 @@ withsidebar = bool(toc) and current_page_name != 'index'
 
             <div id="sidebar-search">
                 <form class="search" action="${pathto('search')}" method="get">
-                  <input type="text" name="q" size="12" /> <input type="submit" value="${_('Search')}" />
+                  <input type="text" name="q" size="12" />
                   <input type="hidden" name="check_keywords" value="yes" />
                   <input type="hidden" name="area" value="default" />
                 </form>

@@ -179,8 +179,11 @@ a.headerlink:hover {
  {
   font-family: $primary-font-family;
   font-size:.85em;
-  line-height:1.5em;
+    line-height:1.5em;
 
+  h2 {
+      line-height:1.3em;
+  }
 }
 
 #docs-body {
@@ -208,19 +211,14 @@ a.headerlink:hover {
 }
 
 #sidebar-topnav {
-  position: absolute;
-  bottom: 3em;
-  left: 10px;
 }
 
 #sidebar-search {
-  position: absolute;
-  bottom: 1em;
-  left: 10px;
+  margin: 10px 0px 10px 0px;
 }
 
 #docs-sidebar {
-  top: 118px;
+  top: 133px;
   bottom: 0;
   min-height: 0;
   overflow-y: auto;
@@ -283,13 +281,13 @@ a.headerlink:hover {
 }
 
 #docs-sidebar-popout {
-  height:105px;
-  max-height: 105px;
+  height:120px;
+  max-height: 120px;
   width:212px;
   padding-left:10px;
   padding-top:10px;
   position: relative;
-
+  line-height: 1em;
   font-size:.75em;
 
   p, form {
