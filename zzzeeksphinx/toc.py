@@ -1,7 +1,6 @@
 #!coding: utf-8
 
 from docutils import nodes as docutils_nodes
-from sphinx import addnodes
 
 
 class TOCMixin(object):
@@ -22,15 +21,19 @@ class TOCMixin(object):
 
         raw_tree = self.app.env.get_toctree_for(
             current_page_name, self.app.builder, True, maxdepth=-1)
-        local_tree = self.app.env.get_toc_for(
+        local_toc_tree = self.app.env.get_toc_for(
             current_page_name, self.app.builder)
+
+        if raw_tree is None:
+            raw_tree = local_toc_tree
 
         # start with the bullets inside the doc's toc,
         # not the top level bullet, as we get that from the other tree
-        if not local_tree.children or len(local_tree.children[0].children) < 2:
+        if not local_toc_tree.children or \
+                len(local_toc_tree.children[0].children) < 2:
             local_tree = None
         else:
-            local_tree = local_tree.children[0].children[1]
+            local_tree = local_toc_tree.children[0].children[1]
 
         def _locate_nodes(nodes, level, outer=True):
             # this is a lazy way of getting at all the info in a
@@ -64,16 +67,7 @@ class TOCMixin(object):
                     name = local_text[0].rawsource
                     remainders = elem.children[index:]
 
-                    # a little bit of extra filtering of when/where
-                    # we want internal nodes vs. page-level nodes,
-                    # this is usually not needed except in a certain
-                    # edge case
-                    if (
-                        not outer and refuri.startswith("#")
-                    ) or (
-                        outer and "#" not in refuri
-                    ):
-                        yield level, refuri, name, local_text
+                    yield level, refuri, name, local_text
                 else:
                     remainders = elem.children
 
@@ -178,6 +172,7 @@ class TOCMixin(object):
                             parent_element=parent_element)
 
         element = docutils_nodes.bullet_list()
+
         nodes = _organize_nodes(_locate_nodes([raw_tree], 0))
         _render_nodes(
             nodes,

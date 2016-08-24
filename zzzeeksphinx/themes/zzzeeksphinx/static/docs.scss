@@ -1,6 +1,10 @@
-$primary-font-family: Verdana, sans-serif;
-$header-font-family: Helvetica, Arial, sans-serif;
-$top-header-font-family: Tahoma,Geneva,sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Oxygen|Libre+Franklin:400,700);
+
+$primary-font-family: "Libre Franklin", sans-serif;
+$header-font-family: "Libre Franklin", Arial, sans-serif;
+$top-header-font-family: "Libre Franklin", Arial, sans-serif;
+$sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
+
 $primary-background-color: #FDFBFC;
 $topmost-header-color: #EBEBEE;
 $popout-color: #FBFBEE;
@@ -11,7 +15,14 @@ $notebox-background-color: #EEFFEF;
 $border-style: 1px solid #CCC;
 $highlighted-nav-link-background-color: #DDD;
 
+$sidebar-popout-height: 150px;
+
+$max-container-width: 1000px;
+$fixed-sidebar-width: 224px;
+$docs-body-sidebar-left: 234px;
+
 /* global */
+
 
 .body-background {
   background-color: $primary-background-color;
@@ -30,6 +41,11 @@ a {
 
 form {
     display:inline;
+}
+
+label > input {
+  margin: 10px 0px;
+
 }
 
 /* hyperlinks */
@@ -76,8 +92,8 @@ a.headerlink:hover {
 /* Container setup */
 
 #docs-container {
-  max-width:1000px;
-  margin: 0 auto;
+  max-width:$max-container-width;
+  margin: 10px auto;
   position: relative;
 }
 
@@ -90,20 +106,24 @@ a.headerlink:hover {
   font-size:.9em;
   position: relative;
 
+  background-color: $topmost-header-color;
+  border: $border-style;
+  height: 75px;
+
+  display: flex;
+  align-items: center;
+
   h1 {
     font-size: 20px;
     color: #222222;
-    margin: 4px 0px;
-    padding: 5px 5px;
-    background-color: $topmost-header-color;
-    border: $border-style;
+    margin-left: 10px;
   }
 }
 
 #docs-sidebar-popout,
 #docs-bottom-navigation,
 #index-nav {
-  font-family: $primary-font-family;
+  font-family: $sidebar-font-family;
   background-color: $popout-color;
   border: $border-style;
   font-size:.8em;
@@ -127,6 +147,10 @@ a.headerlink:hover {
 #docs-bottom-navigation {
     float:right;
     margin: 1em 0 1em 5px;
+}
+
+#docs-bottom-navigation.withsidebar {
+  margin-left: $docs-body-sidebar-left;
 }
 
 #docs-copyright {
@@ -173,13 +197,18 @@ a.headerlink:hover {
   position: relative;
 }
 
+#docs-sidebar {
+  font-family: $sidebar-font-family;
+  font-size:.85em;
+
+}
+
 #docs-body,
-#docs-sidebar,
 #index-nav
  {
   font-family: $primary-font-family;
   font-size:.85em;
-    line-height:1.5em;
+  line-height:1.5em;
 
   h2 {
       line-height:1.3em;
@@ -218,7 +247,7 @@ a.headerlink:hover {
 }
 
 #docs-sidebar {
-  top: 133px;
+  top: $sidebar-popout-height + 18px;
   bottom: 0;
   min-height: 0;
   overflow-y: auto;
@@ -242,6 +271,8 @@ a.headerlink:hover {
     display: block;
     margin-left: -100px;
     padding-left: 100px;
+    padding-top: 3px;
+    padding-bottom: 3px;
   }
 
   li.current > span.link-container {
@@ -251,7 +282,7 @@ a.headerlink:hover {
   h3, h4 {
     background-color: $sidebar-header-background-color;
     color: $sidebar-header-color;
-    font-family: $primary-font-family;
+    font-family: $sidebar-font-family;
     font-size: 1.1em;
     font-weight: normal;
     margin: 10px 0 0 -15px;
@@ -281,13 +312,13 @@ a.headerlink:hover {
 }
 
 #docs-sidebar-popout {
-  height:120px;
-  max-height: 120px;
+  height: $sidebar-popout-height;
+  max-height: $sidebar-popout-height;
   width:212px;
   padding-left:10px;
   padding-top:10px;
   position: relative;
-  line-height: 1em;
+  line-height: 1.2em;
   font-size:.75em;
 
   p, form {
@@ -307,7 +338,8 @@ a.headerlink:hover {
 
 #fixed-sidebar.withsidebar {
   float: left;
-  width:224px;
+  width:$fixed-sidebar-width;
+
 }
 
 #fixed-sidebar.preautomated {
@@ -343,7 +375,7 @@ a.headerlink:hover {
 }
 
 #docs-body.withsidebar {
-  margin-left: 230px;
+  margin-left: $docs-body-sidebar-left;
 }
 
 
@@ -439,6 +471,41 @@ a.headerlink:hover {
     border:1px dashed;
 }
 
+
+/* tables */
+
+.section > table.docutils {
+  border: none;
+  border-collapse: collapse;
+
+  tr {
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+
+    td, th {
+      border: 1px solid #e1e4e5;
+      background-color: transparent;
+      vertical-align: middle;
+      font-size: 90%;
+      margin: 0;
+      overflow: visible;
+      padding: 8px 16px;
+    }
+
+
+  }
+
+
+  tr.row-even {
+      td {
+        background-color: #f3f6f6;
+      }
+  }
+
+
+
+}
 
 /* docutils-specific elements */
 

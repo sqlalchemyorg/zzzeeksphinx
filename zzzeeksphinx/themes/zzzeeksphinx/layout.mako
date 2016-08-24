@@ -89,7 +89,11 @@ withsidebar = bool(toc) and (
 <div id="docs-top-navigation-container" class="body-background">
 <div id="docs-header">
     <div id="docs-version-header">
-        Release: <span class="version-num">${release}</span> | Release Date: ${release_date}
+        Release: <span class="version-num">${release}</span>
+        % if release_date:
+        | Release Date: ${release_date}
+        % endif
+
     </div>
 
     <h1>${docstitle|h}</h1>
@@ -104,7 +108,11 @@ withsidebar = bool(toc) and (
     % if not withsidebar:
         <div id="index-nav">
             <form class="search" action="${pathto('search')}" method="get">
-              <input type="text" name="q" size="12" /> <input type="submit" value="${_('Search')}" />
+              <label>
+                 Search terms:
+              <input type="text" placeholder="search..." name="q" size="12" />
+              </label>
+              <input type="submit" value="${_('Search')}" />
               <input type="hidden" name="check_keywords" value="yes" />
               <input type="hidden" name="area" value="default" />
             </form>
@@ -134,7 +142,10 @@ withsidebar = bool(toc) and (
 
             <div id="sidebar-search">
                 <form class="search" action="${pathto('search')}" method="get">
-                  <input type="text" name="q" size="12" />
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
                   <input type="hidden" name="check_keywords" value="yes" />
                   <input type="hidden" name="area" value="default" />
                 </form>
@@ -207,7 +218,7 @@ withsidebar = bool(toc) and (
 
 </div>
 
-<div id="docs-bottom-navigation" class="docs-navigation-links">
+<div id="docs-bottom-navigation" class="docs-navigation-links${', withsidebar' if withsidebar else ''}">
     % if prevtopic:
         Previous:
         <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
