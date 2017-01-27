@@ -155,6 +155,12 @@ withsidebar = bool(toc) and (
 
         <div id="docs-sidebar">
 
+        <div id="sidebar-banner">
+            ${parent.bannerad()}
+        </div>
+
+        <div id="docs-sidebar-inner">
+
         <%
             breadcrumb = parents[:]
             if not breadcrumb or breadcrumb[0]['link'] != pathto('index'):
@@ -185,6 +191,8 @@ withsidebar = bool(toc) and (
             <li><a href="${pathto('index')}">${release}</a></li>
         </ul>
         % endif
+
+        </div>
 
         </div>
     % endif

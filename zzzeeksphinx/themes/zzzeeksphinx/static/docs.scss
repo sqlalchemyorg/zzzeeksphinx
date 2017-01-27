@@ -15,7 +15,7 @@ $notebox-background-color: #EEFFEF;
 $border-style: 1px solid #CCC;
 $highlighted-nav-link-background-color: #DDD;
 
-$sidebar-popout-height: 150px;
+$sidebar-popout-height: 160px;
 
 $max-container-width: 1000px;
 $fixed-sidebar-width: 224px;
@@ -197,12 +197,6 @@ a.headerlink:hover {
   position: relative;
 }
 
-#docs-sidebar {
-  font-family: $sidebar-font-family;
-  font-size:.85em;
-
-}
-
 #docs-body,
 #index-nav
  {
@@ -246,6 +240,7 @@ a.headerlink:hover {
   margin: 10px 0px 10px 0px;
 }
 
+
 #docs-sidebar {
   top: $sidebar-popout-height + 18px;
   bottom: 0;
@@ -253,14 +248,25 @@ a.headerlink:hover {
   overflow-y: auto;
   overflow-x: hidden;
   margin-top:5px;
-  width:212px;
+
+  z-index: 3;
+}
+
+#sidebar-banner {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+#docs-sidebar-inner {
   padding-left:10px;
+  /*width:212px;*/
+
+  font-family: $sidebar-font-family;
 
   font-size:.85em;
 
   border: $border-style;
-
-  z-index: 3;
   background-color: $sidebar-color;
 
   > ul {
@@ -309,7 +315,9 @@ a.headerlink:hover {
         margin-left: 20px;
     }
   }
+
 }
+
 
 #docs-sidebar-popout {
   height: $sidebar-popout-height;
