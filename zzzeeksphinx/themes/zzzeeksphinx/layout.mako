@@ -92,6 +92,8 @@ withsidebar = bool(toc) and (
         Release: <span class="version-num">${release}</span>
         % if release_date:
         | Release Date: ${release_date}
+        % else:
+        | Release Date: unreleased
         % endif
 
     </div>
