@@ -37,6 +37,10 @@ setup(
     entry_points={
         'sphinx_themes': [
             'zzzeeksphinx = zzzeeksphinx.theme:get_path',
+        ],
+        'pygments.lexers': [
+            'pycon+sql = zzzeeksphinx.sqlformatter:PyConWithSQLLexer',
+            'python+sql = zzzeeksphinx.sqlformatter:PythonWithSQLLexer'
         ]
     },
 )
