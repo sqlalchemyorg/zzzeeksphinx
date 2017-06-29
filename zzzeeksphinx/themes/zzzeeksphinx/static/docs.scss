@@ -17,7 +17,7 @@ $highlighted-nav-link-background-color: #DDD;
 
 $sidebar-popout-height: 160px;
 
-$max-container-width: 1000px;
+$max-container-width: 1600px;
 $fixed-sidebar-width: 224px;
 $docs-body-sidebar-left: 234px;
 
@@ -92,7 +92,7 @@ a.headerlink:hover {
 /* Container setup */
 
 #docs-container {
-  /*max-width:$max-container-width;*/
+  max-width:$max-container-width;
   margin: 10px auto;
   position: relative;
 }
@@ -385,6 +385,12 @@ a.headerlink:hover {
 
 #docs-body.withsidebar {
   margin-left: $docs-body-sidebar-left;
+
+  div.section {
+    /* to limit text width inside the container */
+    /*max-width: 1024px;*/
+  }
+
 }
 
 
@@ -533,8 +539,6 @@ td.field-body {
   }
 }
 
-div.section {
-}
 
 div.note, div.warning, p.deprecated, div.topic, div.admonition  {
     background-color:$notebox-background-color;
