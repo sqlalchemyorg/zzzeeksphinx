@@ -22,7 +22,10 @@ def _strip_trailing_whitespace(iter_):
 class StripDocTestFilter(Filter):
     def filter(self, lexer, stream):
         for ttype, value in stream:
-            if ttype is Token.Comment and re.match(r'#\s*doctest:', value):
+            if (
+                    ttype is Token.Comment or
+                    ttype.parent is Token.Comment
+            ) and re.match(r'#\s*doctest:', value):
                 continue
             yield ttype, value
 
