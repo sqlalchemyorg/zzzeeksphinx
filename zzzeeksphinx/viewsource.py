@@ -3,7 +3,7 @@ from sphinx.ext.viewcode import collect_pages
 from sphinx.pycode import ModuleAnalyzer
 import imp
 import re
-from sphinx.util.compat import Directive
+from docutils.parsers.rst import Directive
 import os
 from docutils.statemachine import StringList
 from sphinx.environment import NoUri

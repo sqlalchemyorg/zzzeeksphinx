@@ -1,5 +1,5 @@
 import re
-from sphinx.util.compat import Directive
+from docutils.parsers.rst import Directive
 from docutils import nodes
 
 
