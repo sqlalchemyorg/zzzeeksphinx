@@ -130,6 +130,8 @@ withsidebar = bool(toc) and (
                 <p id="sidebar-prerelease">pre release version</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
+            % else:
+                <p id="sidebar-current">current release</p>
             % endif
 
         </div>
@@ -142,6 +144,8 @@ withsidebar = bool(toc) and (
                 <p id="sidebar-prerelease">pre release</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
+            % else:
+                <p id="sidebar-current">current release</p>
             % endif
             <p id="sidebar-topnav">
                 <a href="${pathto('contents') or pathto('index')}">Contents</a> |
