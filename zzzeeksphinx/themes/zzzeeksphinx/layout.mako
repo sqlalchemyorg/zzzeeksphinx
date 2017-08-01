@@ -133,7 +133,11 @@ withsidebar = bool(toc) and (
     % if withsidebar:
         <div id="docs-sidebar-popout">
             <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
-
+            % if is_prerelease_version:
+                <p id="sidebar-prerelease">pre release</p>
+            % elif is_legacy_version:
+                <p id="sidebar-legacy">legacy version</p>
+            % endif
             <p id="sidebar-topnav">
                 <a href="${pathto('contents') or pathto('index')}">Contents</a> |
                 <a href="${pathto('genindex')}">Index</a>

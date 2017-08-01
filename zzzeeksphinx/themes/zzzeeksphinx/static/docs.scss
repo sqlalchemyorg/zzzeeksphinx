@@ -258,6 +258,17 @@ a.headerlink:hover {
     padding: 0px;
 }
 
+#sidebar-prerelease, #sidebar-legacy {
+  background: #F11;
+  color: #BBB;
+  transform: ;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-left: 5px;
+  padding: 5px 5px 5px 5px;
+}
+
 
 #docs-sidebar-inner {
   padding-left:10px;
