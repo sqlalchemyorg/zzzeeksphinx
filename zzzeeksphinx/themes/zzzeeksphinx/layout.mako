@@ -126,6 +126,11 @@ withsidebar = bool(toc) and (
             | <a href="${pdf_url}">Download as PDF</a>
             % endif
             </p>
+            % if is_prerelease_version:
+                <p id="sidebar-prerelease">pre release version</p>
+            % elif is_legacy_version:
+                <p id="sidebar-legacy">legacy version</p>
+            % endif
 
         </div>
     % endif
