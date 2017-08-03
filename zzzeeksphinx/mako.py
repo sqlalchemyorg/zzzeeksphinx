@@ -78,6 +78,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
         context.setdefault("rtd_language", "en")
         context.setdefault("is_prerelease_version", False)
         context.setdefault("is_legacy_version", False)
+        context.setdefault("is_current_version", False)
         # override context attributes
         self.setup_ctx(context)
         context.setdefault('_', lambda x: x)

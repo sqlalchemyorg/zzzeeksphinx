@@ -130,7 +130,7 @@ withsidebar = bool(toc) and (
                 <p id="sidebar-prerelease">pre release version</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
-            % else:
+            % elif is_current_version:
                 <p id="sidebar-current">current release</p>
             % endif
 
@@ -144,7 +144,7 @@ withsidebar = bool(toc) and (
                 <p id="sidebar-prerelease">pre release</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
-            % else:
+            % elif is_current_version:
                 <p id="sidebar-current">current release</p>
             % endif
             <p id="sidebar-topnav">
