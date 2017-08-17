@@ -258,22 +258,30 @@ a.headerlink:hover {
     padding: 0px;
 }
 
+#sidebar-prerelease, #sidebar-legacy, #sidebar-current {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 2px 5px 2px 5px;
+  width: 11em;
+  text-align: center;
+}
+
 #sidebar-prerelease, #sidebar-legacy {
   background: #F11;
   color: #BBB;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 5px 5px 5px 5px;
 }
 
 #sidebar-current {
   background: #4C4;
   color: #555;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 5px 5px 5px 5px;
+}
+
+#docs-version-header {
+  #sidebar-prerelease, #sidebar-legacy, #sidebar-current {
+      width: 14em;
+      font-size: 1.0em;
+  }
 }
 
 #docs-sidebar-inner {

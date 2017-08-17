@@ -90,6 +90,15 @@ withsidebar = bool(toc) and (
 <div id="docs-header">
     <div id="docs-version-header">
         Release: <span class="version-num">${release}</span>
+
+        % if is_prerelease_version:
+            <span id="sidebar-prerelease">pre release</span>
+        % elif is_legacy_version:
+            <span id="sidebar-legacy">legacy version</span>
+        % elif is_current_version:
+            <span id="sidebar-current">current release</span>
+        % endif
+
         % if release_date:
         | Release Date: ${release_date}
         % else:
@@ -126,13 +135,6 @@ withsidebar = bool(toc) and (
             | <a href="${pdf_url}">Download as PDF</a>
             % endif
             </p>
-            % if is_prerelease_version:
-                <p id="sidebar-prerelease">pre release version</p>
-            % elif is_legacy_version:
-                <p id="sidebar-legacy">legacy version</p>
-            % elif is_current_version:
-                <p id="sidebar-current">current release</p>
-            % endif
 
         </div>
     % endif
