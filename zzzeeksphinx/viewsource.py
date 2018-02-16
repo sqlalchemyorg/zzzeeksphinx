@@ -100,7 +100,7 @@ def _view_source_node(env, text, state):
         code = analyzer.code
 
     if state is not None:
-        docstring = _find_mod_docstring(analyzer)
+        docstring = _find_mod_docstring(pathname)
         if docstring:
             # get rid of "foo.py" at the top
             docstring = re.sub(r"^[a-zA-Z_0-9]+\.py", "", docstring)
@@ -155,15 +155,16 @@ def _view_source_node(env, text, state):
     return return_node
 
 
-def _find_mod_docstring(analyzer):
+def _find_mod_docstring(pathname):
     """attempt to locate the module-level docstring.
 
     Note that sphinx autodoc just uses ``__doc__``.  But we don't want
     to import the module, so we need to parse for it.
 
     """
-    analyzer.tokenize()
-    for type_, parsed_line, start_pos, end_pos, raw_line in analyzer.tokens:
+    fhandle = open(pathname, 'rb')
+    for type_, parsed_line, start_pos, end_pos, raw_line in \
+            token.tokenize(fhandle.readline):
         if type_ == token.COMMENT:
             continue
         elif type_ == token.STRING:
