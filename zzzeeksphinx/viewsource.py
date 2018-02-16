@@ -5,9 +5,7 @@ import imp
 import re
 from docutils.parsers.rst import Directive
 import os
-from docutils.statemachine import StringList
 from sphinx.environment import NoUri
-import tokenize as token
 import warnings
 from . import util
 
@@ -99,20 +97,6 @@ def _view_source_node(env, text, state):
     else:
         code = analyzer.code
 
-    if state is not None:
-        docstring = _find_mod_docstring(pathname)
-        if docstring:
-            # get rid of "foo.py" at the top
-            docstring = re.sub(r"^[a-zA-Z_0-9]+\.py", "", docstring)
-
-            # strip
-            docstring = docstring.strip()
-
-            # yank only first paragraph
-            docstring = docstring.split("\n\n")[0].strip()
-    else:
-        docstring = None
-
     pagename = '_modules/' + modname.replace('.', '/')
     try:
         refuri = urito(env.docname, pagename)
@@ -127,50 +111,21 @@ def _view_source_node(env, text, state):
         entry = code, analyzer.tags, {}
     env._viewcode_modules[modname] = entry
 
-    if docstring:
-        # embed the ref with the doc text so that it isn't
-        # a separate paragraph
-        if refuri:
-            docstring = "`%s <%s>`_ - %s" % (text, refuri, docstring)
-        else:
-            docstring = "``%s`` - %s" % (text, docstring)
-        para = nodes.paragraph('', '')
-        state.nested_parse(StringList([docstring]), 0, para)
-        return_node = para
+    if refuri:
+        refnode = nodes.reference(
+            '', '',
+            nodes.Text(text, text),
+            refuri=urito(env.docname, pagename)
+        )
     else:
-        if refuri:
-            refnode = nodes.reference(
-                '', '',
-                nodes.Text(text, text),
-                refuri=urito(env.docname, pagename)
-            )
-        else:
-            refnode = nodes.Text(text, text)
+        refnode = nodes.Text(text, text)
 
-        if state:
-            return_node = nodes.paragraph('', '', refnode)
-        else:
-            return_node = refnode
+    if state:
+        return_node = nodes.paragraph('', '', refnode)
+    else:
+        return_node = refnode
 
     return return_node
-
-
-def _find_mod_docstring(pathname):
-    """attempt to locate the module-level docstring.
-
-    Note that sphinx autodoc just uses ``__doc__``.  But we don't want
-    to import the module, so we need to parse for it.
-
-    """
-    fhandle = open(pathname, 'rb')
-    for type_, parsed_line, start_pos, end_pos, raw_line in \
-            token.tokenize(fhandle.readline):
-        if type_ == token.COMMENT:
-            continue
-        elif type_ == token.STRING:
-            return eval(parsed_line)
-        else:
-            return None
 
 
 def _parse_content(content):
