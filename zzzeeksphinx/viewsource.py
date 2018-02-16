@@ -7,7 +7,7 @@ from docutils.parsers.rst import Directive
 import os
 from docutils.statemachine import StringList
 from sphinx.environment import NoUri
-from sphinx.pycode.pgen2 import token
+import tokenize as token
 import warnings
 from . import util
 
