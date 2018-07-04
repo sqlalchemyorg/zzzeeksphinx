@@ -32,6 +32,11 @@ body {
   background-color: $primary-background-color;
   margin:0 38px;
   color:#333333;
+
+}
+
+blockquote {
+    margin-right: inherit;
 }
 
 a {
@@ -565,10 +570,6 @@ td.field-body {
 }
 
 
-div.note, div.warning, p.deprecated, div.topic, div.admonition  {
-    background-color:$notebox-background-color;
-}
-
 .footnote {
   font-size: .95em;
 }
@@ -581,13 +582,31 @@ div.faq ul {
   list-style: square outside none;
 }
 
+div.note, div.warning, p.deprecated, div.topic, div.admonition  {
+    background-color:$notebox-background-color;
+}
+
 div.admonition, div.topic, .deprecated, .versionadded, .versionchanged {
     border: $border-style;
-    padding:5px 10px;
+    padding:5px 10px 5px 10px;
     font-size:.9em;
     margin-top:5px;
     box-shadow: 2px 2px 3px #DFDFDF;
 }
+
+div.note, div.warning {
+    background-image: url("dragons.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    clear: right;
+    min-height: 100px;
+    padding-left: 120px;
+}
+
+p.admonition-title, p.topic-title {
+}
+
+
 
 div.sidebar {
     background-color: #FFFFEE;
