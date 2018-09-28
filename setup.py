@@ -35,8 +35,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     entry_points={
-        'sphinx_themes': [
-            'zzzeeksphinx = zzzeeksphinx.theme:get_path',
+        'sphinx.html_themes': [
+            'zzzeeksphinx = zzzeeksphinx.theme',
         ],
         'pygments.lexers': [
             'pycon+sql = zzzeeksphinx.sqlformatter:PyConWithSQLLexer',

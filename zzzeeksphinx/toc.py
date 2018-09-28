@@ -1,6 +1,7 @@
 #!coding: utf-8
 
 from docutils import nodes as docutils_nodes
+from sphinx.environment.adapters.toctree import TocTree
 
 
 class TOCMixin(object):
@@ -18,10 +19,10 @@ class TOCMixin(object):
         "drill-down" style navigation.
 
         """
-
-        raw_tree = self.app.env.get_toctree_for(
+        toc_tree = TocTree(self.app.env)
+        raw_tree = toc_tree.get_toctree_for(
             current_page_name, self.app.builder, True, maxdepth=-1)
-        local_toc_tree = self.app.env.get_toc_for(
+        local_toc_tree = toc_tree.get_toc_for(
             current_page_name, self.app.builder)
 
         if raw_tree is None:
