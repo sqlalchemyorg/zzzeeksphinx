@@ -31,7 +31,7 @@ setup(
     url='http://bitbucket.org/zzzeek/zzzeeksphinx',
     license='MIT',
     packages=['zzzeeksphinx'],
-    install_requires=['pyscss', 'mako'],
+    install_requires=['pyscss', 'mako', 'requests'],
     include_package_data=True,
     zip_safe=False,
     entry_points={
