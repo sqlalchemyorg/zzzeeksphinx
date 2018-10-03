@@ -29,8 +29,10 @@ class MakoBridge(TOCMixin, TemplateBridge):
 
         self.lookup = TemplateLookup(
             strict_undefined=True,
-            directories=builder.config.templates_path + [
-                template_path
+            directories=[template_path] + [
+                dir_ for dir_ in
+                builder.theme.get_theme_dirs()
+                if 'zzzeeksphinx' in dir_
             ],
             # format_exceptions=True,
             imports=[
