@@ -7,7 +7,7 @@ body {
 }
 
 a {
-    font-weight:normal; 
+    font-weight:normal;
     text-decoration:none;
 }
 
@@ -27,7 +27,7 @@ a:hover {
 
 /* paragraph links after sections.
    These aren't visible until hovering
-   over the <h> tag, then have a 
+   over the <h> tag, then have a
    "reverse video" effect over the actual
    link
  */
@@ -59,6 +59,7 @@ a.headerlink:hover {
 
 #docs-container {
   max-width:1000px;
+  clear:both;
 }
 
 
@@ -249,13 +250,17 @@ a.headerlink:hover {
 }
 
 #docs-container pre {
-  background-color: #f0f0f0;  
+  background-color: #f0f0f0;
   border: solid 1px #ccc;
   box-shadow: 2px 2px 3px #DFDFDF;
   padding:10px;
   margin: 5px 0px 5px 0px;
   overflow:auto;
   line-height:1.3em;
+}
+
+#docs-container #fixed-sidebar {
+  border-bottom: 1px solid;
 }
 
 .popup_sql, .show_sql
@@ -281,7 +286,7 @@ a.headerlink:hover {
   line-height:1.2em;
 }
 
-#docs-container a.sql_link, 
+#docs-container a.sql_link,
 #docs-container .sql_link
 {
     text-decoration: none;
@@ -395,7 +400,7 @@ tt {
 .go {color:#804049;}
 
 
-/* special "index page" sections 
+/* special "index page" sections
    with specific formatting
 */
 
