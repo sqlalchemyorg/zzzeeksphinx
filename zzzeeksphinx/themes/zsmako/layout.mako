@@ -132,6 +132,10 @@ withsidebar = bool(toc) and current_page_name != 'index'
 <div id="docs-body-container">
 
 % if withsidebar:
+    <div id="sidebar-banner">
+        ${self.bannerad()}
+    </div>
+
     <div id="docs-sidebar">
     <h3><a href="${pathto('index')}">Table of Contents</a></h3>
     ${toc}
