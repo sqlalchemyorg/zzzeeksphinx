@@ -1,5 +1,4 @@
 ## coding: utf-8
-
 <%!
     local_script_files = []
 
@@ -14,12 +13,12 @@
     main site.
 
     docs-container ->
-        docs-top-navigation-container ->
-            docs-header ->
-                docs-version-header
-            docs-top-navigation
-                docs-top-page-control
-                docs-navigation-banner
+        docs-header ->
+            docs-search
+            docs-version-header
+        docs-top-navigation
+            docs-top-page-control
+            docs-navigation-banner
         docs-body-container ->
             docs-sidebar
             docs-body
@@ -30,35 +29,20 @@
 <%inherit file="${context['base']}"/>
 
 <%
-    if builder == 'epub':
-        next.body()
-        return
-%>
-
-
-<%
-withsidebar = bool(toc) and (
-    theme_index_sidebar is True or current_page_name != 'index'
-)
+withsidebar = bool(toc) and current_page_name != 'index'
 %>
 
 <%block name="head_title">
-    % if theme_index_sidebar or current_page_name != 'index':
+    % if current_page_name not in ('index', 'genindex'):
     ${capture(self.show_title) | util.striptags} &mdash;
     % endif
     ${docstitle|h}
 </%block>
 
-<%def name="show_title()">
-    ${title}
-</%def>
-
 
 <div id="docs-container">
 
-
 <%block name="headers">
-
     ${parent.headers()}
 
     <!-- begin layout.mako headers -->
@@ -85,103 +69,47 @@ withsidebar = bool(toc) and (
 
 </%block>
 
-
-<div id="docs-top-navigation-container" class="body-background">
 <div id="docs-header">
     <h1>${docstitle|h}</h1>
 
-</div>
-</div>
+    <div id="docs-search">
+    Search:
+    <form class="search" action="${pathto('search')}" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="${_('Search')}" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
 
-<div id="docs-body-container">
-
-    <div id="fixed-sidebar" class="${'withsidebar' if withsidebar else ''}">
-
-    % if not withsidebar:
-        <div id="index-nav">
-
-            <p>
-            <a href="${pathto('index')}">Contents</a> |
-            <a href="${pathto('genindex')}">Index</a>
-            % if pdf_url:
-            | <a href="${pdf_url}">Download as PDF</a>
-            % endif
-            </p>
-
-            <form class="search" action="${pathto('search')}" method="get">
-              <label>
-                 Search terms:
-              <input type="text" placeholder="search..." name="q" size="12" />
-              </label>
-              <input type="submit" value="${_('Search')}" />
-              <input type="hidden" name="check_keywords" value="yes" />
-              <input type="hidden" name="area" value="default" />
-            </form>
-
-        </div>
-    % endif
-
-    % if withsidebar:
-        <div id="docs-sidebar-popout">
-            <p id="sidebar-topnav">
-                <a href="${pathto('index')}">Contents</a> |
-                <a href="${pathto('genindex')}">Index</a>
-                % if pdf_url:
-                | <a href="${pdf_url}">PDF</a>
-                % endif
-            </p>
-
-            <div id="sidebar-search">
-                <form class="search" action="${pathto('search')}" method="get">
-                  <label>
-                  Search terms:
-                  <input type="text" placeholder="search..." name="q" size="12" />
-                  </label>
-                  <input type="hidden" name="check_keywords" value="yes" />
-                  <input type="hidden" name="area" value="default" />
-                </form>
-            </div>
-
-        </div>
-
-        <div id="docs-sidebar">
-
-        <div id="sidebar-banner">
-            ${parent.bannerad()}
-        </div>
-
-        <div id="docs-sidebar-inner">
-
-        <%
-            breadcrumb = parents[:]
-            if not breadcrumb or breadcrumb[0]['link'] != pathto('index'):
-                breadcrumb = [{'link': pathto('index'), 'title': docstitle}] + breadcrumb
-
-            if len(breadcrumb) > 1:
-                breadcrumb = breadcrumb[1:]
-            h3_toc_item = breadcrumb[0]
-            if len(breadcrumb) > 1:
-                outermost_link_item = breadcrumb[1]['link']
-            elif not parents:
-                outermost_link_item = None
-            else:
-                outermost_link_item = ''
-
-        %>
-
-        ${parent_toc(
-            current_page_name,
-            outermost_link_item)}
-
-        </div>
-
-        </div>
-    % endif
+    <div id="docs-version-header">
+        Release: <span class="version-num">${release}</span>
 
     </div>
 
-    <%doc>
-    <div id="docs-top-navigation">
+</div>
+
+<div id="docs-top-navigation">
+    <div id="docs-top-page-control" class="docs-navigation-links">
+        <ul>
+        % if prevtopic:
+            <li>Prev:
+            <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
+            </li>
+        % endif
+        % if nexttopic:
+            <li>Next:
+            <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
+            </li>
+        % endif
+
+        <li>
+            <a href="${pathto('index')}">Table of Contents</a> |
+            <a href="${pathto('genindex')}">Index</a>
+        </li>
+        </ul>
+    </div>
+
+    <div id="docs-navigation-banner">
         <a href="${pathto('index')}">${docstitle|h}</a>
         % if parents:
             % for parent in parents:
@@ -197,9 +125,41 @@ withsidebar = bool(toc) and (
                 ${title}
             </%block>
         </h2>
+    </div>
+
+</div>
+
+<div id="docs-body-container">
+
+% if withsidebar:
+    <div id="docs-sidebar">
+    <h3><a href="${pathto('index')}">Table of Contents</a></h3>
+    ${toc}
+
+    % if prevtopic:
+    <h4>Previous Topic</h4>
+    <p>
+    <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
+    </p>
+    % endif
+    % if nexttopic:
+    <h4>Next Topic</h4>
+    <p>
+    <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
+    </p>
+    % endif
+
+    <h4>Quick Search</h4>
+    <p>
+    <form class="search" action="${pathto('search')}" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="${_('Search')}" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </p>
 
     </div>
-    </%doc>
+% endif
 
     <div id="docs-body" class="${'withsidebar' if withsidebar else ''}" >
         ${next.body()}
@@ -207,7 +167,7 @@ withsidebar = bool(toc) and (
 
 </div>
 
-<div id="docs-bottom-navigation" class="docs-navigation-links${', withsidebar' if withsidebar else ''}">
+<div id="docs-bottom-navigation" class="docs-navigation-links">
     % if prevtopic:
         Previous:
         <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
@@ -224,7 +184,8 @@ withsidebar = bool(toc) and (
         &copy; Copyright ${copyright|h}.
     % endif
     % if show_sphinx:
-        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
+        Documentation generated using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}
+        with Mako templates.
     % endif
     </div>
 </div>

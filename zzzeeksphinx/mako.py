@@ -27,14 +27,17 @@ class MakoBridge(TOCMixin, TemplateBridge):
         template_path = os.path.join(
             package_dir, 'themes', builder.config.html_theme)
 
+        # note: don't use strict_undefined.   it means that a variable
+        # cannot even be used conditionally, or with any inheriting template
+        # that attempts to override the %def/%block that would normally
+        # call upon that variable.
         self.lookup = TemplateLookup(
-            strict_undefined=True,
             directories=[template_path] + [
                 dir_ for dir_ in
                 builder.theme.get_theme_dirs()
                 if 'zzzeeksphinx' in dir_
             ],
-            # format_exceptions=True,
+            #format_exceptions=True,
             imports=[
                 "from zzzeeksphinx import util"
             ]
