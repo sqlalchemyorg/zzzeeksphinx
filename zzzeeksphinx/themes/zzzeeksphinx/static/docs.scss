@@ -263,7 +263,7 @@ a.headerlink:hover {
     padding: 0px;
 }
 
-#sidebar-prerelease, #sidebar-legacy, #sidebar-current {
+#sidebar-prerelease, #sidebar-legacy, #sidebar-current, #sidebar-beta {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.1em;
@@ -274,6 +274,11 @@ a.headerlink:hover {
 
 #sidebar-prerelease, #sidebar-legacy {
   background: #F11;
+  color: #BBB;
+}
+
+#sidebar-beta {
+  background: #FC0;
   color: #BBB;
 }
 

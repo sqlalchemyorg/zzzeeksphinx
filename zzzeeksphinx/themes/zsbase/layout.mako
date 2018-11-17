@@ -91,7 +91,9 @@ withsidebar = bool(toc) and (
     <div id="docs-version-header">
         Release: <span class="version-num">${release}</span>
 
-        % if is_prerelease_version:
+        % if is_beta_version:
+            <span id="sidebar-beta">beta release</span>
+        % elif is_prerelease_version:
             <span id="sidebar-prerelease">pre release</span>
         % elif is_legacy_version:
             <span id="sidebar-legacy">legacy version</span>
@@ -142,7 +144,9 @@ withsidebar = bool(toc) and (
     % if withsidebar:
         <div id="docs-sidebar-popout">
             <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
-            % if is_prerelease_version:
+            % if is_beta_version:
+                <p id="sidebar-beta">beta release</p>
+            % elif is_prerelease_version:
                 <p id="sidebar-prerelease">pre release</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
