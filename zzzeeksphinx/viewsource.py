@@ -136,7 +136,7 @@ def _view_source_node(env, text, state):
     # get the first line of the module docstring
     if module_docstring:
         firstline = module_docstring.lstrip().split("\n\n")[0]
-        if 30 < len(firstline) < 350:  # opinionated
+        if 30 < len(firstline) < 450:  # opinionated
             description_node = nodes.paragraph('', '')
             # parse the content of the first line of the module
             state.nested_parse(
