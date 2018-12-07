@@ -95,7 +95,8 @@ def _view_source_node(env, text, state):
             raise ImportError("Error trying to import %s: %s" % (modname, ie))
         else:
             if file_:
-                module_docstring = _get_module_docstring(file_)
+                if state:
+                    module_docstring = _get_module_docstring(file_)
                 file_.close()
 
     # unlike viewcode which silently traps exceptions,
@@ -134,7 +135,7 @@ def _view_source_node(env, text, state):
         refnode = nodes.Text(text, text)
 
     # get the first line of the module docstring
-    if module_docstring:
+    if module_docstring and state:
         firstline = module_docstring.lstrip().split("\n\n")[0]
         if 30 < len(firstline) < 450:  # opinionated
             description_node = nodes.paragraph('', '')
