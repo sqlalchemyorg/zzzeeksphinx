@@ -2,8 +2,10 @@ from docutils import nodes
 from sphinx.ext.viewcode import collect_pages
 from sphinx.pycode import ModuleAnalyzer
 import imp
+import ast
 import re
 from docutils.parsers.rst import Directive
+import docutils
 import os
 from sphinx.environment import NoUri
 import warnings
@@ -44,6 +46,16 @@ def _get_sphinx_py_module(env):
     return None
 
 
+def _get_module_docstring(_file):
+    content = _file.read()
+    module = ast.parse(content)
+    for elem in module.body:
+        if isinstance(elem, ast.Expr) and isinstance(elem.value, ast.Str):
+            return elem.value.s
+    else:
+        return None
+
+
 def _view_source_node(env, text, state):
     # pretend we're using viewcode fully,
     # install the context it looks for
@@ -73,7 +85,7 @@ def _view_source_node(env, text, state):
     # which we really don't want to have required so load the
     # module by file, not import (though we are importing)
     # the top level module here...
-    pathname = None
+    pathname = module_docstring = None
 
     for tok in modname.split("."):
         try:
@@ -83,6 +95,7 @@ def _view_source_node(env, text, state):
             raise ImportError("Error trying to import %s: %s" % (modname, ie))
         else:
             if file_:
+                module_docstring = _get_module_docstring(file_)
                 file_.close()
 
     # unlike viewcode which silently traps exceptions,
@@ -119,6 +132,19 @@ def _view_source_node(env, text, state):
         )
     else:
         refnode = nodes.Text(text, text)
+
+    # get the first line of the module docstring
+    if module_docstring:
+        firstline = module_docstring.lstrip().split("\n\n")[0]
+        if 30 < len(firstline) < 350:  # opinionated
+            description_node = nodes.paragraph('', '')
+            # parse the content of the first line of the module
+            state.nested_parse(
+                docutils.statemachine.StringList([firstline]),
+                0, description_node)
+            stuff_we_want = description_node.children[0].children
+            refnode = nodes.paragraph(
+                '', '', refnode, nodes.Text(' - ', ' - '), *stuff_we_want)
 
     if state:
         return_node = nodes.paragraph('', '', refnode)
