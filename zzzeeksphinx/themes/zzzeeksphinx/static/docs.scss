@@ -12,6 +12,7 @@ $sidebar-color: #EFEFEF;
 $sidebar-header-background-color: #DDDDDD;
 $sidebar-header-color: #222222;
 $notebox-background-color: #EEFFEF;
+$deprecated-background-color: #FCF0F6;
 $border-style: 1px solid #CCC;
 $highlighted-nav-link-background-color: #DDD;
 
@@ -587,8 +588,12 @@ div.faq ul {
   list-style: square outside none;
 }
 
-div.note, div.warning, p.deprecated, div.topic, div.admonition  {
+div.note, div.topic, div.admonition  {
     background-color:$notebox-background-color;
+}
+
+div.warning, p.deprecated, div.deprecated  {
+    background-color:$deprecated-background-color;
 }
 
 div.admonition, div.topic, .deprecated, .versionadded, .versionchanged {
