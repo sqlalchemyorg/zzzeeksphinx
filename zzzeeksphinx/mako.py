@@ -14,6 +14,8 @@ class MakoBridge(TOCMixin, TemplateBridge):
     def init(self, builder, *args, **kw):
         self.jinja2_fallback = BuiltinTemplateLoader()
         self.jinja2_fallback.init(builder, *args, **kw)
+        # for gettext builder
+        self.environment = self.jinja2_fallback.environment
 
         builder.config.html_context['release_date'] = \
             builder.config['release_date']
@@ -32,11 +34,11 @@ class MakoBridge(TOCMixin, TemplateBridge):
         # that attempts to override the %def/%block that would normally
         # call upon that variable.
         self.lookup = TemplateLookup(
-            directories=[template_path] + [
+            directories=[template_path] + ([
                 dir_ for dir_ in
                 builder.theme.get_theme_dirs()
                 if 'zzzeeksphinx' in dir_
-            ],
+            ] if hasattr(builder, 'theme') else []),
             #format_exceptions=True,
             imports=[
                 "from zzzeeksphinx import util"
