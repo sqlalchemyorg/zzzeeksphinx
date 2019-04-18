@@ -761,6 +761,10 @@ div#sqlalchemy-documentation a, div#sqlalchemy-documentation li {
   padding:5px 0px;
 }
 
+div#sqlalchemy-documentation li p {
+  margin: 0;
+}
+
 div#getting-started {
   border-bottom:1px solid;
 }
