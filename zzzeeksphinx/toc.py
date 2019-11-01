@@ -21,17 +21,21 @@ class TOCMixin(object):
         """
         toc_tree = TocTree(self.app.env)
         raw_tree = toc_tree.get_toctree_for(
-            current_page_name, self.app.builder, True, maxdepth=-1)
+            current_page_name, self.app.builder, True, maxdepth=-1
+        )
         local_toc_tree = toc_tree.get_toc_for(
-            current_page_name, self.app.builder)
+            current_page_name, self.app.builder
+        )
 
         if raw_tree is None:
             raw_tree = local_toc_tree
 
         # start with the bullets inside the doc's toc,
         # not the top level bullet, as we get that from the other tree
-        if not local_toc_tree.children or \
-                len(local_toc_tree.children[0].children) < 2:
+        if (
+            not local_toc_tree.children
+            or len(local_toc_tree.children[0].children) < 2
+        ):
             local_tree = None
         else:
             local_tree = local_toc_tree.children[0].children[1]
@@ -49,8 +53,8 @@ class TOCMixin(object):
 
             for elem in nodes:
 
-                if hasattr(elem, 'attributes'):
-                    refuri = elem.attributes.get('refuri', None)
+                if hasattr(elem, "attributes"):
+                    refuri = elem.attributes.get("refuri", None)
                 else:
                     refuri = None
 
@@ -58,8 +62,9 @@ class TOCMixin(object):
                 if refuri is not None:
                     for index, sub_elem in enumerate(elem.children, 1):
                         if isinstance(
-                                sub_elem,
-                                (docutils_nodes.Text, docutils_nodes.literal)):
+                            sub_elem,
+                            (docutils_nodes.Text, docutils_nodes.literal),
+                        ):
                             continue
                         else:
                             break
@@ -75,14 +80,14 @@ class TOCMixin(object):
                 # try to embed the item-level get_toc_for() inside
                 # the file-level get_toctree_for(), otherwise if we
                 # just get the full get_toctree_for(), it's enormous.
-                if outer and refuri == '':
+                if outer and refuri == "":
                     if local_tree is not None:
                         for ent in _locate_nodes(
-                                [local_tree], level + 1, False):
+                            [local_tree], level + 1, False
+                        ):
                             yield ent
                 else:
-                    for ent in _locate_nodes(
-                            remainders, level + 1, outer):
+                    for ent in _locate_nodes(remainders, level + 1, outer):
                         yield ent
 
         def _organize_nodes(nodes):
@@ -110,48 +115,57 @@ class TOCMixin(object):
             return stack
 
         def _render_nodes(
-                stack, level=0, start_from=None, nested_element=False,
-                parent_element=None):
+            stack,
+            level=0,
+            start_from=None,
+            nested_element=False,
+            parent_element=None,
+        ):
 
             printing = False
             if stack:
-                printing = nested_element or start_from is None or \
-                    start_from in [
-                        elem[0] for elem in stack
-                        if isinstance(elem, tuple)
-                    ]
+                printing = (
+                    nested_element
+                    or start_from is None
+                    or start_from
+                    in [elem[0] for elem in stack if isinstance(elem, tuple)]
+                )
                 if printing:
                     if not isinstance(
-                            parent_element, docutils_nodes.bullet_list):
+                        parent_element, docutils_nodes.bullet_list
+                    ):
                         new_list = docutils_nodes.bullet_list()
                         parent_element.append(new_list)
                         parent_element = new_list
                 while stack:
                     elem = stack.pop(0)
-                    as_links = not isinstance(elem, tuple) or \
-                        elem[0] != ''
+                    as_links = not isinstance(elem, tuple) or elem[0] != ""
                     if isinstance(elem, tuple):
                         refuri, name, text_nodes = elem
                         if not stack or isinstance(stack[0], tuple):
                             if printing:
                                 list_item = docutils_nodes.list_item(
-                                    classes=['selected']
-                                    if not as_links else [])
+                                    classes=["selected"]
+                                    if not as_links
+                                    else []
+                                )
                                 list_item.append(
                                     self._link_node(refuri, text_nodes)
-                                    if as_links else
-                                    self._strong_node(refuri, text_nodes)
+                                    if as_links
+                                    else self._strong_node(refuri, text_nodes)
                                 )
                                 parent_element.append(list_item)
                         elif isinstance(stack[0], list):
                             if printing:
                                 list_item = docutils_nodes.list_item(
-                                    classes=['selected']
-                                    if not as_links else [])
+                                    classes=["selected"]
+                                    if not as_links
+                                    else []
+                                )
                                 list_item.append(
                                     self._link_node(refuri, text_nodes)
-                                    if as_links else
-                                    self._strong_node(refuri, text_nodes)
+                                    if as_links
+                                    else self._strong_node(refuri, text_nodes)
                                 )
                                 parent_element.append(list_item)
                             else:
@@ -160,50 +174,47 @@ class TOCMixin(object):
                                 stack[0],
                                 level=level + 1,
                                 start_from=start_from,
-                                nested_element=nested_element or
-                                printing or
-                                elem[0] == '',
-                                parent_element=list_item or parent_element)
+                                nested_element=nested_element
+                                or printing
+                                or elem[0] == "",
+                                parent_element=list_item or parent_element,
+                            )
                     elif isinstance(elem, list):
                         _render_nodes(
                             elem,
                             level=level + 1,
                             start_from=start_from,
                             nested_element=nested_element,
-                            parent_element=parent_element)
+                            parent_element=parent_element,
+                        )
 
         element = docutils_nodes.bullet_list()
 
         nodes = _organize_nodes(_locate_nodes([raw_tree], 0))
-        _render_nodes(
-            nodes,
-            start_from=start_from,
-            parent_element=element
-        )
-        return self.app.builder.render_partial(element)['fragment']
+        _render_nodes(nodes, start_from=start_from, parent_element=element)
+        return self.app.builder.render_partial(element)["fragment"]
 
     def _link_node(self, refuri, text_nodes):
-        link = docutils_nodes.reference(
-            '', '', text_nodes[0],
-            refuri=refuri)
+        link = docutils_nodes.reference("", "", text_nodes[0], refuri=refuri)
         link.extend(text_nodes[1:])
-        cp = docutils_nodes.inline(classes=['link-container'])
+        cp = docutils_nodes.inline(classes=["link-container"])
         cp.append(link)
         return cp
 
     def _strong_node(self, refuri, text_nodes):
-        cp = docutils_nodes.inline(classes=['link-container'])
+        cp = docutils_nodes.inline(classes=["link-container"])
         n1 = docutils_nodes.strong()
         n1.extend(text_nodes)
         cp.append(n1)
         paramlink = docutils_nodes.reference(
-            '', '',
+            "",
+            "",
             docutils_nodes.Text(u"¶", u"¶"),
             refid="",
             # paramlink is our own CSS class, headerlink
             # is theirs.  Trying to get everything we can for existing
             # symbols...
-            classes=['paramlink', 'headerlink']
+            classes=["paramlink", "headerlink"],
         )
 
         cp.append(paramlink)

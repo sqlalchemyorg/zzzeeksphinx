@@ -20,9 +20,7 @@ else:
     text_type = str
 
 
-def view_source(
-    name, rawtext, text, lineno, inliner,
-        options={}, content=[]):
+def view_source(name, rawtext, text, lineno, inliner, options={}, content=[]):
 
     env = inliner.document.settings.env
 
@@ -31,15 +29,15 @@ def view_source(
 
 
 def _get_sphinx_py_module(env):
-    base_name = env.temp_data.get('autodoc:module', None)
+    base_name = env.temp_data.get("autodoc:module", None)
     if base_name is not None:
         return base_name
     if util.SPHINX_VERSION >= (1, 3):
-        base_name = env.ref_context.get('py:module', None)
+        base_name = env.ref_context.get("py:module", None)
         if base_name is not None:
             return base_name
     else:
-        base_name = env.temp_data.get('py:module', None)
+        base_name = env.temp_data.get("py:module", None)
         if base_name is not None:
             return base_name
 
@@ -59,7 +57,7 @@ def _get_module_docstring(_file):
 def _view_source_node(env, text, state):
     # pretend we're using viewcode fully,
     # install the context it looks for
-    if not hasattr(env, '_viewcode_modules'):
+    if not hasattr(env, "_viewcode_modules"):
         env._viewcode_modules = {}
 
     modname = text
@@ -76,7 +74,8 @@ def _view_source_node(env, text, state):
         else:
             warnings.warn(
                 "Could not get base module for relative module: %s; "
-                "not generating node" % modname)
+                "not generating node" % modname
+            )
             return None
 
     urito = env.app.builder.get_relative_uri
@@ -90,7 +89,8 @@ def _view_source_node(env, text, state):
     for tok in modname.split("."):
         try:
             file_, pathname, desc = imp.find_module(
-                tok, [pathname] if pathname else None)
+                tok, [pathname] if pathname else None
+            )
         except ImportError as ie:
             raise ImportError("Error trying to import %s: %s" % (modname, ie))
         else:
@@ -111,7 +111,7 @@ def _view_source_node(env, text, state):
     else:
         code = analyzer.code
 
-    pagename = '_modules/' + modname.replace('.', '/')
+    pagename = "_modules/" + modname.replace(".", "/")
     try:
         refuri = urito(env.docname, pagename)
     except NoUri:
@@ -127,9 +127,7 @@ def _view_source_node(env, text, state):
 
     if refuri:
         refnode = nodes.reference(
-            '', '',
-            nodes.Text(text, text),
-            refuri=urito(env.docname, pagename)
+            "", "", nodes.Text(text, text), refuri=urito(env.docname, pagename)
         )
     else:
         refnode = nodes.Text(text, text)
@@ -138,17 +136,20 @@ def _view_source_node(env, text, state):
     if module_docstring and state:
         firstline = module_docstring.lstrip().split("\n\n")[0]
         if 30 < len(firstline) < 450:  # opinionated
-            description_node = nodes.paragraph('', '')
+            description_node = nodes.paragraph("", "")
             # parse the content of the first line of the module
             state.nested_parse(
                 docutils.statemachine.StringList([firstline]),
-                0, description_node)
+                0,
+                description_node,
+            )
             stuff_we_want = description_node.children[0].children
             refnode = nodes.paragraph(
-                '', '', refnode, nodes.Text(' - ', ' - '), *stuff_we_want)
+                "", "", refnode, nodes.Text(" - ", " - "), *stuff_we_want
+            )
 
     if state:
-        return_node = nodes.paragraph('', '', refnode)
+        return_node = nodes.paragraph("", "", refnode)
     else:
         return_node = refnode
 
@@ -157,14 +158,14 @@ def _view_source_node(env, text, state):
 
 def _parse_content(content):
     d = {}
-    d['text'] = []
+    d["text"] = []
     idx = 0
     for line in content:
         idx += 1
-        m = re.match(r' *\:(.+?)\:(?: +(.+))?', line)
+        m = re.match(r" *\:(.+?)\:(?: +(.+))?", line)
         if m:
             attrname, value = m.group(1, 2)
-            d[attrname] = value or ''
+            d[attrname] = value or ""
         else:
             break
     d["text"] = content[idx:]
@@ -187,19 +188,21 @@ class AutoSourceDirective(Directive):
         sourcefile = self.state.document.current_source.split(os.pathsep)[0]
         dir_ = os.path.dirname(sourcefile)
         files = [
-            f for f in os.listdir(dir_) if f.endswith(".py")
-            and f != "__init__.py"
+            f
+            for f in os.listdir(dir_)
+            if f.endswith(".py") and f != "__init__.py"
         ]
 
         if "files" in content:
             # ordered listing of files to include
             files = [
-                fname for fname in _comma_list(content["files"])
-                if fname in set(files)]
+                fname
+                for fname in _comma_list(content["files"])
+                if fname in set(files)
+            ]
 
         node = nodes.paragraph(
-            '', '',
-            nodes.Text("Listing of files:", "Listing of files:")
+            "", "", nodes.Text("Listing of files:", "Listing of files:")
         )
 
         bullets = nodes.bullet_list()
@@ -210,10 +213,7 @@ class AutoSourceDirective(Directive):
 
             link = _view_source_node(env, modname, self.state)
             if link is not None:
-                list_node = nodes.list_item(
-                    '',
-                    link
-                )
+                list_node = nodes.list_item("", link)
                 bullets += list_node
 
         node += bullets
@@ -222,9 +222,9 @@ class AutoSourceDirective(Directive):
 
 
 def setup(app):
-    app.add_role('viewsource', view_source)
+    app.add_role("viewsource", view_source)
 
-    app.add_directive('autosource', AutoSourceDirective)
+    app.add_directive("autosource", AutoSourceDirective)
 
     # from sphinx.ext.viewcode
-    app.connect('html-collect-pages', collect_pages)
+    app.connect("html-collect-pages", collect_pages)
