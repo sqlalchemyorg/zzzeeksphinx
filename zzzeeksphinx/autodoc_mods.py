@@ -94,7 +94,24 @@ def missing_reference(app, env, node, contnode):
         return None
 
 
+def work_around_issue_6785():
+    """See https://github.com/sphinx-doc/sphinx/issues/6785
+    """
+
+    from sphinx.ext import autodoc
+
+    # check some assumptions, more as a way of testing if this code changes
+    # on the sphinx side
+    assert (
+        autodoc.PropertyDocumenter.priority
+        > autodoc.AttributeDocumenter.priority
+    )
+    autodoc.PropertyDocumenter.priority = -100
+
+
 def setup(app):
+    work_around_issue_6785()
+
     app.connect("autodoc-skip-member", autodoc_skip_member)
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
     app.add_config_value("autodocmods_convert_modname", {}, "env")
