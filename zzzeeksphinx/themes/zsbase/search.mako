@@ -15,7 +15,5 @@
 
 <%block name="lower_scripts">
 	${parent.lower_scripts()}
-    <script type="text/javascript">
-        jQuery(function() { Search.loadIndex("searchindex.js"); });
-    </script>
+	<script type="text/javascript" src="searchindex.js" defer></script>
 </%block>
