@@ -1,4 +1,9 @@
+import inspect
 import re
+import sys
+import warnings
+
+from sphinx.util.nodes import make_refnode
 
 
 def autodoc_skip_member(app, what, name, obj, skip, options):
@@ -90,8 +95,115 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
 def missing_reference(app, env, node, contnode):
     if node.attributes["reftarget"] in _inherited_names:
         return node.children[0]
+    elif node.attributes["reftype"] == "meth":
+        return resolve_missing_method_reference(app, env, node, contnode)
+
     else:
         return None
+
+_bmopotk = None
+def _big_map_of_pydomain_obj_to_key(env):
+    global _bmopotk
+    if _bmopotk is None:
+        _bmopotk = {}
+        for key in env.domains["py"].objects:
+            obj = _import_object(key)
+            if obj is not None and obj.__hash__ is not None:
+                _bmopotk[obj] = key
+    return _bmopotk
+
+def resolve_missing_method_reference(app, env, node, contnode):
+    # NOTE: this does not work, *at all*.   will keep trying.
+
+    tokens = node.attributes["reftarget"].split(".")
+    cant_find_tokens = []
+    matches = []
+    while tokens:
+        try_ = ".".join(tokens)
+        new_matches = [
+            k for k in env.domains["py"].objects if k.endswith(try_)
+        ]
+        if new_matches:
+            matches = new_matches
+            break
+        else:
+            cant_find_tokens.insert(-1, tokens[-1])
+            del tokens[-1]
+
+    per_obj_matches = []
+    _bmopotk = _big_map_of_pydomain_obj_to_key(env)
+    for match in matches:
+        obj = _import_object(match)
+        if not inspect.isclass(obj):
+            import pdb
+            pdb.set_trace()
+        if inspect.isclass(obj):
+            for mro in obj.__mro__:
+                obj = mro
+                for token in cant_find_tokens:
+                    not_found = object()
+                    obj = getattr(obj, token, not_found)
+                    if obj is not_found:
+                        break
+                else:
+                    if obj in _bmopotk:
+                        per_obj_matches.append(_bmopotk[obj])
+                        break
+    lp = len(per_obj_matches)
+    if lp == 0:
+        warnings.warn(
+            "Couldn't resolve method %s through MRO searching"
+            % node.attributes["reftarget"]
+        )
+    elif lp > 1:
+        import pdb
+        pdb.set_trace()
+        warnings.warn(
+            "Found multiple matches for %s through MRO searching"
+            % node.attributes["reftarget"]
+        )
+    else:
+        warnings.warn(
+            "SUCCESS, matched %s to %s through MRO searching" % (
+                node.attributes["reftarget"], per_obj_matches[0]
+            )
+        )
+        objdoc, type_ = env.domains["py"].objects[per_obj_matches[0]]
+        return make_refnode(
+            app.builder,
+            node.attributes["refdoc"],
+            objdoc,
+            per_obj_matches[0],
+            contnode,
+            per_obj_matches[0],
+        )
+
+
+def _import_object(dotted_name):
+    tokens = dotted_name.split(".")
+    non_module_tokens = []
+    module = None
+    while tokens:
+        try_ = ".".join(tokens)
+        try:
+            __import__(try_)
+        except ImportError:
+            non_module_tokens.insert(-1, tokens[-1])
+            del tokens[-1]
+        else:
+            module = sys.modules[try_]
+            break
+
+    if module is None:
+        return None
+
+    obj = module
+    not_found = object()
+    for tok in non_module_tokens:
+        obj = getattr(obj, tok, not_found)
+        if obj is not_found:
+            return None
+    return obj
 
 
 def work_around_issue_6785():
