@@ -7,7 +7,13 @@ import re
 from docutils.parsers.rst import Directive
 import docutils
 import os
-from sphinx.environment import NoUri
+
+try:
+    # 3.0
+    from sphinx.errors import NoUri
+except:
+    from sphinx.environment import NoUri
+
 import warnings
 from . import util
 

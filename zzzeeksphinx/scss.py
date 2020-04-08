@@ -40,7 +40,9 @@ def add_stylesheet(app):
     app._builder_scss = to_gen
 
     for path, name in to_gen:
-        app.add_stylesheet("%s.css" % name)
+        # changed in 1.8
+        # https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx.application.Sphinx.add_css_file
+        app.add_css_file("%s.css" % name)
 
 
 def generate_stylesheet(app, exception):

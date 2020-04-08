@@ -124,8 +124,9 @@ class PopupLatexFormatter(LatexFormatter):
 
 
 def setup(app):
-    app.add_lexer("pycon+sql", PyConWithSQLLexer())
-    app.add_lexer("python+sql", PythonWithSQLLexer())
+    # pass lexer class instead of lexer instance
+    app.add_lexer("pycon+sql", PyConWithSQLLexer)
+    app.add_lexer("python+sql", PythonWithSQLLexer)
 
     PygmentsBridge.html_formatter = PopupSQLFormatter
     PygmentsBridge.latex_formatter = PopupLatexFormatter
