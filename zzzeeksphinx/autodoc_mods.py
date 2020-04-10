@@ -8,6 +8,8 @@ def autodoc_skip_member(app, what, name, obj, skip, options):
         and name
         in ("__init__", "__eq__", "__ne__", "__lt__", "__le__", "__call__")
         and obj.__doc__
+        and getattr(obj, "__objclass__", None)
+        not in (type, object, list, tuple, dict)
     ):
         return False
     else:
