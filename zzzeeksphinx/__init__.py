@@ -1,4 +1,4 @@
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 
 def setup(app):
@@ -9,6 +9,7 @@ def setup(app):
         sqlformatter,
         viewsource,
         scss,
+        render_pydomains
     )
 
     autodoc_mods.setup(app)
@@ -17,3 +18,4 @@ def setup(app):
     sqlformatter.setup(app)
     viewsource.setup(app)
     scss.setup(app)
+    render_pydomains.setup(app)
