@@ -19,3 +19,8 @@ def setup(app):
     viewsource.setup(app)
     scss.setup(app)
     render_pydomains.setup(app)
+
+    return {
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
+    }
