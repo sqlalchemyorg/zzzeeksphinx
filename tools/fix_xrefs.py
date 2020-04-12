@@ -49,7 +49,7 @@ def highlighted(line_tokens, match_idx, group):
 
 
 def prompt(
-    fname, lines, linenum, line_tokens, token_idx, rec, replacements, app_state
+    fname, state, lines, linenum, line_tokens, token_idx, rec, replacements, app_state
 ):
     """Present the prompt screen for a single token in a line in a file and
     receive user input.
@@ -99,6 +99,7 @@ def prompt(
         sys.stdout.write(
             "[s]kip  skip [a]ll of these   skip [f]ile  "
             "[w]rite file and go to next  \n"
+            "[A]pply all current non-ambiguous replacements from state\n"
             "[F]inish all files with current "
             "instructions "
             "[e]nter new replacement  \n"
@@ -118,6 +119,12 @@ def prompt(
 
     if cmd == "q":
         sys.exit()
+    elif cmd == "A":
+        for rec in state.values():
+            if len(rec["replacements"]) == 1 and "apply_all" not in rec:
+                rec["apply_all"] = 0
+                rec["do_prompt"] = False
+        return True
     elif cmd == "F":
         app_state["do_prompt"] = False
         return "s"
@@ -237,6 +244,9 @@ def process(fname, state, app_state):
 def handle_line(fname, state, lines, linenum, line, app_state):
     """Parse, process and replace a single line in a list of lines."""
 
+    if re.match(r'^ *#', line):
+        return "n"
+
     line_tokens = tokenize_line(line)
 
     if not line_tokens:
@@ -266,6 +276,7 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             while True:
                 result = prompt(
                     fname,
+                    state,
                     lines,
                     linenum,
                     line_tokens,
@@ -289,6 +300,7 @@ def handle_line(fname, state, lines, linenum, line, app_state):
         elif result == "F":
             # continue without prompting
             continue
+
         elif isinstance(result, int):
             replacement_text = local_replacements[result]
             if replacement_text not in rec["replacements"]:
@@ -389,22 +401,25 @@ def write_replacement_rec(old, new):
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("filespec", help="file or directory")
+    parser.add_argument("filespec", help="file or directory", nargs="+")
 
     args = parser.parse_args()
 
     state = restore_state_file()
     app_state = {}
 
-    file_ = os.path.abspath(args.filespec)
-    if os.path.isdir(file_):
-        for root, dirs, files in os.walk(file_):
-            for fname in files:
-                if not fname.endswith(".py") and not fname.endswith(".rst"):
-                    continue
-                process(fname, state, app_state)
-    else:
-        process(file_, state, app_state)
+    for filespec in args.filespec:
+        file_ = os.path.abspath(filespec)
+        if os.path.isdir(file_):
+            for root, dirs, files in os.walk(file_):
+                for fname in files:
+                    if not fname.endswith(".py") and not fname.endswith(
+                        ".rst"
+                    ):
+                        continue
+                    process(os.path.join(root, fname), state, app_state)
+        else:
+            process(file_, state, app_state)
 
 
 if __name__ == "__main__":
