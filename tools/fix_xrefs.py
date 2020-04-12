@@ -9,6 +9,11 @@ import readchar
 BOLD = "\033[1m"
 NORMAL = "\033[0m"
 UNDERLINE = "\033[4m"
+PURPLE = "\033[95m"
+CYAN = "\033[96m"
+DARKCYAN = "\033[36m"
+BLUE = "\033[94m"
+GREEN = "\033[92m"
 
 
 def _token_to_str(token):
@@ -18,12 +23,27 @@ def _token_to_str(token):
         return token.group(0)
 
 
+def color(text, color_code):
+    return "%s%s%s" % (color_code, text, NORMAL)
+
+
 def highlighted(line_tokens, match_idx, group):
+
+    match = line_tokens[match_idx]
+    display_of_match = (
+        BOLD
+        + color(
+            match.group(0).replace(
+                match.group(2), color(match.group(2), CYAN)
+            ),
+            PURPLE,
+        )
+        + NORMAL
+    )
+
     return (
         "".join(_token_to_str(tok) for tok in line_tokens[0:match_idx])
-        + BOLD
-        + _token_to_str(line_tokens[match_idx])
-        + NORMAL
+        + display_of_match
         + "".join(_token_to_str(tok) for tok in line_tokens[match_idx + 1 :])
     )
 
@@ -43,7 +63,9 @@ def prompt(
     if app_state.get("do_prompt", True) and rec.get("do_prompt", True):
         context_lines = 12
         print("\033c")
-        print("-----------------------------------------------------------------")
+        print(
+            "-----------------------------------------------------------------"
+        )
         print(UNDERLINE + fname + NORMAL)
         print("")
         for index in range(
@@ -55,16 +77,24 @@ def prompt(
                 else:
                     content = lines[index].rstrip()
                 print("%4.d: %s" % (index + 1, content))
-        print("-----------------------------------------------------------------")
+        print(
+            "-----------------------------------------------------------------"
+        )
 
-        print("EXISTING TEXT: %s" % line_tokens[token_idx].group(0))
+        print(
+            "EXISTING SYMBOL TO REPLACE: %s"
+            % color(line_tokens[token_idx].group(2), CYAN)
+        )
         print(
             "REPLACEMENTS: %s"
             % " ".join(
-                "[%d] %s" % (num, text) for num, text in enumerate(replacements, 1)
+                "[%d] %s" % (num, text)
+                for num, text in enumerate(replacements, 1)
             )
         )
-        print("-----------------------------------------------------------------")
+        print(
+            "-----------------------------------------------------------------"
+        )
 
         sys.stdout.write(
             "[s]kip  skip [a]ll of these   skip [f]ile  "
@@ -98,7 +128,13 @@ def prompt(
 
         pdb.set_trace()
     elif cmd == "e":
-        replacement_text = input("Enter replacement text: ").strip()
+        replacement_text = input(
+            "Enter replacement text for the portion in "
+            + CYAN
+            + "CYAN"
+            + NORMAL
+            + ": "
+        ).strip()
         replacements.append(replacement_text)
         return True
     elif cmd == "u" or re.match(r"\d+", cmd):
@@ -122,13 +158,14 @@ def prompt(
         else:
             if cmd == "u":
                 rec["apply_all"] = replacement_index - 1
+                rec["do_prompt"] = False
             return replacement_index - 1
 
 
-reg = re.compile(r"\:(class|attr|func|meth|paramref)\:`(.+?)(?:\(\))?`")
+reg = re.compile(r"\:(class|attr|func|meth|paramref)\:`(\.\w+).*?`")
 
 
-def tokenize_line(line, max_missing_package_tokens=0):
+def tokenize_line(line):
     """Search a line for py references.
 
     Return the line as as list of tokens, with non matched portions
@@ -148,48 +185,13 @@ def tokenize_line(line, max_missing_package_tokens=0):
     has_tokens = False
     for match in reg.finditer(line):
 
-        py_type = match.group(1)
-        symbol = match.group(2).lstrip("~.")
-        py_tokens = symbol.split(".")
-        if py_type == "class":
-            target = py_tokens.pop(-1)  # noqa
-            package_tokens = py_tokens
-        elif py_type in ("meth", "attr"):
-            methname = py_tokens.pop(-1)
-            if py_tokens:
-                clsname = py_tokens.pop(-1)
-                target = "%s.%s" % (clsname, methname)
-            package_tokens = py_tokens
-        elif py_type == "func":
-            target = py_tokens.pop(-1)  # noqa
-            package_tokens = py_tokens
-        elif py_type == "paramref":
-            paramname = py_tokens.pop(-1)  # noqa
-            meth_or_fn_name = py_tokens.pop(-1)  # noqa
-            if py_tokens and py_tokens[-1][0].isupper():
-                clsname = py_tokens.pop(-1)
-            else:
-                clsname = None
-            package_tokens = py_tokens
-
-        if len(package_tokens) > max_missing_package_tokens:
-            is_match = False
-        else:
-            is_match = True
-
-        if is_match:
-            has_tokens = True
+        has_tokens = True
         mstart, mend = match.span(0)
         if start == -1:
             start = 0
         tokens.append(line[start:mstart])
 
-        if is_match:
-            tokens.append(match)
-        else:
-            # append match as the string it matched so it won't be
-            # processed
-            tokens.append(match.group(0))
+        tokens.append(match)
 
         start = mend
     tokens.append(line[mend:])
@@ -225,7 +227,7 @@ def process(fname, state, app_state):
             write = True
     if write:
         sys.stdout.write("Writing %s..\n" % fname)
-        sys.stout.flush()
+        sys.stdout.flush()
         with open(fname, "w") as file_:
             file_.write("".join(lines))
 
@@ -246,13 +248,13 @@ def handle_line(fname, state, lines, linenum, line, app_state):
         if isinstance(token, str):
             continue
 
-        if token.group(0) not in state:
-            rec = state[token.group(0)] = {
+        if token.group(2) not in state:
+            rec = state[token.group(2)] = {
                 "replacements": [],
                 "cmd": None,
             }
         else:
-            rec = state[token.group(0)]
+            rec = state[token.group(2)]
 
         if rec.get("cmd") == "a":
             # skip all of these, don't do prompt
@@ -291,9 +293,11 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             replacement_text = local_replacements[result]
             if replacement_text not in rec["replacements"]:
                 rec["replacements"].append(replacement_text)
-                write_replacement_rec(token.group(0), replacement_text)
+                write_replacement_rec(token.group(2), replacement_text)
             has_replacements = True
-            line_tokens[idx] = replacement_text
+            line_tokens[idx] = token.group(0).replace(
+                token.group(2), replacement_text
+            )
 
     if has_replacements:
         newline = reformat_line(line_tokens)
