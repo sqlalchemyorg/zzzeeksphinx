@@ -1,62 +1,64 @@
-from docutils import nodes
-from docutils.transforms import Transform
-from sphinx.addnodes import pending_xref
 import re
 
-# the searchindex.js system relies upon the object types
-# in the PythonDomain to create search entries
+from docutils import nodes
+from sphinx.addnodes import pending_xref
 
 
-class RenderDocLinks(Transform):
-    default_priority = 210
+def replace_synonyms(app, doctree):
 
-    def apply(self):
-        py_nodes = self.document.traverse(pending_xref)
-        for py_node in py_nodes:
-            if not py_node.children or not py_node.children[0].children:
-                continue
+    py_nodes = doctree.traverse(pending_xref)
 
-            reftype = py_node.attributes["reftype"]
-            if reftype in ("meth", "attr", "paramref"):
-                tokens = py_node.attributes["reftarget"].split(".")
-                lt = len(tokens)
-                if (
-                    reftype == "paramref"
-                    and lt >= 3
-                    and tokens[-3][0].isupper()
-                ):
-                    # for paramref look at first char of "method" token
-                    # to see if its a method name or if this is a
-                    # function.  paramrefs don't store this info right now.
-                    need = 3
-                else:
-                    need = min(lt, 2)
-                corrected_name = ".".join(tokens[-need:])
-            elif reftype == "func":
-                tokens = py_node.attributes["reftarget"].split(".")
-                corrected_name = tokens[-1]
-                need = 1
-            elif reftype == "class" and re.match(
-                r"^:class:`\..+`$", py_node.rawsource
+    replace_prefixes = app.env.config.zzzeeksphinx_module_prefixes
+
+    for py_node in py_nodes:
+        if not py_node.children or not py_node.children[0].children:
+            continue
+
+        reftype = py_node.attributes["reftype"]
+        reftarget = py_node.attributes["reftarget"]
+
+        needs_correction = False
+
+        ref_tokens = reftarget.split(".")
+        if ref_tokens[0] in replace_prefixes:
+            ref_tokens[0] = replace_prefixes[ref_tokens[0]]
+
+            needs_correction = True
+            py_node.attributes["reftarget"] = ".".join(ref_tokens)
+
+        if reftype in ("meth", "attr", "paramref"):
+            lt = len(ref_tokens)
+            if (
+                reftype == "paramref"
+                and lt >= 3
+                and ref_tokens[-3][0].isupper()
             ):
-                # for a class node, only rewrite it if the rawsource
-                # indicates a "." at the beginning.  otherwise it either
-                # has a ~ and it will just be class name anyway, or
-                # it's fully module qualified and that should write out fully.
-                tokens = py_node.attributes["reftarget"].split(".")
-                corrected_name = tokens[-1]
-                need = 1
+                # for paramref look at first char of "method" token
+                # to see if its a method name or if this is a
+                # function.  paramrefs don't store this info right now.
+                need = 3
             else:
-                continue
+                need = min(lt, 2)
+            corrected_name = ".".join(ref_tokens[-need:])
+        elif reftype == "func":
+            corrected_name = ref_tokens[-1]
+        elif reftype == "class" and (
+            needs_correction or re.match(r"^:class:`\..+`$", py_node.rawsource)
+        ):
+            corrected_name = ref_tokens[-1]
+        else:
+            assert not needs_correction
+            continue
 
-            if py_node.attributes["reftype"] in ("meth", "func"):
-                corrected_name += "()"
+        if reftype in ("meth", "func"):
+            corrected_name += "()"
 
-            py_node.children[0].pop(0)
-            py_node.children[0].insert(
-                0, nodes.Text(corrected_name, corrected_name)
-            )
+        py_node.children[0].pop(0)
+        py_node.children[0].insert(
+            0, nodes.Text(corrected_name, corrected_name)
+        )
 
 
 def setup(app):
-    app.add_transform(RenderDocLinks)
+    app.connect("doctree-read", replace_synonyms)
+    app.add_config_value("zzzeeksphinx_module_prefixes", {}, "env")

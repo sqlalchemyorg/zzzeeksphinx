@@ -1,4 +1,4 @@
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 
 def setup(app):
@@ -21,6 +21,7 @@ def setup(app):
     render_pydomains.setup(app)
 
     return {
+        "version": __version__,
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
