@@ -34,7 +34,7 @@ setup(
     keywords="Sphinx",
     author="Mike Bayer",
     author_email="mike@zzzcomputing.com",
-    url="http://bitbucket.org/zzzeek/zzzeeksphinx",
+    url="https://github.com/sqlalchemyorg/zzzeeksphinx",
     license="MIT",
     packages=["zzzeeksphinx"],
     install_requires=["pyscss", "mako", "requests"],
