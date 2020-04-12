@@ -49,7 +49,15 @@ def highlighted(line_tokens, match_idx, group):
 
 
 def prompt(
-    fname, state, lines, linenum, line_tokens, token_idx, rec, replacements, app_state
+    fname,
+    state,
+    lines,
+    linenum,
+    line_tokens,
+    token_idx,
+    rec,
+    replacements,
+    app_state,
 ):
     """Present the prompt screen for a single token in a line in a file and
     receive user input.
@@ -169,10 +177,10 @@ def prompt(
             return replacement_index - 1
 
 
-reg = re.compile(r"\:(class|attr|func|meth|paramref)\:`(\.\w+).*?`")
+reg = re.compile(r"\:(class|attr|func|meth|obj|paramref)\:`~?(\.\w+).*?`")
 
 
-def tokenize_line(line):
+def tokenize_line(app_state, line):
     """Search a line for py references.
 
     Return the line as as list of tokens, with non matched portions
@@ -186,22 +194,29 @@ def tokenize_line(line):
 
     """
 
+    search_reg = app_state["opts"].search
     tokens = []
     start = -1
     mend = 0
     has_tokens = False
     for match in reg.finditer(line):
 
+        if search_reg and not re.match(search_reg, match.group(0)):
+            continue
+
         has_tokens = True
         mstart, mend = match.span(0)
         if start == -1:
             start = 0
-        tokens.append(line[start:mstart])
+
+        # extend w/ non match tokens.  keep commas and periods
+        # as separate tokens so that they don't get linebroken.
+        tokens.extend(re.split(r'([.,])', line[start:mstart]))
 
         tokens.append(match)
 
         start = mend
-    tokens.append(line[mend:])
+    tokens.extend(re.split(r'([.,])', line[mend:]))
 
     if has_tokens:
         return tokens
@@ -244,10 +259,10 @@ def process(fname, state, app_state):
 def handle_line(fname, state, lines, linenum, line, app_state):
     """Parse, process and replace a single line in a list of lines."""
 
-    if re.match(r'^ *#', line):
+    if re.match(r"^ *#", line):
         return "n"
 
-    line_tokens = tokenize_line(line)
+    line_tokens = tokenize_line(app_state, line)
 
     if not line_tokens:
         return "n"
@@ -307,17 +322,21 @@ def handle_line(fname, state, lines, linenum, line, app_state):
                 rec["replacements"].append(replacement_text)
                 write_replacement_rec(token.group(2), replacement_text)
             has_replacements = True
-            line_tokens[idx] = token.group(0).replace(
-                token.group(2), replacement_text
+            line_tokens[idx] = (
+                token.group(0)
+                .replace(token.group(2), replacement_text)
+                .replace("~", "")
             )
 
     if has_replacements:
-        newline = reformat_line(line_tokens)
+        newline = reformat_line(
+            line_tokens, subsequent_line=lines[linenum + 1]
+        )
         lines[linenum] = newline
         return "c"
 
 
-def reformat_line(line_tokens, length=79):
+def reformat_line(line_tokens, length=79, subsequent_line=None):
     """Given line tokens where one or more of the tokens has been replaced,
     write out a new line, while ensuring that the max length is maintained.
 
@@ -332,11 +351,25 @@ def reformat_line(line_tokens, length=79):
     if len(printed_line) <= length:
         return printed_line
 
-    whitespace = re.match(r"^( +)", printed_line)
-    if whitespace:
-        whitespace = whitespace.group(1)
+    # the whitespace is used for the next line.  so if we have a next line,
+    # use that as a guideline for indentation which works for :param: lists
+    # etc.
+    if subsequent_line.strip():
+        whitespace = re.match(r"^( +)", subsequent_line)
+        if whitespace:
+            whitespace = whitespace.group(1)
+        else:
+            whitespace = ""
     else:
-        whitespace = ""
+        # otherwise, use the whitespace we have, try to figure things
+        # out for bulleted lists, numbered lists, start of :param:
+        whitespace = re.match(r"^( +)(\d+\: |\* |\:para)?", printed_line)
+        if whitespace:
+            whitespace = whitespace.group(1) + (
+                " " * len(whitespace.group(2) or "")
+            )
+        else:
+            whitespace = ""
 
     quote_char = ""
     stripped = printed_line.strip()
@@ -402,11 +435,13 @@ def write_replacement_rec(old, new):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("filespec", help="file or directory", nargs="+")
-
+    parser.add_argument(
+        "--search", help="only work with symbols matching this regexp"
+    )
     args = parser.parse_args()
 
     state = restore_state_file()
-    app_state = {}
+    app_state = {"opts": args, "symbols": state}
 
     for filespec in args.filespec:
         file_ = os.path.abspath(filespec)

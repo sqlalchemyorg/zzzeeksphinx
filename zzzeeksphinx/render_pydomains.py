@@ -40,7 +40,7 @@ def replace_synonyms(app, doctree):
             else:
                 need = min(lt, 2)
             corrected_name = ".".join(ref_tokens[-need:])
-        elif reftype == "func":
+        elif reftype in ("func", "obj"):
             corrected_name = ref_tokens[-1]
         elif reftype == "class" and (
             needs_correction or re.match(r"^:class:`\..+`$", py_node.rawsource)
