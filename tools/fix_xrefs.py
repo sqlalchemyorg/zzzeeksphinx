@@ -28,7 +28,9 @@ def highlighted(line_tokens, match_idx, group):
     )
 
 
-def prompt(fname, lines, linenum, line_tokens, token_idx, rec, replacements):
+def prompt(
+    fname, lines, linenum, line_tokens, token_idx, rec, replacements, app_state
+):
     """Present the prompt screen for a single token in a line in a file and
     receive user input.
 
@@ -37,44 +39,58 @@ def prompt(fname, lines, linenum, line_tokens, token_idx, rec, replacements):
     this particular token.
 
     """
-    context_lines = 12
-    print("\033c")
-    print("-----------------------------------------------------------------")
-    print(UNDERLINE + fname + NORMAL)
-    print("")
-    for index in range(
-        linenum - context_lines // 2, linenum + context_lines // 2
-    ):
-        if index >= 0 and index <= len(lines):
-            if index == linenum:
-                content = highlighted(line_tokens, token_idx, 0).rstrip()
-            else:
-                content = lines[index].rstrip()
-            print("%4.d: %s" % (index + 1, content))
-    print("-----------------------------------------------------------------")
 
-    print("EXISTING TEXT: %s" % line_tokens[token_idx].group(0))
-    print(
-        "REPLACEMENTS: %s"
-        % " ".join(
-            "[%d] %s" % (num, text) for num, text in enumerate(replacements, 1)
+    if app_state.get("do_prompt", True) and rec.get("do_prompt", True):
+        context_lines = 12
+        print("\033c")
+        print("-----------------------------------------------------------------")
+        print(UNDERLINE + fname + NORMAL)
+        print("")
+        for index in range(
+            linenum - context_lines // 2, linenum + context_lines // 2
+        ):
+            if index >= 0 and index <= len(lines):
+                if index == linenum:
+                    content = highlighted(line_tokens, token_idx, 0).rstrip()
+                else:
+                    content = lines[index].rstrip()
+                print("%4.d: %s" % (index + 1, content))
+        print("-----------------------------------------------------------------")
+
+        print("EXISTING TEXT: %s" % line_tokens[token_idx].group(0))
+        print(
+            "REPLACEMENTS: %s"
+            % " ".join(
+                "[%d] %s" % (num, text) for num, text in enumerate(replacements, 1)
+            )
         )
-    )
-    print("-----------------------------------------------------------------")
+        print("-----------------------------------------------------------------")
 
-    sys.stdout.write(
-        "[s]kip  skip [a]ll of these   skip [f]ile  "
-        "[w]rite file and go to next  "
-        "[e]nter new replacement  [p]db  [q]uit  [s]? "
-    )
-    sys.stdout.flush()
-    cmd = readchar.readchar()
-    print("")
-    if ord(cmd) in (10, 13):
-        cmd = "s"
+        sys.stdout.write(
+            "[s]kip  skip [a]ll of these   skip [f]ile  "
+            "[w]rite file and go to next  \n"
+            "[F]inish all files with current "
+            "instructions "
+            "[e]nter new replacement  \n"
+            "[u]se numbered replacement for all "
+            "future occurrences [p]db  [q]uit  [s]? "
+        )
+        sys.stdout.flush()
+        cmd = readchar.readchar()
+        print("")
+        if ord(cmd) in (10, 13):
+            cmd = "s"
+    else:
+        if "apply_all" in rec:
+            return rec["apply_all"]
+        else:
+            return "s"
 
     if cmd == "q":
         sys.exit()
+    elif cmd == "F":
+        app_state["do_prompt"] = False
+        return "s"
     elif cmd in ("s", "f", "a", "w"):
         return cmd
     elif cmd == "p":
@@ -85,8 +101,17 @@ def prompt(fname, lines, linenum, line_tokens, token_idx, rec, replacements):
         replacement_text = input("Enter replacement text: ").strip()
         replacements.append(replacement_text)
         return True
-    elif re.match(r"\d+", cmd):
-        replacement_index = int(cmd)
+    elif cmd == "u" or re.match(r"\d+", cmd):
+
+        if cmd == "u":
+            num = input("Enter number of replacement: ")
+            if re.match(r"\d+", num):
+                replacement_index = int(num)
+            else:
+                input("not a number: %s, press enter" % num)
+        else:
+            replacement_index = int(cmd)
+
         try:
             replacements[replacement_index - 1]
         except IndexError:
@@ -95,6 +120,8 @@ def prompt(fname, lines, linenum, line_tokens, token_idx, rec, replacements):
                 % replacement_index
             )
         else:
+            if cmd == "u":
+                rec["apply_all"] = replacement_index - 1
             return replacement_index - 1
 
 
@@ -122,7 +149,7 @@ def tokenize_line(line, max_missing_package_tokens=0):
     for match in reg.finditer(line):
 
         py_type = match.group(1)
-        symbol = match.group(2).lstrip('~.')
+        symbol = match.group(2).lstrip("~.")
         py_tokens = symbol.split(".")
         if py_type == "class":
             target = py_tokens.pop(-1)  # noqa
@@ -173,7 +200,7 @@ def tokenize_line(line, max_missing_package_tokens=0):
         return None
 
 
-def process(fname, state):
+def process(fname, state, app_state):
     """Parse, process, and write a single file.
 
     Creates a list of lines and then passes each one off to handle_line().
@@ -186,8 +213,9 @@ def process(fname, state):
     with open(fname) as file_:
         lines = list(file_)
 
+    result = None
     for linenum, line in enumerate(lines):
-        result = handle_line(fname, state, lines, linenum, line)
+        result = handle_line(fname, state, lines, linenum, line, app_state)
         if result == "f":  # skipfile
             return
         elif result == "w":  # write and finish
@@ -196,11 +224,15 @@ def process(fname, state):
         elif result == "c":  # has changes but keep going
             write = True
     if write:
+        sys.stdout.write("Writing %s..\n" % fname)
+        sys.stout.flush()
         with open(fname, "w") as file_:
             file_.write("".join(lines))
 
+    return result
 
-def handle_line(fname, state, lines, linenum, line):
+
+def handle_line(fname, state, lines, linenum, line, app_state):
     """Parse, process and replace a single line in a list of lines."""
 
     line_tokens = tokenize_line(line)
@@ -238,6 +270,7 @@ def handle_line(fname, state, lines, linenum, line):
                     idx,
                     rec,
                     local_replacements,
+                    app_state,
                 )
                 if result is True:
                     continue
@@ -250,6 +283,9 @@ def handle_line(fname, state, lines, linenum, line):
             continue  # skip this token
         elif result == "a":
             rec["cmd"] = "a"  # skip all of these
+            continue
+        elif result == "F":
+            # continue without prompting
             continue
         elif isinstance(result, int):
             replacement_text = local_replacements[result]
@@ -350,6 +386,7 @@ def main(argv=None):
     args = parser.parse_args()
 
     state = restore_state_file()
+    app_state = {}
 
     file_ = os.path.abspath(args.filespec)
     if os.path.isdir(file_):
@@ -357,9 +394,9 @@ def main(argv=None):
             for fname in files:
                 if not fname.endswith(".py") and not fname.endswith(".rst"):
                     continue
-                process(fname, state)
+                process(fname, state, app_state)
     else:
-        process(file_, state)
+        process(file_, state, app_state)
 
 
 if __name__ == "__main__":
