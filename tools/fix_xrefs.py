@@ -341,7 +341,11 @@ def reformat_line(line_tokens, length=79):
             len_ = 0
 
             if idx > 0:
-                line_tokens[idx - 1] = line_tokens[idx - 1].rstrip()
+                line_tokens[idx - 1] = (
+                    line_tokens[idx - 1].rstrip()
+                    + (" " if quote_char else "")
+                    + quote_char
+                )
             token = "\n" + whitespace + quote_char + token.lstrip()
         line_tokens[idx] = token
 
