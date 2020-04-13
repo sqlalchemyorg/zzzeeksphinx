@@ -23,6 +23,11 @@ def _token_to_str(token):
         return token.group(0)
 
 
+def _matched_portion(match):
+    a, b, c = match.group(2, 3, 4)
+    return a or b or c
+
+
 def color(text, color_code):
     return "%s%s%s" % (color_code, text, NORMAL)
 
@@ -34,7 +39,7 @@ def highlighted(line_tokens, match_idx, group):
         BOLD
         + color(
             match.group(0).replace(
-                match.group(2), color(match.group(2), CYAN)
+                _matched_portion(match), color(_matched_portion(match), CYAN)
             ),
             PURPLE,
         )
@@ -91,7 +96,7 @@ def prompt(
 
         print(
             "EXISTING SYMBOL TO REPLACE: %s"
-            % color(line_tokens[token_idx].group(2), CYAN)
+            % color(_matched_portion(line_tokens[token_idx]), CYAN)
         )
         print(
             "REPLACEMENTS: %s"
@@ -177,7 +182,29 @@ def prompt(
             return replacement_index - 1
 
 
-reg = re.compile(r"\:(class|attr|func|meth|obj|paramref)\:`~?(\.\w+).*?`")
+# reg = re.compile(r"\:(class|attr|func|meth|obj|paramref)\:`~?(\.\w+).*?`")
+
+# reg = re.compile(r"\:(class|attr|func|meth|obj|paramref)\:`~?([\.a-z]+)`")
+
+# one token alone, to the end, we want the whole thing
+#     :func:`.foo`
+#     :class:`.Foo`
+#
+# two tokens, we want the first
+#
+#   :func:`.foo.bar`
+#   :meth:`.Foo.bar`
+#
+# three tokens, we want the first two.
+#
+#   :func:`.sql.expression.select`
+#
+#
+
+reg = re.compile(
+    r"\:(class|attr|func|meth|obj|paramref)\:"
+    r"`~?(?:(\.\w+)|(?:(\.\w+)\.\w+)|(?:(\.[a-z]+\.[a-z]+)\.\w+))(?:\(\))?`"
+)
 
 
 def tokenize_line(app_state, line):
@@ -259,7 +286,16 @@ def process(fname, state, app_state):
 def handle_line(fname, state, lines, linenum, line, app_state):
     """Parse, process and replace a single line in a list of lines."""
 
+    # skip comments
     if re.match(r"^ *#", line):
+        return "n"
+
+    # skip function decorators that are inline, these are too hard
+    elif re.match(r"^ *@", line):
+        return "n"
+
+    # skip keyword arguments that are also too hard to format
+    elif re.match(r"^ *\w+ *= *", line):
         return "n"
 
     line_tokens = tokenize_line(app_state, line)
@@ -273,13 +309,13 @@ def handle_line(fname, state, lines, linenum, line, app_state):
         if isinstance(token, str):
             continue
 
-        if token.group(2) not in state:
-            rec = state[token.group(2)] = {
+        if _matched_portion(token) not in state:
+            rec = state[_matched_portion(token)] = {
                 "replacements": [],
                 "cmd": None,
             }
         else:
-            rec = state[token.group(2)]
+            rec = state[_matched_portion(token)]
 
         if rec.get("cmd") == "a":
             # skip all of these, don't do prompt
@@ -320,11 +356,13 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             replacement_text = local_replacements[result]
             if replacement_text not in rec["replacements"]:
                 rec["replacements"].append(replacement_text)
-                write_replacement_rec(token.group(2), replacement_text)
+                write_replacement_rec(
+                    _matched_portion(token), replacement_text
+                )
             has_replacements = True
             line_tokens[idx] = (
                 token.group(0)
-                .replace(token.group(2), replacement_text)
+                .replace(_matched_portion(token), replacement_text)
                 .replace("~", "")
             )
 
@@ -373,12 +411,13 @@ def reformat_py_line(line_tokens, length=79, subsequent_line=None):
     else:
         quote_char = ""
 
-    # figure out current line whitespace.
-    # looking for zero or more whitespace, then optional markup that
-    # suggests the next line needs to be futher indented, such as
-    # numbering, bullet, :param: or ".. rstdirective" of some kind
+    # figure out current line whitespace. looking for zero or more whitespace,
+    # then optional markup that suggests the next line needs to be futher
+    # indented, such as numbering, bullet, :return:, :param: or "..
+    # rstdirective" of some kind
     whitespace_match = re.match(
-        r"^( *)(\d+[\:\.] |\* |\:param .+?\:|\.\. \w+)?", printed_line
+        r"^( *)(\d+[\:\.] |\* |\:param .+?\:|\:return\:|\.\. \w+)?",
+        printed_line,
     )
     if whitespace_match:
         whitespace = whitespace_match.group(1) + (
