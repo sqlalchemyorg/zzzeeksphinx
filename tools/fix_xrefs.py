@@ -211,12 +211,12 @@ def tokenize_line(app_state, line):
 
         # extend w/ non match tokens.  keep commas and periods
         # as separate tokens so that they don't get linebroken.
-        tokens.extend(re.split(r'([.,])', line[start:mstart]))
+        tokens.extend(re.split(r"([.,])", line[start:mstart]))
 
         tokens.append(match)
 
         start = mend
-    tokens.extend(re.split(r'([.,])', line[mend:]))
+    tokens.extend(re.split(r"([.,])", line[mend:]))
 
     if has_tokens:
         return tokens
@@ -329,14 +329,26 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             )
 
     if has_replacements:
-        newline = reformat_line(
-            line_tokens, subsequent_line=lines[linenum + 1]
-        )
+        if fname.endswith(".py"):
+            if linenum == len(lines) - 1:
+                subsequent_line = None
+            else:
+                subsequent_line = lines[linenum + 1]
+
+            # reformatting lines for max line length is VERY hard.  Give
+            # ourselves a break by not enforcing it for .rst files right now.
+            # python is hard enough.  still rst docstrings in the py files
+            # though
+            newline = reformat_py_line(
+                line_tokens, subsequent_line=subsequent_line
+            )
+        else:
+            newline = "".join(_token_to_str(token) for token in line_tokens)
         lines[linenum] = newline
         return "c"
 
 
-def reformat_line(line_tokens, length=79, subsequent_line=None):
+def reformat_py_line(line_tokens, length=79, subsequent_line=None):
     """Given line tokens where one or more of the tokens has been replaced,
     write out a new line, while ensuring that the max length is maintained.
 
@@ -351,34 +363,58 @@ def reformat_line(line_tokens, length=79, subsequent_line=None):
     if len(printed_line) <= length:
         return printed_line
 
-    # the whitespace is used for the next line.  so if we have a next line,
-    # use that as a guideline for indentation which works for :param: lists
-    # etc.
-    if subsequent_line.strip():
-        whitespace = re.match(r"^( +)", subsequent_line)
-        if whitespace:
-            whitespace = whitespace.group(1)
-        else:
-            whitespace = ""
-    else:
-        # otherwise, use the whitespace we have, try to figure things
-        # out for bulleted lists, numbered lists, start of :param:
-        whitespace = re.match(r"^( +)(\d+\: |\* |\:para)?", printed_line)
-        if whitespace:
-            whitespace = whitespace.group(1) + (
-                " " * len(whitespace.group(2) or "")
-            )
-        else:
-            whitespace = ""
-
     quote_char = ""
     stripped = printed_line.strip()
-    if stripped[0] in "'\"":
-        quote_char = stripped[0]
-        if stripped[-1] != quote_char:
-            quote_char = ""
+    lq = re.match(r'^("""|"|\'|\'' ")", stripped)
+    rq = re.match(r'.*?("""|"|\'|\'' ")(,)?$", stripped)
+
+    if lq and rq and lq.group(1) == rq.group(1):
+        quote_char = lq.group(1)
+    else:
+        quote_char = ""
+
+    # figure out current line whitespace.
+    # looking for zero or more whitespace, then optional markup that
+    # suggests the next line needs to be futher indented, such as
+    # numbering, bullet, :param: or ".. rstdirective" of some kind
+    whitespace_match = re.match(
+        r"^( *)(\d+[\:\.] |\* |\:param .+?\:|\.\. \w+)?", printed_line
+    )
+    if whitespace_match:
+        whitespace = whitespace_match.group(1) + (
+            " " * len(whitespace_match.group(2) or "")
+        )
+    else:
+        whitespace = ""
+
+    # if it looks like we're a bullet or a paramref or something, see if
+    # we can get the indentation from the next line.
+    if (
+        whitespace_match
+        and not quote_char
+        and subsequent_line.strip()
+        and whitespace_match.group(2)
+    ):
+        subsq_whitespace_match = re.match(
+            r"^( +)(\d+\: |\* |\:para)?", subsequent_line
+        )
+
+        # if we have the next line, anb it does not look like it is
+        # itself a bullet or param, and it has indentation that is the
+        # same or greater than ours, we will use that indentation.
+        if (
+            subsq_whitespace_match
+            and not subsq_whitespace_match.group(2)
+            and len(subsq_whitespace_match.group(0))
+            >= len(whitespace_match.group(1))
+        ):
+            whitespace = subsq_whitespace_match.group(1)
 
     len_ = 0
+
+    #    import pdb
+
+    #    pdb.set_trace()
     for idx, token in enumerate(line_tokens):
 
         len_ += len(token)
@@ -391,7 +427,10 @@ def reformat_line(line_tokens, length=79, subsequent_line=None):
                     + (" " if quote_char else "")
                     + quote_char
                 )
-            token = "\n" + whitespace + quote_char + token.lstrip()
+            if token.strip() != quote_char:
+                token = "\n" + whitespace + quote_char + token.lstrip()
+            else:
+                token = "\n"
         line_tokens[idx] = token
 
     return "".join(line_tokens)
