@@ -31,6 +31,28 @@ _track_autodoced = {}
 _inherited_names = set()
 
 
+def _superclass_classstring(
+    adjusted_mod, base, tilde=False, pytype="class", attrname=None
+):
+
+    dont_link = (
+        base.__module__ == "builtins"
+        or base.__name__.startswith("_")
+        or (attrname and attrname.startswith("_"))
+    )
+    attrname = ".%s" % attrname if attrname else ""
+    if dont_link:
+        return "``%s.%s%s``" % (adjusted_mod, base.__name__, attrname)
+    else:
+        return ":%s:`%s%s.%s%s`" % (
+            pytype,
+            "~" if tilde else "",
+            adjusted_mod,
+            base.__name__,
+            attrname,
+        )
+
+
 def autodoc_process_docstring(app, what, name, obj, options, lines):
     if what == "class":
         _track_autodoced[name] = obj
@@ -44,13 +66,7 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 adjusted_mod = _adjust_rendered_mod_name(
                     app.env.config, base.__module__, base.__name__
                 )
-                if base.__module__ == "builtins":
-                    # e.g. dict, tuple, etc.
-                    bases.append("``%s.%s``" % (adjusted_mod, base.__name__))
-                else:
-                    bases.append(
-                        ":class:`%s.%s`" % (adjusted_mod, base.__name__)
-                    )
+                bases.append(_superclass_classstring(adjusted_mod, base))
                 _inherited_names.add("%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
@@ -81,15 +97,21 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                         ".. container:: inherited_member",
                         "",
                         "    *inherited from the* "
-                        ":%s:`~%s.%s.%s` *%s of* :class:`~%s.%s`"
+                        "%s *%s of* %s"
                         % (
-                            "attr" if what == "attribute" else "meth",
-                            adjusted_mod,
-                            supercls.__name__,
-                            attrname,
+                            _superclass_classstring(
+                                adjusted_mod,
+                                supercls,
+                                attrname=attrname,
+                                pytype="attr"
+                                if what == "attribute"
+                                else "meth",
+                                tilde=True,
+                            ),
                             what,
-                            adjusted_mod,
-                            supercls.__name__,
+                            _superclass_classstring(
+                                adjusted_mod, supercls, tilde=True
+                            ),
                         ),
                         "",
                     ]
