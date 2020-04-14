@@ -357,7 +357,9 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             if replacement_text not in rec["replacements"]:
                 rec["replacements"].append(replacement_text)
                 write_replacement_rec(
-                    _matched_portion(token), replacement_text
+                    app_state["fixes_file"],
+                    _matched_portion(token),
+                    replacement_text,
                 )
             has_replacements = True
             line_tokens[idx] = (
@@ -495,10 +497,7 @@ def reformat_py_line(lines, linenum, line_tokens, length=79):
     lines[linenum] = newline
 
 
-state_file_name = "fix_xref_state.txt"
-
-
-def restore_state_file():
+def restore_state_file(state_file_name):
     """Read the state file if any and restore existing replacement tokens
     that were established from a previous run.
 
@@ -524,7 +523,7 @@ def restore_state_file():
     return state
 
 
-def write_replacement_rec(old, new):
+def write_replacement_rec(state_file_name, old, new):
     """Write a single replacement token to the state file."""
     with open(state_file_name, "a") as file_:
         file_.write("%s %s\n" % (old, new))
@@ -534,12 +533,18 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("filespec", help="file or directory", nargs="+")
     parser.add_argument(
+        "-f",
+        "--fixes-file",
+        help="path to the current list of fixes",
+        default="fix_xref_state.txt",
+    )
+    parser.add_argument(
         "--search", help="only work with symbols matching this regexp"
     )
     args = parser.parse_args()
 
-    state = restore_state_file()
-    app_state = {"opts": args, "symbols": state}
+    state = restore_state_file(args.fixes_file)
+    app_state = {"opts": args, "symbols": state, "fixes_file": args.fixes_file}
 
     for filespec in args.filespec:
         file_ = os.path.abspath(filespec)
