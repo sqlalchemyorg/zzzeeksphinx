@@ -454,8 +454,10 @@ def reformat_py_line(lines, linenum, line_tokens, length=79):
         and subsequent_line.strip()
         and whitespace_match.group(2)
     ):
+        # make sure we match :param <name>: and not
+        # :paramref: that happens to be inline :)
         subsq_whitespace_match = re.match(
-            r"^( +)(\d+\: |\* |\:para)?", subsequent_line
+            r"^( +)(\d+\: |\* |\:param .+?\:)?", subsequent_line
         )
 
         # if we have the next line, anb it does not look like it is

@@ -44,7 +44,13 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 adjusted_mod = _adjust_rendered_mod_name(
                     app.env.config, base.__module__, base.__name__
                 )
-                bases.append(":class:`%s.%s`" % (adjusted_mod, base.__name__))
+                if base.__module__ == "builtins":
+                    # e.g. dict, tuple, etc.
+                    bases.append("``%s.%s``" % (adjusted_mod, base.__name__))
+                else:
+                    bases.append(
+                        ":class:`%s.%s`" % (adjusted_mod, base.__name__)
+                    )
                 _inherited_names.add("%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
