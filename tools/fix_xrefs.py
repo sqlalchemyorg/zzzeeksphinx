@@ -367,26 +367,40 @@ def handle_line(fname, state, lines, linenum, line, app_state):
             )
 
     if has_replacements:
+
         if fname.endswith(".py"):
-            if linenum == len(lines) - 1:
-                subsequent_line = None
-            else:
-                subsequent_line = lines[linenum + 1]
 
             # reformatting lines for max line length is VERY hard.  Give
             # ourselves a break by not enforcing it for .rst files right now.
             # python is hard enough.  still rst docstrings in the py files
             # though
-            newline = reformat_py_line(
-                line_tokens, subsequent_line=subsequent_line
-            )
+            reformat_py_line(lines, linenum, line_tokens)
         else:
-            newline = "".join(_token_to_str(token) for token in line_tokens)
-        lines[linenum] = newline
+            reformat_rst_line(lines, linenum, line_tokens)
         return "c"
 
 
-def reformat_py_line(line_tokens, length=79, subsequent_line=None):
+def reformat_rst_line(lines, linenum, line_tokens):
+    newline = "".join(_token_to_str(token) for token in line_tokens)
+
+    if linenum == len(lines) - 1:
+        subsequent_line = None
+    else:
+        subsequent_line = lines[linenum + 1]
+
+    # find an rst underline and rewrite it to be the same length
+    # as the new line
+    if subsequent_line and subsequent_line[0] in ("=-~^"):
+        underline_token = subsequent_line[0]
+        if subsequent_line.strip() == underline_token * len(
+            subsequent_line.strip()
+        ):
+            lines[linenum + 1] = underline_token * len(newline)
+
+    lines[linenum] = newline
+
+
+def reformat_py_line(lines, linenum, line_tokens, length=79):
     """Given line tokens where one or more of the tokens has been replaced,
     write out a new line, while ensuring that the max length is maintained.
 
@@ -396,10 +410,16 @@ def reformat_py_line(line_tokens, length=79, subsequent_line=None):
     have quotes on both sides.
 
     """
+    if linenum == len(lines) - 1:
+        subsequent_line = None
+    else:
+        subsequent_line = lines[linenum + 1]
+
     line_tokens = [_token_to_str(token) for token in line_tokens]
     printed_line = "".join(line_tokens)
     if len(printed_line) <= length:
-        return printed_line
+        lines[linenum] = printed_line
+        return
 
     quote_char = ""
     stripped = printed_line.strip()
@@ -451,9 +471,6 @@ def reformat_py_line(line_tokens, length=79, subsequent_line=None):
 
     len_ = 0
 
-    #    import pdb
-
-    #    pdb.set_trace()
     for idx, token in enumerate(line_tokens):
 
         len_ += len(token)
@@ -472,7 +489,8 @@ def reformat_py_line(line_tokens, length=79, subsequent_line=None):
                 token = "\n"
         line_tokens[idx] = token
 
-    return "".join(line_tokens)
+    newline = "".join(line_tokens)
+    lines[linenum] = newline
 
 
 state_file_name = "fix_xref_state.txt"
