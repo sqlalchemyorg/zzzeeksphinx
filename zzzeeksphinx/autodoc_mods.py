@@ -1,5 +1,8 @@
 import re
 
+from docutils import nodes
+from sphinx import addnodes
+
 
 def autodoc_skip_member(app, what, name, obj, skip, options):
     if (
@@ -51,6 +54,50 @@ def _superclass_classstring(
             base.__name__,
             attrname,
         )
+
+
+def fix_up_autodoc_headers(app, doctree):
+
+    for idx, node in enumerate(doctree.traverse(addnodes.desc)):
+        objtype = node.attributes.get("objtype")
+        if objtype in ("method", "attribute"):
+            sig = node.children[0]
+
+            modname = sig.attributes["module"]
+            clsname = sig.attributes["class"]
+            qualified = "%s.%s." % (modname, clsname)
+
+            sig.insert(
+                0,
+                nodes.reference(
+                    "",
+                    "",
+                    nodes.literal(clsname + ".", clsname + "."),
+                    refid="%s.%s" % (modname, clsname),
+                ),
+            )
+
+            sig.insert(
+                0,
+                addnodes.desc_addname(
+                    qualified, nodes.Text(modname + ".", modname + ".")
+                ),
+            )
+            sig.insert(
+                0,
+                addnodes.desc_annotation(
+                    objtype, nodes.Text(objtype + " ", objtype + " ")
+                ),
+            )
+
+        elif objtype == "function":
+            sig = node.children[0]
+            sig.insert(
+                0,
+                addnodes.desc_annotation(
+                    objtype, nodes.Text(objtype + " ", objtype + " ")
+                ),
+            )
 
 
 def autodoc_process_docstring(app, what, name, obj, options, lines):
@@ -144,6 +191,7 @@ def setup(app):
 
     app.connect("autodoc-skip-member", autodoc_skip_member)
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
+    app.connect("doctree-read", fix_up_autodoc_headers)
     app.add_config_value("autodocmods_convert_modname", {}, "env")
     app.add_config_value("autodocmods_convert_modname_w_class", {}, "env")
 
