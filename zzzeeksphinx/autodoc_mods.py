@@ -72,17 +72,11 @@ def fix_up_autodoc_headers(app, doctree):
                 nodes.reference(
                     "",
                     "",
-                    nodes.literal(clsname + ".", clsname + "."),
+                    nodes.literal(qualified, qualified),
                     refid="%s.%s" % (modname, clsname),
                 ),
             )
 
-            sig.insert(
-                0,
-                addnodes.desc_addname(
-                    qualified, nodes.Text(modname + ".", modname + ".")
-                ),
-            )
             sig.insert(
                 0,
                 addnodes.desc_annotation(
