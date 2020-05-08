@@ -43,7 +43,8 @@ class PyConWithSQLLexer(RegexLexer):
         ],
         "sqlpopup": [
             (
-                r"(.*?\n)((?:PRAGMA|BEGIN|SELECT|INSERT|DELETE|ROLLBACK|"
+                r"(.*?\n)((?:PRAGMA|BEGIN|WITH|SE\.\.\.|SELECT|INSERT|"
+                "DELETE|ROLLBACK|"
                 "COMMIT|ALTER|UPDATE|CREATE|DROP|PRAGMA"
                 "|DESCRIBE).*?(?:{stop}\n?|$))",
                 bygroups(using(PythonConsoleLexer), Token.Sql.Popup),
