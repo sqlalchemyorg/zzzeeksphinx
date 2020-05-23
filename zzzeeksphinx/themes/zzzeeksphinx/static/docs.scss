@@ -18,9 +18,9 @@ $highlighted-nav-link-background-color: #DDD;
 
 $sidebar-popout-height: 160px;
 
-$max-container-width: 1600px;
-$fixed-sidebar-width: 224px;
-$docs-body-sidebar-left: 234px;
+$max-container-width: 100em; // 100 * 16 == 1600px;
+$fixed-sidebar-width: 328px;
+$docs-body-sidebar-left: 338px;
 
 /* global */
 
@@ -33,6 +33,8 @@ body {
   background-color: $primary-background-color;
   margin:0 38px;
   color:#333333;
+  font-size: 120%;
+  line-height: 1.4em;
 
 }
 
@@ -355,7 +357,7 @@ a.headerlink:hover {
 #docs-sidebar-popout {
   height: $sidebar-popout-height;
   max-height: $sidebar-popout-height;
-  width:212px;
+  width:$fixed-sidebar-width - 14px;
   padding-left:10px;
   padding-top:10px;
   position: relative;
