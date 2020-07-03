@@ -1,5 +1,5 @@
 from docutils import nodes
-from sphinx.ext.viewcode import collect_pages
+from sphinx.ext.viewcode import collect_pages, env_merge_info
 from sphinx.pycode import ModuleAnalyzer
 import imp
 import ast
@@ -231,6 +231,8 @@ def setup(app):
     app.add_role("viewsource", view_source)
 
     app.add_directive("autosource", AutoSourceDirective)
+
+    app.connect('env-merge-info', env_merge_info)
 
     # from sphinx.ext.viewcode
     app.connect("html-collect-pages", collect_pages)
