@@ -13,6 +13,7 @@ $sidebar-header-background-color: #DDDDDD;
 $sidebar-header-color: #222222;
 $notebox-background-color: #EEFFEF;
 $deprecated-background-color: #FCF0F6;
+$versionchanged-background-color: #F9F9D9;
 $border-style: 1px solid #CCC;
 $highlighted-nav-link-background-color: #DDD;
 
@@ -594,11 +595,12 @@ div.warning, p.deprecated, div.deprecated  {
     background-color:$deprecated-background-color;
 }
 
-div.admonition, div.topic, .deprecated, .versionadded, .versionchanged {
+div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
     border: $border-style;
-    padding:5px 10px 5px 10px;
+    padding:5px 5px 5px 10px;
     font-size:.9em;
     margin-top:5px;
+    margin-right:10px;
     box-shadow: 2px 2px 3px #DFDFDF;
 }
 
@@ -609,6 +611,10 @@ div.note, div.warning {
     clear: right;
     min-height: 100px;
     padding-left: 120px;
+}
+
+.versionchanged, .versionadded, .versionmodified added {
+    background-color:$versionchanged-background-color;
 }
 
 p.admonition-title, p.topic-title {
@@ -639,9 +645,8 @@ p.sidebar-title {
 .versionchanged > p:first-child > span:first-child,
 .deprecated > p:first-child > span:first-child
 {
-    background-color: #ECF0F3;
     color: #990000;
-    font-style: italic;
+    font-weight: bold;
 }
 
 
@@ -705,7 +710,7 @@ code.descclassname, tt.descclassname {
 }
 
 code, tt {
-    background-color:#ECF0F3;
+    /*background-color:#ECF0F3;*/
     padding:0 1px;
 }
 
