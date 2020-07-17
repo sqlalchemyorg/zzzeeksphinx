@@ -133,8 +133,8 @@ withsidebar = bool(toc) and (
             <p>
             <a href="${pathto('contents') or pathto('index')}">Contents</a> |
             <a href="${pathto('genindex')}">Index</a>
-            % if pdf_url:
-            | <a href="${pdf_url}">Download as PDF</a>
+            % if zip_url:
+            | <a href="${zip_url}">Download as ZIP file</a>
             % endif
             </p>
 
@@ -156,8 +156,8 @@ withsidebar = bool(toc) and (
             <p id="sidebar-topnav">
                 <a href="${pathto('contents') or pathto('index')}">Contents</a> |
                 <a href="${pathto('genindex')}">Index</a>
-                % if pdf_url:
-                | <a href="${pdf_url}">PDF</a>
+                % if zip_url:
+                | <a href="${zip_url}">Download as ZIP file</a>
                 % endif
             </p>
 
