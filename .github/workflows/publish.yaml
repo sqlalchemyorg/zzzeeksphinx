@@ -36,5 +36,5 @@ jobs:
           user: __token__
           password: ${{ secrets.pypi_token }}
           # comment repository_url to use the real pypi
-          repository_url: https://test.pypi.org/legacy/
+          # repository_url: https://test.pypi.org/legacy/
           packages_dir: dist/
