@@ -13,6 +13,8 @@ $sidebar-header-background-color: #DDDDDD;
 $sidebar-header-color: #222222;
 $notebox-background-color: #EEFFEF;
 $deprecated-background-color: #FCF0F6;
+$warning-background-color: #FCF0F6;
+$deepalchemy-background-color: #F6E8FD;
 $versionchanged-background-color: #F9F9D9;
 $border-style: 1px solid #CCC;
 $highlighted-nav-link-background-color: #DDD;
@@ -587,12 +589,16 @@ div.faq ul {
   list-style: square outside none;
 }
 
-div.note, div.topic, div.admonition  {
+div.topic, div.admonition  {
     background-color:$notebox-background-color;
 }
 
-div.warning, p.deprecated, div.deprecated  {
+p.deprecated, div.deprecated  {
     background-color:$deprecated-background-color;
+}
+
+.versionchanged, .versionadded, .versionmodified added {
+    background-color:$versionchanged-background-color;
 }
 
 div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
@@ -606,6 +612,7 @@ div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged,
 
 div.note, div.warning {
     background-image: url("dragons.png");
+    background-color:$notebox-background-color;
     background-position: left center;
     background-repeat: no-repeat;
     clear: right;
@@ -613,11 +620,18 @@ div.note, div.warning {
     padding-left: 120px;
 }
 
-.versionchanged, .versionadded, .versionmodified added {
-    background-color:$versionchanged-background-color;
+div.warning {
+    background-color:$warning-background-color;
 }
 
-p.admonition-title, p.topic-title {
+div.deepalchemy {
+    background-image: url("deepalchemy.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-color:$deepalchemy-background-color;
+    clear: right;
+    min-height: 140px;
+    padding-left: 140px;
 }
 
 

@@ -9,7 +9,8 @@ def setup(app):
         sqlformatter,
         viewsource,
         scss,
-        render_pydomains
+        render_pydomains,
+        extras
     )
 
     autodoc_mods.setup(app)
@@ -19,6 +20,7 @@ def setup(app):
     viewsource.setup(app)
     scss.setup(app)
     render_pydomains.setup(app)
+    extras.setup(app)
 
     return {
         "version": __version__,
