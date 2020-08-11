@@ -61,6 +61,7 @@ def fix_up_autodoc_headers(app, doctree):
     for idx, node in enumerate(doctree.traverse(addnodes.desc)):
         objtype = node.attributes.get("objtype")
         if objtype in ("method", "attribute"):
+
             sig = node.children[0]
 
             modname = sig.attributes["module"]
@@ -92,6 +93,24 @@ def fix_up_autodoc_headers(app, doctree):
                     objtype, nodes.Text(objtype + " ", objtype + " ")
                 ),
             )
+
+
+def autodoc_process_signature(
+    app, what, name, obj, options, signature, return_annotation
+):
+    # a fixer for return annotations that seem to be fully module-qualified
+    # if the return class is outside of any brackets.
+    if what in ("function", "method", "attribute") and return_annotation:
+        m = re.match(r"^(.*?)\.([\w_]+)$", return_annotation)
+        if m:
+            modname, objname = m.group(1, 2)
+            config = app.env.config
+            if modname in config.autodocmods_convert_modname:
+                modname = config.autodocmods_convert_modname[modname]
+
+                new_return_annotation = "%s.%s" % (modname, objname)
+                return_annotation = new_return_annotation
+        return (signature, return_annotation)
 
 
 def autodoc_process_docstring(app, what, name, obj, options, lines):
@@ -185,6 +204,7 @@ def setup(app):
 
     app.connect("autodoc-skip-member", autodoc_skip_member)
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
+    app.connect("autodoc-process-signature", autodoc_process_signature)
     app.connect("doctree-read", fix_up_autodoc_headers)
     app.add_config_value("autodocmods_convert_modname", {}, "env")
     app.add_config_value("autodocmods_convert_modname_w_class", {}, "env")
