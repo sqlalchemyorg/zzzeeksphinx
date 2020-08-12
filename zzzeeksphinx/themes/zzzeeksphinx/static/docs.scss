@@ -12,11 +12,13 @@ $sidebar-color: #EFEFEF;
 $sidebar-header-background-color: #DDDDDD;
 $sidebar-header-color: #222222;
 $notebox-background-color: #EEFFEF;
+$code-sig-background-color: #EFEFEF;
 $deprecated-background-color: #FCF0F6;
 $warning-background-color: #FCF0F6;
 $deepalchemy-background-color: #F6E8FD;
 $versionchanged-background-color: #F9F9D9;
 $border-style: 1px solid #CCC;
+$box-shadow-style: 2px 2px 3px #DFDFDF;
 $highlighted-nav-link-background-color: #DDD;
 
 $sidebar-popout-height: 160px;
@@ -472,7 +474,7 @@ a.headerlink:hover {
     font-size:1.2em;
     background-color: #f0f0f0;
     border: $border-style;
-    box-shadow: 2px 2px 3px #DFDFDF;
+    box-shadow: $box-shadow-style;
     padding:10px;
     margin: 5px 0px 5px 0px;
     overflow:auto;
@@ -561,6 +563,7 @@ a.headerlink:hover {
 
 /* docutils-specific elements */
 
+
 th.field-name {
     text-align:right;
     position: absolute;
@@ -603,11 +606,11 @@ p.deprecated, div.deprecated  {
 
 div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
     border: $border-style;
+    box-shadow: $box-shadow-style;
     padding:5px 5px 5px 10px;
     font-size:.9em;
     margin-top:5px;
     margin-right:10px;
-    box-shadow: 2px 2px 3px #DFDFDF;
 }
 
 div.note, div.warning {
@@ -666,9 +669,9 @@ p.sidebar-title {
 
 div.inherited-member {
     border: $border-style;
+    box-shadow: $box-shadow-style;
     padding:5px 5px;
     font-size:.9em;
-    box-shadow: 2px 2px 3px #DFDFDF;
 }
 
 div.warning .admonition-title {
@@ -690,11 +693,29 @@ dl.method > dt,
 dl.class > dt,
 dl.exception > dt
 {
-    background-color: #EFEFEF;
+    border: $border-style;
+    box-shadow: $box-shadow-style;
+    background-color: $code-sig-background-color;
     margin:25px -10px 10px 10px;
     padding: 0px 10px;
 }
 
+/* parameters / returns lists for functions and methods */
+dl.field-list {
+  border-left: $border-style;
+  border-right: $border-style;
+  border-bottom: $border-style;
+    box-shadow: $box-shadow-style;
+    margin-top: 10px;
+}
+
+dl.field-list > dt {
+  border-top: $border-style;
+  border-bottom: $border-style;
+  font-weight: bold;
+  background-color: $code-sig-background-color;
+  padding-left: 10px;
+}
 
 dl.glossary > dt {
   font-weight:bold;
