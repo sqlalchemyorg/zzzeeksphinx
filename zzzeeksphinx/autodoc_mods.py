@@ -61,15 +61,18 @@ def fix_up_autodoc_headers(app, doctree):
     for idx, node in enumerate(doctree.traverse(addnodes.desc)):
         objtype = node.attributes.get("objtype")
         if objtype in ("method", "attribute"):
-
             sig = node.children[0]
 
             modname = sig.attributes["module"]
             clsname = sig.attributes["class"]
             qualified = "%s.%s." % (modname, clsname)
 
+            start_index = 0
+            if sig[0].rawsource == "async ":
+                start_index = 1
+
             sig.insert(
-                0,
+                start_index,
                 nodes.reference(
                     "",
                     "",
@@ -79,7 +82,7 @@ def fix_up_autodoc_headers(app, doctree):
             )
 
             sig.insert(
-                0,
+                start_index,
                 addnodes.desc_annotation(
                     objtype, nodes.Text(objtype + " ", objtype + " ")
                 ),
@@ -87,8 +90,13 @@ def fix_up_autodoc_headers(app, doctree):
 
         elif objtype == "function":
             sig = node.children[0]
+
+            start_index = 0
+            if sig[0].rawsource == "async ":
+                start_index = 1
+
             sig.insert(
-                0,
+                start_index,
                 addnodes.desc_annotation(
                     objtype, nodes.Text(objtype + " ", objtype + " ")
                 ),

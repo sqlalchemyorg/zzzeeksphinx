@@ -705,8 +705,9 @@ dl.field-list {
   border-left: $border-style;
   border-right: $border-style;
   border-bottom: $border-style;
-    box-shadow: $box-shadow-style;
-    margin-top: 10px;
+  box-shadow: $box-shadow-style;
+  margin-top: 5px;
+  margin-right: 10px;
 }
 
 dl.field-list > dt {
