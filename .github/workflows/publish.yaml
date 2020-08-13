@@ -4,7 +4,7 @@ on:
   # run when a pushing a tag
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   create-dist:
