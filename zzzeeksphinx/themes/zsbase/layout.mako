@@ -263,6 +263,10 @@ withsidebar = bool(toc) and (
     % else:
         &copy; Copyright ${copyright|h}.
     % endif
+
+
+    <p>flambé! the dragon and The Alchemist image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
     % if show_sphinx:
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
