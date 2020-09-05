@@ -129,7 +129,13 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
         # as we document lots of symbols in namespace modules
         # outside of their source
         bases = []
-        for base in obj.__bases__:
+        try:
+            obj_bases = obj.__bases__
+        except AttributeError:
+            print("Object %s is not a class" % obj)
+            return
+
+        for base in obj_bases:
             if base is not object:
                 adjusted_mod = _adjust_rendered_mod_name(
                     app.env.config, base.__module__, base.__name__
