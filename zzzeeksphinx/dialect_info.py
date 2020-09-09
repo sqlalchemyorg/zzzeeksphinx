@@ -1,6 +1,7 @@
 import re
-from docutils.parsers.rst import Directive
+
 from docutils import nodes
+from docutils.parsers.rst import Directive
 
 
 class DialectDirective(Directive):
@@ -169,15 +170,6 @@ class DialectDirective(Directive):
                     refdocname=self.docname,
                     refuri=relative_uri + "#" + idname,
                 ),
-                # nodes.Text(" ", " "),
-                # nodes.reference('', '',
-                #            nodes.Text("(connectstring)", "(connectstring)"),
-                #            refdocname=self.docname,
-                #            refuri=env.app.builder.get_relative_uri(
-                #                    dialect_directive.docname, self.docname) +
-                ##                        "#" + ("dialect-%s-%s-connect" %
-                #                                (dialect_name, dbapi_name))
-                #        )
             ),
         )
         dialect_directive.bullets.append(list_node)

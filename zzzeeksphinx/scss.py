@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import os
+
 from scss import Scss
 
 # these docs aren't super accurate

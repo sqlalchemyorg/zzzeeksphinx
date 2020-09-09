@@ -1,14 +1,19 @@
 from __future__ import absolute_import
 
-from pygments.lexer import RegexLexer, bygroups, using
-from pygments.token import Token
-from pygments.filter import Filter
-from pygments.filter import apply_filters
-from pygments.lexers import PythonLexer, PythonConsoleLexer
-from sphinx.highlighting import PygmentsBridge
-from pygments.formatters import HtmlFormatter, LatexFormatter
-from mako import filters
 import re
+
+from mako import filters
+from pygments.filter import apply_filters
+from pygments.filter import Filter
+from pygments.formatters import HtmlFormatter
+from pygments.formatters import LatexFormatter
+from pygments.lexer import bygroups
+from pygments.lexer import RegexLexer
+from pygments.lexer import using
+from pygments.lexers import PythonConsoleLexer
+from pygments.lexers import PythonLexer
+from pygments.token import Token
+from sphinx.highlighting import PygmentsBridge
 
 
 def _strip_trailing_whitespace(iter_):

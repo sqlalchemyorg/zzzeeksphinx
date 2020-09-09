@@ -5,11 +5,11 @@ zzzeeksphinx
 This is zzzeek's own Sphinx layout, used by SQLAlchemy.
 
 This layout is first and foremost pulled in for the SQLAlchemy documentation
-builds (and possibly other related projects), but is also usable as a
-standalone theme / utility set for any project.
+builds (and possibly other related projects).
 
-Feel free to fork off features from it as needed, the project here first
-and foremost has to work with SQLAlchemy.
+.. note:: The stability of zzzeeksphinx is **not** guaranteed and APIs and
+   behaviors can change at any time.    For use in other projects, please fork
+   and/or adapt any portion of useful code as needed.
 
 Features include:
 

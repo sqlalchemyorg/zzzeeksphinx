@@ -1,9 +1,10 @@
-import sphinx
 import re
+
+import sphinx
 
 
 SPHINX_VERSION = tuple(
-    int(dig) for dig in re.findall("\d+", sphinx.__version__)
+    int(dig) for dig in re.findall(r"\d+", sphinx.__version__)
 )
 
 

@@ -1,29 +1,23 @@
-from docutils import nodes
-from sphinx.ext.viewcode import collect_pages, env_merge_info
-from sphinx.pycode import ModuleAnalyzer
-import imp
 import ast
-import re
-from docutils.parsers.rst import Directive
-import docutils
+import imp
 import os
+import re
+import warnings
+
+import docutils
+from docutils import nodes
+from docutils.parsers.rst import Directive
+from sphinx.ext.viewcode import collect_pages
+from sphinx.ext.viewcode import env_merge_info
+from sphinx.pycode import ModuleAnalyzer
+
+from . import util
 
 try:
     # 3.0
     from sphinx.errors import NoUri
 except:
     from sphinx.environment import NoUri
-
-import warnings
-from . import util
-
-import sys
-
-py2k = sys.version_info < (3, 0)
-if py2k:
-    text_type = unicode
-else:
-    text_type = str
 
 
 def view_source(name, rawtext, text, lineno, inliner, options={}, content=[]):
@@ -112,7 +106,7 @@ def _view_source_node(env, text, state):
     analyzer = ModuleAnalyzer.for_file(pathname, modname)
     # copied from viewcode
     analyzer.find_tags()
-    if not isinstance(analyzer.code, text_type):
+    if not isinstance(analyzer.code, str):
         code = analyzer.code.decode(analyzer.encoding)
     else:
         code = analyzer.code
@@ -232,7 +226,7 @@ def setup(app):
 
     app.add_directive("autosource", AutoSourceDirective)
 
-    app.connect('env-merge-info', env_merge_info)
+    app.connect("env-merge-info", env_merge_info)
 
     # from sphinx.ext.viewcode
     app.connect("html-collect-pages", collect_pages)

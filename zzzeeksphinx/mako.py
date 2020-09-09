@@ -1,11 +1,13 @@
 from __future__ import absolute_import
 
-from sphinx.application import TemplateBridge
-from sphinx.jinja2glue import BuiltinTemplateLoader
-from mako.lookup import TemplateLookup
-from .toc import TOCMixin
 import os
 import re
+
+from mako.lookup import TemplateLookup
+from sphinx.application import TemplateBridge
+from sphinx.jinja2glue import BuiltinTemplateLoader
+
+from .toc import TOCMixin
 
 rtd = os.environ.get("READTHEDOCS", None) == "True"
 

@@ -1,4 +1,4 @@
-__version__ = "1.1.7"
+__version__ = "1.2.0"
 
 
 def setup(app):
@@ -10,7 +10,7 @@ def setup(app):
         viewsource,
         scss,
         render_pydomains,
-        extras
+        extras,
     )
 
     autodoc_mods.setup(app)

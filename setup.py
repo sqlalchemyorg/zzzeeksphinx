@@ -1,6 +1,7 @@
-from setuptools import setup
 import os
 import re
+
+from setuptools import setup
 
 
 v = open(
@@ -25,10 +26,7 @@ setup(
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Intended Audience :: Developers",
-        "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Documentation",
     ],
     keywords="Sphinx",

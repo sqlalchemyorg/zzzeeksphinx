@@ -2,11 +2,10 @@ import re
 
 from docutils import nodes
 from sphinx.addnodes import pending_xref
-
-
 from sphinx.util import logging
 
 LOG = logging.getLogger(__name__)
+
 
 def replace_synonyms(app, doctree):
 

@@ -1,7 +1,8 @@
 from docutils.nodes import Admonition
 from docutils.nodes import Element
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
-from sphinx.locale import admonitionlabels, _
+from sphinx.locale import _
+from sphinx.locale import admonitionlabels
 
 
 class deepalchemy(Admonition, Element):
@@ -27,7 +28,7 @@ deepalchemy_visit = (visit_deepalchemy, depart_deepalchemy)
 
 def setup(app):
 
-    admonitionlabels["deepalchemy"] = _('Deep Alchemy')
+    admonitionlabels["deepalchemy"] = _("Deep Alchemy")
 
     app.add_directive("deepalchemy", DeepAlchemy)
     app.add_node(

@@ -2,7 +2,6 @@ import re
 
 from docutils import nodes
 from sphinx import addnodes
-
 from sphinx.util import logging
 
 LOG = logging.getLogger(__name__)

@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import re
-import os
 import argparse
+import os
+import re
 import sys
+
 import readchar
 
 BOLD = "\033[1m"
