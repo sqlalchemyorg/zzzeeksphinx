@@ -4,6 +4,10 @@ from docutils import nodes
 from sphinx.addnodes import pending_xref
 
 
+from sphinx.util import logging
+
+LOG = logging.getLogger(__name__)
+
 def replace_synonyms(app, doctree):
 
     py_nodes = doctree.traverse(pending_xref)
@@ -47,7 +51,13 @@ def replace_synonyms(app, doctree):
         ):
             corrected_name = ref_tokens[-1]
         else:
-            assert not needs_correction
+            if needs_correction:
+                LOG.warn(
+                    "source %r at %s needs synonym correction but is not "
+                    "handled by zzzeeksphinx",
+                    py_node.rawsource,
+                    py_node.source,
+                )
             continue
 
         if reftype in ("meth", "func"):

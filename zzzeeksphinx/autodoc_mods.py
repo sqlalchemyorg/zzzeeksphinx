@@ -3,6 +3,10 @@ import re
 from docutils import nodes
 from sphinx import addnodes
 
+from sphinx.util import logging
+
+LOG = logging.getLogger(__name__)
+
 
 def autodoc_skip_member(app, what, name, obj, skip, options):
     if (
@@ -132,7 +136,11 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
         try:
             obj_bases = obj.__bases__
         except AttributeError:
-            print("Object %s is not a class" % obj)
+            LOG.warn(
+                "Object %s is not a class, "
+                "cannot be corrected by zzzeeksphinx",
+                obj,
+            )
             return
 
         for base in obj_bases:
