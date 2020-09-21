@@ -481,6 +481,41 @@ a.headerlink:hover {
     line-height:1.3em;
   }
 
+
+  div.section.orm {
+      background-color: #E2F3F4;
+
+      h1, h2, h3, h4, h5 {
+        padding-left:5px;
+        padding-top:5px;
+      }
+      p {
+        padding-left:5px;
+      }
+
+      pre {
+        background-color: #C6D4D5;
+
+      }
+  }
+
+  div.section.core {
+      background-color: #E1E2F9;
+
+      h1, h2, h3, h4, h5 {
+        padding-left:5px;
+        padding-top:5px;
+      }
+      p {
+        padding-left:5px;
+      }
+
+      pre {
+        background-color: #CDCEDF;
+      }
+  }
+
+
   /* the [SQL] links used to display SQL */
   .sql_link
   {
@@ -779,6 +814,7 @@ div#sqlalchemy-documentation a, div#sqlalchemy-documentation li {
 div.section li p {
   margin: 0;
 }
+
 
 div#getting-started {
   border-bottom:1px solid;
