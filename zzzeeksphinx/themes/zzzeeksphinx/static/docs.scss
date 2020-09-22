@@ -491,6 +491,7 @@ a.headerlink:hover {
       }
       p {
         padding-left:5px;
+        padding-right:5px;
       }
 
       pre {
@@ -500,7 +501,7 @@ a.headerlink:hover {
   }
 
   div.section.core {
-      background-color: #E1E2F9;
+      background-color: #AECAF7;
 
       h1, h2, h3, h4, h5 {
         padding-left:5px;
@@ -508,6 +509,7 @@ a.headerlink:hover {
       }
       p {
         padding-left:5px;
+        padding-right:5px;
       }
 
       pre {
@@ -820,22 +822,36 @@ div#getting-started {
   border-bottom:1px solid;
 }
 
+div#tutorials {
+  border-bottom:1px solid;
+}
+
 div#sqlalchemy-documentation div#sqlalchemy-orm {
   float:left;
   width:48%;
+  min-height:400px;
+  padding-left:10px;
+  border-right:1px solid;
+  h2 {
+    margin: 0;
+  }
 }
 
 div#sqlalchemy-documentation div#sqlalchemy-core {
-  float:left;
-  width:48%;
   margin:0;
   padding-left:10px;
-  border-left:1px solid;
+  min-height:400px;
+  padding-left:50%;
+
+  h2 {
+    margin: 0;
+  }
+
 }
 
 div#dialect-documentation {
   border-top:1px solid;
-  /*clear:left;*/
+  clear:both;
 }
 
 div .versionwarning,
