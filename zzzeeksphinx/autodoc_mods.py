@@ -186,9 +186,11 @@ def write_autosummaries(app, doctree):
             else:
                 continue
 
-            name_node = nodes.literal(
-                "", *[c.copy() for c in name_node.children]
-            )
+            name_node = name_node.deepcopy()
+
+            # nodes.literal(
+            #    "", *[c.copy() for c in name_node.children]
+            # )
 
             p = nodes.paragraph(
                 "",
