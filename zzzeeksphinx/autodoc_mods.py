@@ -1,3 +1,4 @@
+import inspect
 import re
 
 from docutils import nodes
@@ -57,6 +58,164 @@ def _superclass_classstring(
             base.__name__,
             attrname,
         )
+
+
+def _quick_inspect_sig(
+    args,
+    varargs=None,
+    varkw=None,
+    defaults=None,
+    kwonlyargs=(),
+    kwonlydefaults={},
+    annotations={},
+    formatarg=str,
+    formatvarargs=lambda name: "*" + name,
+    formatvarkw=lambda name: "**" + name,
+):
+    specs = []
+    if defaults:
+        firstdefault = len(args) - len(defaults)
+
+    close_bracket = False
+    for i, arg in enumerate(args):
+        if i > 3:
+            specs[-1] += ", ..."
+            break
+
+        spec = formatarg(arg)
+        if defaults and i >= firstdefault and not close_bracket:
+            if specs:
+                specs[-1] = specs[-1] + "["
+            else:
+                spec = "[" + spec
+            close_bracket = True
+        specs.append(spec)
+
+    if close_bracket:
+        specs[-1] = specs[-1] + "]"
+        close_bracket = False
+
+    if varargs is not None:
+        specs.append(formatvarargs(formatarg(varargs)))
+    else:
+        if kwonlyargs:
+            specs.append("*")
+
+    if kwonlyargs:
+        for kwonlyarg in kwonlyargs:
+            spec = formatarg(kwonlyarg)
+            if (
+                kwonlydefaults
+                and kwonlyarg in kwonlydefaults
+                and not close_bracket
+            ):
+                close_bracket = True
+                spec = "[" + spec
+            specs.append(spec)
+
+        if close_bracket:
+            specs[-1] = specs[-1] + "]"
+            close_bracket = False
+
+    if varkw is not None:
+        specs.append(formatvarkw(formatarg(varkw)))
+
+    result = "(" + ", ".join(specs) + ")"
+    return result
+
+
+def write_autosummaries(app, doctree):
+    for idx, node in enumerate(doctree.traverse(nodes.section)):
+
+        immediate_autodoc_nodes = [
+            n
+            for n in node.traverse(addnodes.desc)
+            if n.parent is node
+            and n.attributes.get("objtype", None)
+            in ("attribute", "data", "class", "function")
+        ]
+        if not immediate_autodoc_nodes:
+            continue
+        where = node.index(immediate_autodoc_nodes[0])
+
+        immediate_autodoc_nodes = sorted(
+            immediate_autodoc_nodes,
+            key=lambda node: node[0].attributes["fullname"].lower(),
+        )
+
+        table = nodes.table("", classes=["longtable"])
+        group = nodes.tgroup("", cols=2)
+
+        table.append(group)
+        group.append(nodes.colspec("", colwidth=10))
+        group.append(nodes.colspec("", colwidth=90))
+
+        header = nodes.thead("")
+        header.append(
+            nodes.row(
+                "",
+                nodes.entry("", nodes.Text("Object Name", "Object Name")),
+                nodes.entry("", nodes.Text("Description", "Description")),
+            )
+        )
+        group.append(header)
+
+        body = nodes.tbody("")
+        group.append(body)
+
+        for ad_node in immediate_autodoc_nodes:
+
+            # what = ad_node.attributes["objtype"]
+            sig = ad_node.children[0]
+            refid = sig.attributes.get("ids", [None])[0]
+            if not refid:
+                continue
+
+            row = nodes.row("")
+
+            obj = _track_autodoced.get(refid, None)
+
+            if inspect.isfunction(obj):
+                param_str = _quick_inspect_sig(*inspect.getfullargspec(obj))
+            else:
+                param_str = ""
+
+            name_node = sig.traverse(addnodes.desc_name)
+            if name_node:
+                name_node = name_node[0]
+            else:
+                continue
+
+            name_node = nodes.literal(
+                "", *[c.copy() for c in name_node.children]
+            )
+
+            p = nodes.paragraph(
+                "",
+                "",
+                # nodes.Text(what + " ", what + " "),
+                nodes.reference(
+                    "",
+                    "",
+                    name_node,
+                    refid=refid,
+                    classes=["reference", "internal"],
+                ),
+                nodes.Text(param_str, param_str),
+            )
+
+            row.append(nodes.entry("", p, classes=["nowrap"]))
+
+            try:
+                text = ad_node[1].traverse(nodes.paragraph)[0].deepcopy()
+            except IndexError:
+                text = nodes.Text("", "")
+
+            row.append(nodes.entry("", text))
+            body.append(row)
+
+        if where > 0:
+            node.insert(where, table)
 
 
 def fix_up_autodoc_headers(app, doctree):
@@ -154,9 +313,10 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 _inherited_names.add("%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
+            modname, objname = re.match(r"(.*)\.(.*?)$", name).group(1, 2)
 
             adjusted_mod = _adjust_rendered_mod_name(
-                app.env.config, obj.__module__, obj.__name__
+                app.env.config, modname, objname
             )
             clsdoc = _superclass_classstring(adjusted_mod, obj)
 
@@ -215,6 +375,8 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                         ),
                         "",
                     ]
+    elif what == "function":
+        _track_autodoced[name] = obj
 
 
 def missing_reference(app, env, node, contnode):
@@ -246,6 +408,7 @@ def setup(app):
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
     app.connect("autodoc-process-signature", autodoc_process_signature)
     app.connect("doctree-read", fix_up_autodoc_headers)
+    app.connect("doctree-read", write_autosummaries)
     app.add_config_value("autodocmods_convert_modname", {}, "env")
     app.add_config_value("autodocmods_convert_modname_w_class", {}, "env")
 
