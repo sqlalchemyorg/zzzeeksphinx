@@ -207,9 +207,12 @@ def write_autosummaries(app, doctree):
             )
 
             row.append(nodes.entry("", p, classes=["nowrap"]))
-
             try:
-                text = ad_node[1].traverse(nodes.paragraph)[0].deepcopy()
+                para = ad_node[1][0]
+                if isinstance(para, nodes.paragraph):
+                    text = para.deepcopy()
+                else:
+                    text = nodes.Text("", "")
             except IndexError:
                 text = nodes.Text("", "")
 
