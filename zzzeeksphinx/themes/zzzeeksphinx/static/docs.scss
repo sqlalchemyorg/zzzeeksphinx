@@ -704,11 +704,24 @@ p.sidebar-title {
 }
 
 
+div.class-bases {
+    border: $border-style;
+    box-shadow: $box-shadow-style;
+    padding:5px 5px;
+
+    padding:5px 5px 5px 10px;
+    font-size:.9em;
+    margin-top:5px;
+    margin-right:10px;
+    background-color: #eefbfb;
+}
+
 div.inherited-member {
     border: $border-style;
     box-shadow: $box-shadow-style;
     padding:5px 5px;
     font-size:.9em;
+    background-color: #eefbfb;
 }
 
 div.warning .admonition-title {

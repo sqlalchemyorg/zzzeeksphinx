@@ -125,6 +125,9 @@ def autodoc_process_signature(
 
 
 def autodoc_process_docstring(app, what, name, obj, options, lines):
+    # skipping superclass classlevel docs for now, as these
+    # get in the way of using autosummary.
+
     if what == "class":
         _track_autodoced[name] = obj
 
@@ -151,7 +154,23 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 _inherited_names.add("%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
-            lines[:0] = ["Bases: %s" % (", ".join(bases)), ""]
+
+            adjusted_mod = _adjust_rendered_mod_name(
+                app.env.config, obj.__module__, obj.__name__
+            )
+            clsdoc = _superclass_classstring(adjusted_mod, obj)
+
+            lines.extend(
+                [
+                    "",
+                    ".. container:: class_bases",
+                    "    " "",
+                    "    **Class signature**",
+                    "",
+                    "    class %s (%s)" % (clsdoc, ", ".join(bases)),
+                    "",
+                ]
+            )
 
     elif what in ("attribute", "method"):
         m = re.match(r"(.*?)\.([\w_]+)$", name)
