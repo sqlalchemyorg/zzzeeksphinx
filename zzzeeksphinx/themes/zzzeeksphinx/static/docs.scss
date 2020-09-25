@@ -18,6 +18,7 @@ $warning-background-color: #FCF0F6;
 $deepalchemy-background-color: #F6E8FD;
 $versionchanged-background-color: #F9F9D9;
 $border-style: 1px solid #CCC;
+$divider-line-style: 1px solid #CCC;
 $box-shadow-style: 2px 2px 3px #DFDFDF;
 $highlighted-nav-link-background-color: #DDD;
 
@@ -452,8 +453,7 @@ a.headerlink:hover {
 
 #docs-body h2 {
   font-size:1.8em;
-  border-top:1px solid;
-  /*border-bottom:1px solid;*/
+  border-top: $divider-line-style;
   padding-top:20px;
 }
 
@@ -839,11 +839,11 @@ div.section li p {
 
 
 div#getting-started {
-  border-bottom:1px solid;
+  border-bottom: $divider-line-style;
 }
 
 div#tutorials {
-  border-bottom:1px solid;
+  border-bottom: $divider-line-style;
 }
 
 
@@ -855,7 +855,7 @@ div#tutorials {
 
 div.left-right-container {
   display:flex;
-  border-bottom: 1px solid;
+  border-bottom:  $divider-line-style;
 
   p.h2 {
     display: block;
@@ -888,7 +888,7 @@ div#sqlalchemy-documentation div#sqlalchemy-orm {
   width:48%;
   min-height:400px;
   padding-left:10px;
-  border-right:1px solid;
+  border-right:  $divider-line-style;
   h2 {
     margin: 0;
   }
@@ -908,7 +908,7 @@ div#sqlalchemy-documentation div#sqlalchemy-core {
 
 
 div#dialect-documentation {
-  border-top:1px solid;
+  border-top:  $divider-line-style;
   clear:both;
 }
 
@@ -916,7 +916,7 @@ div .versionwarning,
 div .version-warning {
   font-size:12px;
   font-color:red;
-  border:1px solid;
+  border:  $border-style;
   padding:4px 4px;
   margin:8px 0px 2px 0px;
   background:#FFBBBB;
