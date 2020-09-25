@@ -422,9 +422,6 @@ a.headerlink:hover {
   margin-top:10px;
 }
 
-#docs-body.index {
-  padding:0;
-}
 
 #docs-body.withsidebar {
   margin-left: $docs-body-sidebar-left;
@@ -852,6 +849,10 @@ div#tutorials {
 
 /* new index layout thing */
 
+#docs-body.index {
+  padding:0;
+}
+
 div.left-right-container {
   display:flex;
   border-bottom: 1px solid;
@@ -877,6 +878,10 @@ div.left-right-container {
 
 
 /* legacy index layout thing */
+
+div#sqlalchemy-documentation > .section {
+  padding-left:10px;
+}
 
 div#sqlalchemy-documentation div#sqlalchemy-orm {
   float:left;
