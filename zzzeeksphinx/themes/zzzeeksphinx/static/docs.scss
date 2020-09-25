@@ -422,6 +422,10 @@ a.headerlink:hover {
   margin-top:10px;
 }
 
+#docs-body.index {
+  padding:0;
+}
+
 #docs-body.withsidebar {
   margin-left: $docs-body-sidebar-left;
 
@@ -436,7 +440,9 @@ a.headerlink:hover {
 #docs-body h1,
 #docs-body h2,
 #docs-body h3,
-#docs-body h4 {
+#docs-body h4,
+#docs-body .h2
+{
   font-family: $header-font-family;
 }
 
@@ -482,7 +488,7 @@ a.headerlink:hover {
   }
 
 
-  div.section.orm {
+  div.section.orm, div.orm {
       background-color: #E2F3F4;
 
       h1, h2, h3, h4, h5 {
@@ -500,7 +506,7 @@ a.headerlink:hover {
       }
   }
 
-  div.section.core {
+  div.section.core, div.core {
       background-color: #AECAF7;
 
       h1, h2, h3, h4, h5 {
@@ -843,6 +849,35 @@ div#tutorials {
   border-bottom:1px solid;
 }
 
+
+/* new index layout thing */
+
+div.left-right-container {
+  display:flex;
+  border-bottom: 1px solid;
+
+  p.h2 {
+    display: block;
+    font-weight: bold;
+    font-size:1.4em;
+  }
+
+  .leftmost {
+      width: 15em;
+      max-width: 15em;
+      background-color: #e4e4e8;
+      padding-left:10px;
+  }
+
+  div {
+      flex: 3;
+      padding-left:10px;
+  }
+}
+
+
+/* legacy index layout thing */
+
 div#sqlalchemy-documentation div#sqlalchemy-orm {
   float:left;
   width:48%;
@@ -865,6 +900,7 @@ div#sqlalchemy-documentation div#sqlalchemy-core {
   }
 
 }
+
 
 div#dialect-documentation {
   border-top:1px solid;

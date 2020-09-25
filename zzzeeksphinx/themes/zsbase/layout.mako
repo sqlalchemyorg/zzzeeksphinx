@@ -109,7 +109,7 @@ withsidebar = bool(toc) and (
 
     </div>
 
-    <h1>${docstitle|h}</h1>
+    <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
 
 </div>
 </div>
@@ -241,7 +241,7 @@ withsidebar = bool(toc) and (
     </div>
     </%doc>
 
-    <div id="docs-body" class="${'withsidebar' if withsidebar else ''}" >
+    <div id="docs-body" class="${'withsidebar' if withsidebar else ''} ${current_page_name.replace("/", "-")}" >
         ${next.body()}
     </div>
 
@@ -265,7 +265,7 @@ withsidebar = bool(toc) and (
     % endif
 
 
-    <p>flambé! the dragon and The Alchemist image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
 
     % if show_sphinx:
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
