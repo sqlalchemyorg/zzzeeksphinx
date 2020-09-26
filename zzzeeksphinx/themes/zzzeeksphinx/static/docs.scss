@@ -21,6 +21,9 @@ $border-style: 1px solid #CCC;
 $divider-line-style: 1px solid #CCC;
 $box-shadow-style: 2px 2px 3px #DFDFDF;
 $highlighted-nav-link-background-color: #DDD;
+$orm-background-color: #E2F3F4;
+$core-background-color: #AECAF7;
+
 
 $sidebar-popout-height: 160px;
 
@@ -485,41 +488,6 @@ a.headerlink:hover {
   }
 
 
-  div.section.orm, div.orm {
-      background-color: #E2F3F4;
-
-      h1, h2, h3, h4, h5 {
-        padding-left:5px;
-        padding-top:5px;
-      }
-      p {
-        padding-left:5px;
-        padding-right:5px;
-      }
-
-      pre {
-        background-color: #C6D4D5;
-
-      }
-  }
-
-  div.section.core, div.core {
-      background-color: #AECAF7;
-
-      h1, h2, h3, h4, h5 {
-        padding-left:5px;
-        padding-top:5px;
-      }
-      p {
-        padding-left:5px;
-        padding-right:5px;
-      }
-
-      pre {
-        background-color: #CDCEDF;
-      }
-  }
-
 
   /* the [SQL] links used to display SQL */
   .sql_link
@@ -554,6 +522,9 @@ a.headerlink:hover {
       padding: 0 4px 0 4px;
       text-decoration: none;
   }
+
+
+
 
 }
 
@@ -652,6 +623,17 @@ div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged,
     margin-top:5px;
     margin-right:10px;
 }
+
+div .versionwarning,
+div .version-warning {
+  font-size:12px;
+  font-color:red;
+  border:  $border-style;
+  padding:4px 4px;
+  margin:8px 0px 2px 0px;
+  background:#FFBBBB;
+}
+
 
 div.note, div.warning {
     background-image: url("dragons.png");
@@ -857,6 +839,14 @@ div.left-right-container {
   display:flex;
   border-bottom:  $divider-line-style;
 
+  .orm {
+      background-color: $orm-background-color;
+  }
+
+  .core {
+      background-color: $core-background-color;
+  }
+
   p.h2 {
     display: block;
     font-weight: bold;
@@ -912,13 +902,61 @@ div#dialect-documentation {
   clear:both;
 }
 
-div .versionwarning,
-div .version-warning {
-  font-size:12px;
-  font-color:red;
-  border:  $border-style;
-  padding:4px 4px;
-  margin:8px 0px 2px 0px;
-  background:#FFBBBB;
-}
 
+
+/* core/orm tabbed thing */
+
+$card-line-style: 1px dotted #CCC;
+
+#docs-body {
+
+  div.orm-core {
+
+    h2, h3, h4 {
+      border: none;
+    }
+  }
+
+  div.orm-header {
+
+    border-top: $card-line-style;
+    border-bottom: $card-line-style;
+    border-right: $card-line-style;
+    border-left: 3em solid $orm-background-color;
+    border-radius: 10px;
+
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+
+    > h2, > h3 {
+      border: none;
+      padding-top: 0;
+    }
+  }
+
+  div.core-header {
+
+    border-top: $card-line-style;
+    border-bottom: $card-line-style;
+    border-left: $card-line-style;
+    border-right: 3em solid $core-background-color;
+    border-radius: 10px;
+
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+
+    > h2, > h3 {
+      border: none;
+      padding-top: 0;
+    }
+
+  }
+
+  div.orm-dependency {
+    border-left: 1em solid $orm-background-color;
+  }
+}
