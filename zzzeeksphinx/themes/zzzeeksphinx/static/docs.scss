@@ -603,10 +603,6 @@ div.faq ul {
   list-style: square outside none;
 }
 
-div.topic, div.admonition  {
-    background-color:$notebox-background-color;
-}
-
 p.deprecated, div.deprecated  {
     background-color:$deprecated-background-color;
 }
@@ -615,13 +611,44 @@ p.deprecated, div.deprecated  {
     background-color:$versionchanged-background-color;
 }
 
-div.admonition, div.topic, div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
+
+div.warning .admonition-title {
+    color:#FF0000;
+}
+
+
+div.admonition, div.sidebar {
+    .admonition-title, .sidebar-title {
+        background-color: #c5cec2;
+        padding:0 2em 0 1.5em;
+        margin:0;
+      font-weight:bold;
+    }
+
+    p {
+      padding: 0 0 0 2em;
+    }
+    ol {
+      padding: 0 3em 0 3em;
+    }
+    background-color: #F8F9F0;
     border: $border-style;
     box-shadow: $box-shadow-style;
-    padding:5px 5px 5px 10px;
     font-size:.9em;
+
     margin-top:5px;
     margin-right:10px;
+}
+
+div.sidebar {
+    background-color: #FFFFEE;
+    float: right;
+    width: 40%;
+}
+
+div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
+  padding: 2px 1em 2px 1em;
+  margin: 0 1em 1em 0;
 }
 
 div .versionwarning,
@@ -636,13 +663,19 @@ div .version-warning {
 
 
 div.note, div.warning {
+    > .admonition-title {
+        margin: 0 0 30px 0;
+    }
     background-image: url("dragons.png");
     background-color:$notebox-background-color;
     background-position: left center;
     background-repeat: no-repeat;
     clear: right;
-    min-height: 100px;
-    padding-left: 120px;
+    min-height: 140px;
+
+    p {
+        margin-left: 100px;
+    }
 }
 
 div.warning {
@@ -656,24 +689,13 @@ div.deepalchemy {
     background-color:$deepalchemy-background-color;
     clear: right;
     min-height: 140px;
-    padding-left: 140px;
+    p {
+        margin-left: 160px;
+    }
 }
 
 
 
-div.sidebar {
-    background-color: #FFFFEE;
-    border: 1px solid #DDDDBB;
-    float: right;
-    margin: 10px 0 10px 1em;
-    padding: 7px 7px 0;
-    width: 40%;
-    font-size:.9em;
-}
-
-p.sidebar-title {
-    font-weight: bold;
-}
 
 /* grrr sphinx changing your document structures, removing classes.... */
 
@@ -709,13 +731,6 @@ div.inherited-member {
     background-color: #eefbfb;
 }
 
-div.warning .admonition-title {
-    color:#FF0000;
-}
-
-div.admonition .admonition-title, div.topic .topic-title {
-    font-weight:bold;
-}
 
 .viewcode-back, .viewcode-link {
     float:right;
