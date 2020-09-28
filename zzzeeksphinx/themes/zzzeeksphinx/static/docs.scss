@@ -19,11 +19,15 @@ $deepalchemy-background-color: #F6E8FD;
 $versionchanged-background-color: #F9F9D9;
 $border-style: 1px solid #CCC;
 $divider-line-style: 1px solid #CCC;
+
 $box-shadow-style: 2px 2px 3px #DFDFDF;
+$box-top-margin: 10px;
+$box-margin: $box-top-margin 10px 5px 0px;
+$box-title-padding: 0 2em 0 1.5em;
+
 $highlighted-nav-link-background-color: #DDD;
 $orm-background-color: #E2F3F4;
 $core-background-color: #AECAF7;
-
 
 $sidebar-popout-height: 160px;
 
@@ -482,7 +486,7 @@ a.headerlink:hover {
     border: $border-style;
     box-shadow: $box-shadow-style;
     padding:10px;
-    margin: 5px 0px 5px 0px;
+    margin: $box-margin;
     overflow:auto;
     line-height:1.3em;
   }
@@ -618,38 +622,52 @@ div.warning .admonition-title {
 
 
 div.admonition, div.sidebar {
+    clear:both;
+
     .admonition-title, .sidebar-title {
         background-color: #c5cec2;
-        padding:0 2em 0 1.5em;
+        padding:$box-title-padding;
         margin:0;
-      font-weight:bold;
+        font-weight:bold;
+        border-left: $border-style;
+        border-right: $border-style;
+        border-bottom: $border-style;
     }
 
-    p {
-      padding: 0 0 0 2em;
+    > p {
+      padding: 0 3em 0 2em;
+      font-size:.9em;
     }
-    ol {
+    > ol, > ul {
       padding: 0 3em 0 3em;
+      font-size:.9em;
     }
+
     background-color: #F8F9F0;
     border: $border-style;
     box-shadow: $box-shadow-style;
-    font-size:.9em;
 
-    margin-top:5px;
-    margin-right:10px;
+    margin: $box-margin;
+
 }
 
 div.sidebar {
     background-color: #FFFFEE;
     float: right;
     width: 40%;
+    > p, > ol, > ul {
+      padding: 0 1em 0 1em;
+    }
+    margin: 10px 10px 5px 10px;
 }
 
 div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
   padding: 2px 1em 2px 1em;
-  margin: 0 1em 1em 0;
+
+  margin: $box-margin;
+
 }
+
 
 div .versionwarning,
 div .version-warning {
@@ -664,17 +682,16 @@ div .version-warning {
 
 div.note, div.warning {
     > .admonition-title {
-        margin: 0 0 30px 0;
     }
     background-image: url("dragons.png");
     background-color:$notebox-background-color;
-    background-position: left center;
+    background-position: 1em 110%;
     background-repeat: no-repeat;
     clear: right;
     min-height: 140px;
 
-    p {
-        margin-left: 100px;
+    > p, > ul, > ol {
+        margin-left: 120px;
     }
 }
 
@@ -718,8 +735,7 @@ div.class-bases {
 
     padding:5px 5px 5px 10px;
     font-size:.9em;
-    margin-top:5px;
-    margin-right:10px;
+    margin: $box-margin;
     background-color: #eefbfb;
 }
 
@@ -756,8 +772,11 @@ dl.field-list {
   border-right: $border-style;
   border-bottom: $border-style;
   box-shadow: $box-shadow-style;
-  margin-top: 5px;
-  margin-right: 10px;
+  margin: $box-top-margin 10px 0 0;
+
+  li > p {
+      margin: .5em 0 .5em 0;
+  }
 }
 
 dl.field-list > dt {
@@ -765,7 +784,7 @@ dl.field-list > dt {
   border-bottom: $border-style;
   font-weight: bold;
   background-color: $code-sig-background-color;
-  padding-left: 10px;
+  padding: $box-title-padding;
 }
 
 dl.glossary > dt {
@@ -830,11 +849,6 @@ div#sqlalchemy-documentation a, div#sqlalchemy-documentation li {
   padding:5px 0px;
 }
 
-div.section li p {
-  margin: 0;
-}
-
-
 div#getting-started {
   border-bottom: $divider-line-style;
 }
@@ -884,8 +898,17 @@ div.left-right-container {
 
 /* legacy index layout thing */
 
+div#sqlalchemy-documentation {
+  li p {
+    margin: 0;
+  }
+}
+
 div#sqlalchemy-documentation > .section {
   padding-left:10px;
+
+
+
 }
 
 div#sqlalchemy-documentation div#sqlalchemy-orm {
