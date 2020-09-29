@@ -23,6 +23,7 @@ $divider-line-style: 1px solid #CCC;
 $box-shadow-style: 2px 2px 3px #DFDFDF;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 5px 0px;
+$box-padding: 2px 1em 2px 1em;
 $box-title-padding: 0 2em 0 1.5em;
 
 $highlighted-nav-link-background-color: #DDD;
@@ -627,7 +628,9 @@ div.admonition, div.sidebar {
     .admonition-title, .sidebar-title {
         background-color: #c5cec2;
         padding:$box-title-padding;
-        margin:0;
+
+        margin:0 -20px 20px -20px;
+
         font-weight:bold;
         border-left: $border-style;
         border-right: $border-style;
@@ -635,14 +638,10 @@ div.admonition, div.sidebar {
     }
 
     > p {
-      padding: 0 3em 0 2em;
-      font-size:.9em;
-    }
-    > ol, > ul {
-      padding: 0 3em 0 3em;
       font-size:.9em;
     }
 
+    padding: 0 20px 0 20px;
     background-color: #F8F9F0;
     border: $border-style;
     box-shadow: $box-shadow-style;
@@ -655,14 +654,12 @@ div.sidebar {
     background-color: #FFFFEE;
     float: right;
     width: 40%;
-    > p, > ol, > ul {
-      padding: 0 1em 0 1em;
-    }
+    padding: 0 1em 0 1em;
     margin: 10px 10px 5px 10px;
 }
 
 div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
-  padding: 2px 1em 2px 1em;
+  padding: $box-padding;
 
   margin: $box-margin;
 
@@ -682,17 +679,15 @@ div .version-warning {
 
 div.note, div.warning {
     > .admonition-title {
+      margin-left: -140px;
     }
     background-image: url("dragons.png");
     background-color:$notebox-background-color;
-    background-position: 1em 55%;
+    background-position: 1em center;
     background-repeat: no-repeat;
     clear: right;
-    min-height: 140px;
-
-    > p, > ul, > ol {
-        margin-left: 120px;
-    }
+    min-height: 130px;
+    padding-left: 140px;
 }
 
 div.warning {
@@ -700,15 +695,16 @@ div.warning {
 }
 
 div.deepalchemy {
+    > .admonition-title {
+      margin-left: -140px;
+    }
     background-image: url("deepalchemy.png");
     background-position: left center;
     background-repeat: no-repeat;
     background-color:$deepalchemy-background-color;
     clear: right;
     min-height: 140px;
-    p {
-        margin-left: 160px;
-    }
+    padding-left: 140px;
 }
 
 
@@ -727,13 +723,13 @@ div.deepalchemy {
     font-weight: bold;
 }
 
-
 div.class-bases {
     border: $border-style;
     box-shadow: $box-shadow-style;
     padding:5px 5px;
 
-    padding:5px 5px 5px 10px;
+    padding: $box-padding;
+
     font-size:.9em;
     margin: $box-margin;
     background-color: #eefbfb;
