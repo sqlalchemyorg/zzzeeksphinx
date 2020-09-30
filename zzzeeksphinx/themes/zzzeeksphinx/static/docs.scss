@@ -25,6 +25,8 @@ $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 5px 0px;
 $box-padding: 2px 1em 2px 1em;
 $box-title-padding: 0 2em 0 1.5em;
+$box-header-color: #c5cec2;
+$box-background-color: #F8F9F0;
 
 $highlighted-nav-link-background-color: #DDD;
 $orm-background-color: #E2F3F4;
@@ -450,28 +452,38 @@ a.headerlink:hover {
 #docs-body .h2
 {
   font-family: $header-font-family;
+  clear: both;
 }
 
-#docs-body #sqlalchemy-documentation h1 {
-  /* hide the <h1> for each content section. */
-  display:none;
-  font-size:2.0em;
+#docs-body {
+  #sqlalchemy-documentation h1 {
+    /* hide the <h1> for each content section. */
+    display:none;
+    font-size:2.0em;
+  }
+
+  h2 {
+    font-size:1.8em;
+    border-top: $divider-line-style;
+    padding-top:20px;
+  }
+
+  #sqlalchemy-documentation h2 {
+    border-top:none;
+    padding-top:0;
+  }
+  h3 {
+    font-size:1.4em;
+  }
+
+  h4 {
+    font-size:1.2em;
+  }
+
 }
 
 
-#docs-body h2 {
-  font-size:1.8em;
-  border-top: $divider-line-style;
-  padding-top:20px;
-}
 
-#sqlalchemy-documentation h2 {
-  border-top:none;
-  padding-top:0;
-}
-#docs-body h3 {
-  font-size:1.4em;
-}
 
 /* SQL popup, code styles */
 
@@ -596,9 +608,6 @@ td.field-body {
 }
 
 
-.footnote {
-  font-size: .95em;
-}
 
 div.faq {
   background-color: #EFEFEF;
@@ -606,6 +615,33 @@ div.faq {
 
 div.faq ul {
   list-style: square outside none;
+}
+
+/* box styles */
+
+.footnote-reference {
+  vertical-align: super;
+}
+dl.footnote {
+  font-size: .95em;
+  border: $border-style;
+  background-color: $box-background-color;
+  margin: $box-margin;
+  padding: 10px 20px 0 20px;
+
+  dt {
+    float: left;
+    background-color: $box-header-color;
+    margin: -10px 0 0 -20px;
+    padding: 0 10px 0 10px;
+  }
+  dd {
+    margin-right:40px;
+
+    p {
+      margin-top: 0;
+    }
+  }
 }
 
 p.deprecated, div.deprecated  {
@@ -622,11 +658,12 @@ div.warning .admonition-title {
 }
 
 
-div.admonition, div.sidebar {
+
+div.admonition, div.sidebar, div.topic {
     clear:both;
 
-    .admonition-title, .sidebar-title {
-        background-color: #c5cec2;
+    .admonition-title, .sidebar-title, .topic-title {
+        background-color: $box-header-color;
         padding:$box-title-padding;
 
         margin:0 -20px 20px -20px;
@@ -642,7 +679,7 @@ div.admonition, div.sidebar {
     }
 
     padding: 0 20px 0 20px;
-    background-color: #F8F9F0;
+    background-color: $box-background-color;
     border: $border-style;
     box-shadow: $box-shadow-style;
 
@@ -650,11 +687,11 @@ div.admonition, div.sidebar {
 
 }
 
+
 div.sidebar {
     background-color: #FFFFEE;
     float: right;
     width: 40%;
-    padding: 0 1em 0 1em;
     margin: 10px 10px 5px 10px;
 }
 
