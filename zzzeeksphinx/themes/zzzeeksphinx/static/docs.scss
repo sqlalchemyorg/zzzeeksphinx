@@ -1,9 +1,10 @@
-@import url(//fonts.googleapis.com/css?family=Oxygen|Libre+Franklin:400,700);
+@import url(https://fonts.googleapis.com/css?family=Oxygen|Libre+Franklin:400,700);
 
 $primary-font-family: "Libre Franklin", sans-serif;
 $header-font-family: "Libre Franklin", Arial, sans-serif;
 $top-header-font-family: "Libre Franklin", Arial, sans-serif;
 $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
+
 
 $primary-background-color: #FDFBFC;
 $topmost-header-color: #EBEBEE;
@@ -27,6 +28,10 @@ $box-padding: 2px 1em 2px 1em;
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
 $box-background-color: #F8F9F0;
+
+$hyperlink-color: #990000;
+$keyword-color: #480717;
+$keyword-background-color: #f2f2f2;
 
 $highlighted-nav-link-background-color: #DDD;
 $orm-background-color: #E2F3F4;
@@ -75,7 +80,7 @@ label > input {
 /* hyperlinks */
 
 a:link, a:visited, a:active {
-    color: #990000;
+    color: $hyperlink-color;
 }
 a:hover {
     color: #FF0000;
@@ -505,7 +510,6 @@ a.headerlink:hover {
   }
 
 
-
   /* the [SQL] links used to display SQL */
   .sql_link
   {
@@ -851,9 +855,25 @@ code.descclassname, tt.descclassname {
     background-color:transparent;
 }
 
+a {
+  code, tt {
+      > .pre {
+        color: $hyperlink-color;
+      }
+    }
+}
+
+
 code, tt {
-    /*background-color:#ECF0F3;*/
     padding:0 1px;
+
+    color: $keyword-color;
+    font: "Courier New",Courier,fixed,monospace;
+    font-weight: 400;
+    font-size: 95%;
+
+    > .pre {
+    }
 }
 
 /* syntax highlighting overrides */
@@ -998,7 +1018,6 @@ $card-line-style: 1px dotted #CCC;
 
     padding-left: 1em;
     padding-right: 1em;
-    padding-bottom: 2em;
     margin-bottom: 2em;
 
     > h2, > h3 {
@@ -1017,7 +1036,6 @@ $card-line-style: 1px dotted #CCC;
 
     padding-left: 1em;
     padding-right: 1em;
-    padding-bottom: 2em;
     margin-bottom: 2em;
 
     > h2, > h3 {
@@ -1030,4 +1048,16 @@ $card-line-style: 1px dotted #CCC;
   div.orm-dependency {
     border-left: 1em solid $orm-background-color;
   }
+
+  div.orm-addin {
+    border-left: 1em solid $orm-background-color;
+    border-top: $card-line-style;
+    border-bottom: $card-line-style;
+    border-radius: 10px;
+
+    padding-left: 10px;
+    margin: 10px 0 10px 0;
+  }
+
+
 }
