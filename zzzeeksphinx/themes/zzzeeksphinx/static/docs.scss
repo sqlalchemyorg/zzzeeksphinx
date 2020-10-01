@@ -54,8 +54,6 @@ body {
   background-color: $primary-background-color;
   margin:0 38px;
   color:#333333;
-  font-size: 120%;
-  line-height: 1.4em;
 
 }
 
@@ -120,6 +118,8 @@ a.headerlink:hover {
   max-width:$max-container-width;
   margin: 10px auto;
   position: relative;
+  font-size: 120%;
+  line-height: 1.4em;
 }
 
 
