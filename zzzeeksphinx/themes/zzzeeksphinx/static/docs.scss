@@ -1001,8 +1001,8 @@ div#dialect-documentation {
 
 @mixin card-line-style() {
   box-shadow: 0px 0px 2px #CCC;
-  display: flex;
-  flex-flow: column;
+  padding-top: 1px;
+  padding-bottom: 1px;
   border-radius: 10px;
 }
 
