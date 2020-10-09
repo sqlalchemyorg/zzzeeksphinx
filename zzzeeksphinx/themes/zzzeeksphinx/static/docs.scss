@@ -457,7 +457,9 @@ a.headerlink:hover {
 #docs-body .h2
 {
   font-family: $header-font-family;
-  clear: both;
+
+  /* DO NOT RESTORE without testing 1.3 docs homepage!!!! */
+  /*clear: both;*/
 }
 
 #docs-body {
