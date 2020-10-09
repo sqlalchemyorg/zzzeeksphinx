@@ -999,7 +999,12 @@ div#dialect-documentation {
 
 /* core/orm tabbed thing */
 
-$card-line-style: 1px dotted #CCC;
+@mixin card-line-style() {
+  box-shadow: 0px 0px 2px #CCC;
+  display: flex;
+  flex-flow: column;
+  border-radius: 10px;
+}
 
 #docs-body {
 
@@ -1012,11 +1017,8 @@ $card-line-style: 1px dotted #CCC;
 
   div.orm-header {
 
-    border-top: $card-line-style;
-    border-bottom: $card-line-style;
-    border-right: $card-line-style;
+    @include card-line-style();
     border-left: 3em solid $orm-background-color;
-    border-radius: 10px;
 
     padding-left: 1em;
     padding-right: 1em;
@@ -1030,11 +1032,8 @@ $card-line-style: 1px dotted #CCC;
 
   div.core-header {
 
-    border-top: $card-line-style;
-    border-bottom: $card-line-style;
-    border-left: $card-line-style;
+    @include card-line-style();
     border-right: 3em solid $core-background-color;
-    border-radius: 10px;
 
     padding-left: 1em;
     padding-right: 1em;
@@ -1052,10 +1051,8 @@ $card-line-style: 1px dotted #CCC;
   }
 
   div.orm-addin {
+    @include card-line-style();
     border-left: 1em solid $orm-background-color;
-    border-top: $card-line-style;
-    border-bottom: $card-line-style;
-    border-radius: 10px;
 
     padding-left: 10px;
     margin: 10px 0 10px 0;
