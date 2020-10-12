@@ -94,7 +94,7 @@ withsidebar = bool(toc) and (
         % if is_beta_version:
             <span id="sidebar-beta">beta release</span>
         % elif is_prerelease_version:
-            <span id="sidebar-prerelease">pre release</span>
+            <span id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</span>
         % elif is_legacy_version:
             <span id="sidebar-legacy">legacy version</span>
         % elif is_current_version:
@@ -104,7 +104,7 @@ withsidebar = bool(toc) and (
         % if release_date:
         | Release Date: ${release_date}
         % else:
-        | Release Date: unreleased
+        | Release Date: <b>not released yet</b>
         % endif
 
     </div>
@@ -147,7 +147,7 @@ withsidebar = bool(toc) and (
             % if is_beta_version:
                 <p id="sidebar-beta">beta release</p>
             % elif is_prerelease_version:
-                <p id="sidebar-prerelease">pre release</p>
+                <p id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</p>
             % elif is_legacy_version:
                 <p id="sidebar-legacy">legacy version</p>
             % elif is_current_version:
