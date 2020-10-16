@@ -726,10 +726,10 @@ div.note, div.warning {
     }
     background-image: url("dragons.png");
     background-color:$notebox-background-color;
-    background-position: 1em center;
+    background-position: 1em top;
     background-repeat: no-repeat;
     clear: right;
-    min-height: 130px;
+    min-height: 140px;
     padding-left: 140px;
 }
 
@@ -742,11 +742,11 @@ div.deepalchemy {
       margin-left: -140px;
     }
     background-image: url("deepalchemy.png");
-    background-position: left center;
+    background-position: left top;
     background-repeat: no-repeat;
     background-color:$deepalchemy-background-color;
     clear: right;
-    min-height: 140px;
+    min-height: 180px;
     padding-left: 140px;
 }
 
@@ -863,6 +863,9 @@ a {
         color: $hyperlink-color;
       }
     }
+  code.sig-name {
+      color: $hyperlink-color;
+  }
 }
 
 
