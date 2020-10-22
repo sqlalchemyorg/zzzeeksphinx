@@ -23,7 +23,7 @@ $divider-line-style: 1px solid #CCC;
 
 $box-shadow-style: 2px 2px 3px #DFDFDF;
 $box-top-margin: 10px;
-$box-margin: $box-top-margin 10px 5px 0px;
+$box-margin: $box-top-margin 10px 20px 0px;
 $box-padding: 2px 1em 2px 1em;
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
@@ -170,7 +170,6 @@ a.headerlink:hover {
 }
 
 #docs-bottom-navigation {
-    float:right;
     margin: 1em 0 1em 5px;
 }
 
@@ -665,7 +664,8 @@ div.warning .admonition-title {
 
 
 
-div.admonition, div.sidebar, div.topic {
+div {
+  .admonition, .sidebar, .topic, .docutils-header, .docutils-footer {
     clear:both;
 
     .admonition-title, .sidebar-title, .topic-title {
@@ -690,7 +690,7 @@ div.admonition, div.sidebar, div.topic {
     box-shadow: $box-shadow-style;
 
     margin: $box-margin;
-
+  }
 }
 
 
@@ -765,6 +765,8 @@ div.deepalchemy {
     color: #990000;
     font-weight: bold;
 }
+
+
 
 div.class-bases {
     border: $border-style;
