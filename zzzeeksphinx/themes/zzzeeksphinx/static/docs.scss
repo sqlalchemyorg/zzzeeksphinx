@@ -1013,6 +1013,11 @@ div#dialect-documentation {
   padding-top: 1px;
   padding-bottom: 1px;
   border-radius: 10px;
+
+  h2 {
+    border-top: none;
+  }
+
 }
 
 #docs-body {
