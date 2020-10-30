@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import re
 
-from mako import filters
+import pygments
 from pygments.filter import apply_filters
 from pygments.filter import Filter
 from pygments.formatters import HtmlFormatter
@@ -12,6 +12,7 @@ from pygments.lexer import RegexLexer
 from pygments.lexer import using
 from pygments.lexers import PythonConsoleLexer
 from pygments.lexers import PythonLexer
+from pygments.lexers import SqlLexer
 from pygments.token import Token
 from sphinx.highlighting import PygmentsBridge
 
@@ -87,6 +88,9 @@ class PythonWithSQLLexer(RegexLexer):
 
 class PopupSQLFormatter(HtmlFormatter):
     def _format_lines(self, tokensource):
+        sql_lexer = SqlLexer()
+
+        formatter = HtmlFormatter(nowrap=True)
         buf = []
         for ttype, value in apply_filters(tokensource, [StripDocTestFilter()]):
             if ttype in Token.Sql:
@@ -96,14 +100,26 @@ class PopupSQLFormatter(HtmlFormatter):
                 buf = []
 
                 if ttype is Token.Sql:
-                    yield 1, "<div class='show_sql'>%s</div>" % re.sub(
-                        r"(?:{stop}|\n+)$", "", filters.html_escape(value)
+                    yield (
+                        1,
+                        "<div class='show_sql'>%s</div>"
+                        % pygments.highlight(
+                            re.sub(r"(?:{stop}|\n+)$", "", value),
+                            sql_lexer,
+                            formatter,
+                        ),
                     )
                 elif ttype is Token.Sql.Link:
                     yield 1, "<a href='#' class='sql_link'>sql</a>"
                 elif ttype is Token.Sql.Popup:
-                    yield 1, "<div class='popup_sql'>%s</div>" % re.sub(
-                        r"(?:{stop}|\n+)$", "", filters.html_escape(value)
+                    yield (
+                        1,
+                        "<div class='popup_sql'>%s</div>"
+                        % pygments.highlight(
+                            re.sub(r"(?:{stop}|\n+)$", "", value),
+                            sql_lexer,
+                            formatter,
+                        ),
                     )
             else:
                 buf.append((ttype, value))
