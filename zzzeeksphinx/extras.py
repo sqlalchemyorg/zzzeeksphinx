@@ -1,8 +1,6 @@
 from docutils import nodes
 from docutils.nodes import Admonition
 from docutils.nodes import Element
-from docutils.nodes import footer
-from docutils.nodes import header
 from docutils.nodes import topic
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from docutils.parsers.rst.directives.body import Topic
@@ -45,25 +43,7 @@ def depart_deepalchemy(self, node):
     self.depart_admonition(node)
 
 
-def visit_header_footer(self, node):
-    self.body.append(
-        self.starttag(
-            node,
-            "div",
-            CLASS="docutils-header"
-            if isinstance(node, header)
-            else "docutils-footer",
-        )
-    )
-
-
-def depart_header_footer(self, node):
-    self.body.append("</div>\n")
-
-
 deepalchemy_visit = (visit_deepalchemy, depart_deepalchemy)
-
-header_footer_visit = (visit_header_footer, depart_header_footer)
 
 footer_topic_visit = (visit_footer_topic, depart_footer_topic)
 
@@ -100,26 +80,6 @@ def setup(app):
                 "manpage",
             ]
         }
-    )
-
-    app.add_node(
-        header,
-        **{
-            key: header_footer_visit
-            for key in [
-                "html",
-                "html5",
-                "latex",
-                "text",
-                "xml",
-                "texinfo",
-                "manpage",
-            ]
-        }
-    )
-
-    app.add_node(
-        footer, **{key: header_footer_visit for key in ["html", "html5"]}
     )
 
     app.add_node(
