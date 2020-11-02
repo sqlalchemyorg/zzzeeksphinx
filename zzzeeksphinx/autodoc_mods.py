@@ -180,7 +180,7 @@ def write_autosummaries(app, doctree):
             else:
                 param_str = ""
 
-            name_node = sig.traverse(addnodes.desc_name)
+            name_node = list(sig.traverse(addnodes.desc_name))
             if name_node:
                 name_node = name_node[0]
             else:
