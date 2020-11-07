@@ -44,7 +44,16 @@ def replace_synonyms(app, doctree):
                 need = min(lt, 2)
             corrected_name = ".".join(ref_tokens[-need:])
         elif reftype in ("func", "obj", "data"):
-            corrected_name = ref_tokens[-1]
+            if needs_correction or re.match(
+                r"^:(?:func|obj|data):`[\.~].+`$", py_node.rawsource
+            ):
+                corrected_name = ref_tokens[-1]
+            else:
+                # print(
+                #    "no longer correcting: %s %s %s"
+                #    % (py_node.rawsource, py_node.source, py_node.line)
+                # )
+                continue
         elif reftype == "class" and (
             needs_correction or re.match(r"^:class:`\..+`$", py_node.rawsource)
         ):
