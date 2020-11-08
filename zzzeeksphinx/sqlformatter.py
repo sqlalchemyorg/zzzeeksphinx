@@ -104,7 +104,7 @@ class PopupSQLFormatter(HtmlFormatter):
                         1,
                         "<div class='show_sql'>%s</div>"
                         % pygments.highlight(
-                            re.sub(r"(?:{stop}|\n+)$", "", value),
+                            re.sub(r"(?:{stop}|\n+)\s*$", "", value),
                             sql_lexer,
                             formatter,
                         ),
