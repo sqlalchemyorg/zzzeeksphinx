@@ -561,7 +561,13 @@ a.headerlink:hover {
 
 /* tables */
 
-.section > table.docutils {
+.sliding-table {
+    width: 100%;
+    overflow: auto;
+
+}
+
+.section > table.docutils, .sliding-table > table.docutils {
   border: none;
   border-collapse: collapse;
 
