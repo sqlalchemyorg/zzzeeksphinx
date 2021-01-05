@@ -1,7 +1,7 @@
 <%inherit file="layout.mako"/>
 
 <%!
-    local_script_files = ['_static/searchtools.js']
+    local_script_files = ['_static/searchtools.js', '_static/language_data.js']
 %>
 <%block name="show_title">
     ${_('Search')}
