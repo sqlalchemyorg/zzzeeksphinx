@@ -7,17 +7,13 @@ import warnings
 import docutils
 from docutils import nodes
 from docutils.parsers.rst import Directive
-from sphinx.ext.viewcode import collect_pages
-from sphinx.ext.viewcode import env_merge_info
+from sphinx.errors import NoUri
+from sphinx.locale import _
+from sphinx.locale import __
 from sphinx.pycode import ModuleAnalyzer
+from sphinx.util import status_iterator
 
 from . import util
-
-try:
-    # 3.0
-    from sphinx.errors import NoUri
-except:
-    from sphinx.environment import NoUri
 
 
 def view_source(name, rawtext, text, lineno, inliner, options={}, content=[]):
@@ -26,6 +22,133 @@ def view_source(name, rawtext, text, lineno, inliner, options={}, content=[]):
 
     node = _view_source_node(env, text, None)
     return [node], []
+
+
+def vendored_collect_pages(app):
+    # vendored from sphinx viewcode
+    env = app.builder.env
+    if not hasattr(env, "_viewcode_modules"):
+        return
+    highlighter = app.builder.highlighter  # type: ignore
+    urito = app.builder.get_relative_uri
+
+    modnames = set(env._viewcode_modules)  # type: ignore
+
+    for modname, entry in status_iterator(
+        sorted(env._viewcode_modules.items()),  # type: ignore
+        __("highlighting module code... "),
+        "blue",
+        len(env._viewcode_modules),  # type: ignore
+        app.verbosity,
+        lambda x: x[0],
+    ):
+        if not entry:
+            continue
+        code, tags, used, refname = entry
+        # construct a page name for the highlighted source
+        pagename = "_modules/" + modname.replace(".", "/")
+        # highlight the source using the builder's highlighter
+        if env.config.highlight_language in ("python3", "default", "none"):
+            lexer = env.config.highlight_language
+        else:
+            lexer = "python"
+        highlighted = highlighter.highlight_block(code, lexer, linenos=False)
+        # split the code into lines
+        lines = highlighted.splitlines()
+        # split off wrap markup from the first line of the actual code
+        before, after = lines[0].split("<pre>")
+        lines[0:1] = [before + "<pre>", after]
+        # nothing to do for the last line; it always starts with </pre> anyway
+        # now that we have code lines (starting at index 1), insert anchors for
+        # the collected tags (HACK: this only works if the tag boundaries are
+        # properly nested!)
+        maxindex = len(lines) - 1
+        for name, docname in used.items():
+            type_, start, end = tags[name]
+            backlink = urito(pagename, docname) + "#" + refname + "." + name
+            lines[start] = (
+                '<div class="viewcode-block" id="%s"><a class="viewcode-back" '
+                'href="%s">%s</a>' % (name, backlink, _("[docs]"))
+                + lines[start]
+            )
+            lines[min(end, maxindex)] += "</div>"
+        # try to find parents (for submodules)
+        parents = []
+        parent = modname
+        while "." in parent:
+            parent = parent.rsplit(".", 1)[0]
+            if parent in modnames:
+                parents.append(
+                    {
+                        "link": urito(
+                            pagename, "_modules/" + parent.replace(".", "/")
+                        ),
+                        "title": parent,
+                    }
+                )
+        parents.append(
+            {
+                "link": urito(pagename, "_modules/index"),
+                "title": _("Module code"),
+            }
+        )
+        parents.reverse()
+        # putting it all together
+        context = {
+            "parents": parents,
+            "title": modname,
+            "body": (
+                _("<h1>Source code for %s</h1>") % modname + "\n".join(lines)
+            ),
+        }
+        yield (pagename, context, "page.html")
+
+    if not modnames:
+        return
+
+    html = ["\n"]
+    # the stack logic is needed for using nested lists for submodules
+    stack = [""]
+    for modname in sorted(modnames):
+        if modname.startswith(stack[-1]):
+            stack.append(modname + ".")
+            html.append("<ul>")
+        else:
+            stack.pop()
+            while not modname.startswith(stack[-1]):
+                stack.pop()
+                html.append("</ul>")
+            stack.append(modname + ".")
+        html.append(
+            '<li><a href="%s">%s</a></li>\n'
+            % (
+                urito(
+                    "_modules/index", "_modules/" + modname.replace(".", "/")
+                ),
+                modname,
+            )
+        )
+    html.append("</ul>" * (len(stack) - 1))
+    context = {
+        "title": _("Overview: module code"),
+        "body": (
+            _("<h1>All modules for which code is available</h1>")
+            + "".join(html)
+        ),
+    }
+
+    yield ("_modules/index", context, "page.html")
+
+
+def vendored_env_merge_info(app, env, docnames, other):
+    # vendored from sphinx viewcode
+    if not hasattr(other, "_viewcode_modules"):
+        return
+    # create a _viewcode_modules dict on the main environment
+    if not hasattr(env, "_viewcode_modules"):
+        env._viewcode_modules = {}  # type: ignore
+    # now merge in the information from the subprocess
+    env._viewcode_modules.update(other._viewcode_modules)  # type: ignore
 
 
 def _get_sphinx_py_module(env):
@@ -222,11 +345,10 @@ class AutoSourceDirective(Directive):
 
 
 def setup(app):
+
     app.add_role("viewsource", view_source)
 
     app.add_directive("autosource", AutoSourceDirective)
 
-    app.connect("env-merge-info", env_merge_info)
-
-    # from sphinx.ext.viewcode
-    app.connect("html-collect-pages", collect_pages)
+    app.connect("env-merge-info", vendored_env_merge_info)
+    app.connect("html-collect-pages", vendored_collect_pages)
