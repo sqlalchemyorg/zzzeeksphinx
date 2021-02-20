@@ -430,7 +430,6 @@ a.headerlink:hover {
 #fixed-sidebar.withsidebar {
   float: left;
   width:$fixed-sidebar-width;
-
 }
 
 #fixed-sidebar.preautomated {
@@ -475,6 +474,17 @@ a.headerlink:hover {
   }
 
 }
+
+/* disable sidebar on mobile */
+@media only screen and (max-width: 980px) {
+  #fixed-sidebar {
+    display:none;
+  }
+  #docs-body.withsidebar {
+    margin-left:0;
+  }
+}
+
 
 
 #docs-body h1,
