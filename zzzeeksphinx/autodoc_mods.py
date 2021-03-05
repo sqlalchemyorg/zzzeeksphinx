@@ -392,8 +392,7 @@ def missing_reference(app, env, node, contnode):
 
 
 def work_around_issue_6785():
-    """See https://github.com/sphinx-doc/sphinx/issues/6785
-    """
+    """See https://github.com/sphinx-doc/sphinx/issues/6785"""
 
     from sphinx.ext import autodoc
 
