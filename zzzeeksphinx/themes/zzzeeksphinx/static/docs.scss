@@ -896,30 +896,10 @@ dt:target, span.highlight {
 }
 
 /* sphinx 1.3 now using 'code' and not 'tt' for code / docstring elements */
-
-code.descname, tt.descname {
-    background-color:transparent;
-    font-size:1.2em;
-    font-weight:bold;
-}
-
-code.descclassname, tt.descclassname {
-    background-color:transparent;
-}
-
-a {
-  code, tt {
-      > .pre {
-        color: $hyperlink-color;
-      }
-    }
-  code.sig-name {
-      color: $hyperlink-color;
-  }
-}
+/* sphinx 1.4 now using 'span' and not 'code' for code / docstring elements */
 
 
-code, tt {
+span.descclassname, span.descname, code, tt {
     padding:0 1px;
 
     color: $keyword-color;
@@ -930,6 +910,30 @@ code, tt {
     > .pre {
     }
 }
+
+
+span.descname, code.descname, tt.descname {
+    background-color:transparent;
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+span.descclassname, code.descclassname, tt.descclassname {
+    background-color:transparent;
+}
+
+a {
+  code, tt {
+      > .pre {
+        color: $hyperlink-color;
+      }
+    }
+  span.sig-name, code.sig-name {
+      color: $hyperlink-color;
+  }
+}
+
+
 
 /* syntax highlighting overrides */
 .k, .kn {color:#0908CE;}
