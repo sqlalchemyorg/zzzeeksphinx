@@ -33,7 +33,10 @@ def add_stylesheet(app):
         if ext == ".scss":
             to_gen.append((static_path, name))
         elif ext == ".css":
-            app.add_stylesheet(fname)
+            if hasattr(app, "add_css_file"):
+                app.add_css_file(fname)
+            else:
+                app.add_stylesheet(fname)
 
     # sphinx doesn't really have a "temp" area that will persist
     # down into build-finished (env.temp_data gets emptied).
