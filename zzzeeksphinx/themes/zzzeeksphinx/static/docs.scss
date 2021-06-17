@@ -71,6 +71,7 @@ $max-container-width: 100em; // 100 * 16 == 1600px;
 $fixed-sidebar-width: 328px;
 $docs-body-sidebar-left: 338px;
 
+$mobile-width: 980px;
 /* global */
 
 
@@ -163,13 +164,25 @@ a.headerlink:hover {
   border: $border-style;
   height: 75px;
 
-  display: flex;
-  align-items: center;
-
+  div {
+    display: flex;
+    align-items: center;
+  }
   h1 {
     font-size: 20px;
     color: #222222;
     margin-left: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  a.btn {
+    margin-right: 10px;
+
+    @media only screen and (min-width: $mobile-width) {
+      display: none;
+    }
   }
 }
 
@@ -187,11 +200,11 @@ a.headerlink:hover {
   padding:10px;
 }
 
-#docs-version-header {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-}
+// #docs-version-header {
+//   position: absolute;
+//   right: 8px;
+//   bottom: 8px;
+// }
 
 .docs-navigation-links {
   font-family: $primary-font-family;
@@ -476,10 +489,7 @@ a.headerlink:hover {
 }
 
 /* disable sidebar on mobile */
-@media only screen and (max-width: 980px) {
-  #fixed-sidebar {
-    display:none;
-  }
+@media only screen and (max-width: $mobile-width) {
   #docs-body.withsidebar {
     margin-left:0;
   }

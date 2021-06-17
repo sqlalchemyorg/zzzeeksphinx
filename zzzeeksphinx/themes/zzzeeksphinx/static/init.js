@@ -108,8 +108,26 @@ function highlightLinks() {
     setLink();
 }
 
+function handleSidebar(){
+    const width = $(window).width();
+    const fixedSidebar = $("#fixed-sidebar");
+    if(width >= 980 && fixedSidebar.hasClass('offcanvas')){
+        fixedSidebar.removeClass("offcanvas offcanvas-start show hide");
+        fixedSidebar.removeAttr("tabindex");
+        fixedSidebar.removeAttr("aria-hidden");
+        fixedSidebar.removeAttr("aria-modal");
+        fixedSidebar.removeAttr("role");
+        $(".modal-backdrop").hide();
+    }
+    if(width < 980 && !fixedSidebar.hasClass('offcanvas')){
+        fixedSidebar.addClass("offcanvas offcanvas-start");
+        fixedSidebar.attr('tabindex', "-1")
+    }
+}
+
 
 $(document).ready(function() {
+    handleSidebar();
     initSQLPopups();
     if (!$.browser.mobile) {
         initFloatyThings();
@@ -117,3 +135,7 @@ $(document).ready(function() {
     }
 });
 
+
+$(window).resize(function(){
+    handleSidebar();
+})

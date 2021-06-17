@@ -59,6 +59,7 @@ withsidebar = bool(toc) and (
 
 <%block name="headers">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     ${parent.headers()}
 
     <!-- begin layout.mako headers -->
@@ -81,6 +82,7 @@ withsidebar = bool(toc) and (
     % if prevtopic:
         <link rel="prev" title="${prevtopic['title']|util.striptags}" href="${prevtopic['link']|h}" />
     % endif
+
     <!-- end layout.mako headers -->
 
 </%block>
@@ -88,7 +90,13 @@ withsidebar = bool(toc) and (
 
 <div id="docs-top-navigation-container" class="body-background">
 <div id="docs-header">
+    <div>
+        <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
+        <span class="flex-grow-1"></span>
+        <a class="btn btn-light" data-bs-toggle="offcanvas" href="#fixed-sidebar" role="button" aria-controls="fixed-sidebar"> Toggle menu </a>
+    </div>
     <div id="docs-version-header">
+        <span class="flex-grow-1"></span>
         Release: <span class="version-num">${release}</span>
 
         % if is_beta_version:
@@ -108,8 +116,6 @@ withsidebar = bool(toc) and (
         % endif
 
     </div>
-
-    <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
 
 </div>
 </div>
@@ -268,7 +274,7 @@ withsidebar = bool(toc) and (
     <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
 
     % if show_sphinx:
-        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
+        Created using <a href="https://www.sphinx-doc.org" target="_blank">Sphinx</a> ${sphinx_version|h}.
     % endif
     </div>
 </div>
@@ -296,5 +302,6 @@ withsidebar = bool(toc) and (
 
     <script type="text/javascript" src="${pathto('_static/detectmobile.js', 1)}"></script>
     <script type="text/javascript" src="${pathto('_static/init.js', 1)}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
 </%block>
