@@ -477,7 +477,7 @@ a.headerlink:hover {
 
 /* disable sidebar on mobile */
 @media only screen and (max-width: 980px) {
-  #fixed-sidebar {
+  #fixed-sidebar.withsidebar {
     display:none;
   }
   #docs-body.withsidebar {
