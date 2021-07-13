@@ -4,7 +4,7 @@ on:
   # run when a pushing a tag
   push:
     tags:
-      - 'rel_*'
+      - '*'
 
 jobs:
   create-dist:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.9'
 
       - name: Create dist
         run: |
@@ -27,7 +27,7 @@ jobs:
           python setup.py sdist --dist-dir dist
 
       - name: Publish wheel
-        uses: pypa/gh-action-pypi-publish@v1.3.1
+        uses: pypa/gh-action-pypi-publish@v1.4.2
         with:
           user: __token__
           password: ${{ secrets.pypi_token }}
