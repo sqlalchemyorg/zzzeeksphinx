@@ -68,7 +68,7 @@ function highlightLinks() {
     var divCollection = [];
     var currentIdx = -1;
     var docHeight = $(document).height();
-    $("div.section").each(function(index) {
+    $("div.section,section").each(function(index) {
         var active = $(this).offset().top - 20;
         divCollection.push({
             'id': this.id,

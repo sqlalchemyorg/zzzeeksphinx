@@ -468,7 +468,7 @@ a.headerlink:hover {
 #docs-body.withsidebar {
   margin-left: $docs-body-sidebar-left;
 
-  div.section {
+  div.section, section {
     /* to limit text width inside the container */
     /*max-width: 1024px;*/
   }
@@ -605,7 +605,7 @@ a.headerlink:hover {
 
 }
 
-.section > table.docutils, .sliding-table > table.docutils {
+.section > table.docutils, .sliding-table > table.docutils, section > table.docutils {
   border: none;
   border-collapse: collapse;
 
@@ -1016,7 +1016,7 @@ div#sqlalchemy-documentation {
   }
 }
 
-div#sqlalchemy-documentation > .section {
+div#sqlalchemy-documentation > .section, div#sqlalchemy-documentation > section {
   padding-left:10px;
 
 
