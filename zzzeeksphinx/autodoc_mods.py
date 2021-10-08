@@ -343,10 +343,12 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
             clsname, attrname = m.group(1, 2)
             if clsname in _track_autodoced:
                 cls = _track_autodoced[clsname]
+                found = False
                 for supercls in cls.__mro__:
                     if attrname in supercls.__dict__:
+                        found = True
                         break
-                if supercls is not cls:
+                if found and supercls is not cls:
                     adjusted_mod = _adjust_rendered_mod_name(
                         app.env.config, supercls.__module__, supercls.__name__
                     )
