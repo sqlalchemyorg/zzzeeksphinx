@@ -63,7 +63,7 @@ def generate_stylesheet(app, exception):
     for static_path, name in to_gen:
 
         css = sass.compile(
-            open(os.path.join(static_path, "%s.scss" % name)).read()
+            string=open(os.path.join(static_path, "%s.scss" % name)).read()
         )
 
         dest = os.path.join(app.builder.outdir, "_static", "%s.css" % name)
