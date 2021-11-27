@@ -241,7 +241,7 @@ withsidebar = bool(toc) and (
     </div>
     </%doc>
 
-    <div id="docs-body" class="${'withsidebar' if withsidebar else ''} ${current_page_name.replace("/", "-")}" >
+    <div id="docs-body" role="main" class="${'withsidebar' if withsidebar else ''} ${current_page_name.replace("/", "-")}" >
         ${next.body()}
     </div>
 
