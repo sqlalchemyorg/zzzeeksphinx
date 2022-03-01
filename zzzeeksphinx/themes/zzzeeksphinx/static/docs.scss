@@ -211,15 +211,10 @@ a.headerlink:hover {
 }
 
 #docs-header h1,
-#docs-top-navigation h1,
-#docs-top-navigation h2 {
+#docs-mobile-top-navigation h1,
+#docs-mobile-top-navigation h2 {
   font-family: $top-header-font-family;
   font-weight:normal;
-}
-
-#docs-top-navigation h2 {
-    margin:16px 4px 7px 5px;
-    font-size:1.6em;
 }
 
 #docs-top-page-control {
@@ -405,7 +400,7 @@ a.headerlink:hover {
 #docs-sidebar-popout {
   height: $sidebar-popout-height;
   max-height: $sidebar-popout-height;
-  width:$fixed-sidebar-width - 14px;
+  width: 100%;
   padding-left:10px;
   padding-top:10px;
   position: relative;
@@ -475,16 +470,55 @@ a.headerlink:hover {
 
 }
 
-/* disable sidebar on mobile */
-@media only screen and (max-width: 980px) {
-  #fixed-sidebar {
-    display:none;
-  }
-  #docs-body.withsidebar {
-    margin-left:0;
-  }
+#docs-mobile-top-navigation {
+    display: none;
 }
 
+/* disable sidebar on mobile */
+@media only screen and (max-width: 980px) {
+    #fixed-sidebar {
+        display:none;
+    }
+    #docs-body.withsidebar {
+        margin-left:0;
+    }
+    #docs-bottom-navigation.withsidebar {
+        margin-left: 0;
+    }
+
+    #docs-mobile-top-navigation {
+        display:inline;
+    }
+    #docs-top-navigation-container h1 {
+        position: absolute;
+        top: 10px;
+        margin:0;
+        padding:0;
+        left: 8px;
+    }
+
+    #docs-header {
+        height: 124px;
+    }
+    #docs-version-header {
+        position:absolute;
+        left: 8px;
+        right: 0;
+        bottom: 0;
+    }
+
+}
+
+
+#docs-mobile-top-navigation {
+    h2 {
+        margin:16px 4px 7px 5px;
+        font-size:1.6em;
+    }
+    p {
+        margin: 0;
+    }
+}
 
 
 #docs-body h1,
@@ -792,6 +826,25 @@ div.deepalchemy {
     clear: right;
     min-height: 180px;
     padding-left: 140px;
+}
+
+@media only screen and (max-width: 980px) {
+    div.note, div.warning {
+        > .admonition-title {
+            margin-left: -14px;
+            padding-left: 10px;
+        }
+        background-image: none;
+        padding-left: 14px;
+    }
+    div.deepalchemy {
+        > .admonition-title {
+            margin-left: -14px;
+            padding-left: 10px;
+        }
+        background-image: none;
+        padding-left: 14px;
+    }
 }
 
 
