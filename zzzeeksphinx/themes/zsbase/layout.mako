@@ -131,10 +131,10 @@ withsidebar = bool(toc) and (
             </form>
 
             <p>
-            <a href="${pathto('contents') or pathto('index')}">Contents</a> |
+            <a href="${pathto('contents')}">Contents</a> |
             <a href="${pathto('genindex')}">Index</a>
             % if zip_url:
-            | <a href="${zip_url}">Download as ZIP file</a>
+            | <a href="${zip_url}">ZIP Download</a>
             % endif
             </p>
 
@@ -155,10 +155,11 @@ withsidebar = bool(toc) and (
                 <p id="sidebar-current">current release</p>
             % endif
             <p id="sidebar-topnav">
+                <a href="${pathto('index')}">Home</a> |
                 <a href="${pathto('contents') or pathto('index')}">Contents</a> |
                 <a href="${pathto('genindex')}">Index</a>
                 % if zip_url:
-                | <a href="${zip_url}">Download as ZIP file</a>
+                | <a href="${zip_url}">ZIP Download</a>
                 % endif
             </p>
 
@@ -233,10 +234,11 @@ withsidebar = bool(toc) and (
         </form>
 
         <p>
+        <a href="${pathto('index')}">Home</a> |
         <a href="${pathto('contents') or pathto('index')}">Contents</a> |
         <a href="${pathto('genindex')}">Index</a>
         % if zip_url:
-        | <a href="${zip_url}">Download as ZIP file</a>
+        | <a href="${zip_url}">ZIP Download</a>
         % endif
         </p>
 
