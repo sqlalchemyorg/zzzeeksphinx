@@ -110,7 +110,7 @@ function highlightLinks() {
 
 
 $(document).ready(function() {
-    initSQLPopups();
+    /*initSQLPopups();*/
     if (!$.browser.mobile) {
         initFloatyThings();
         highlightLinks();

@@ -10,60 +10,62 @@
 */
 
 @font-face {
-  font-family: 'Libre Franklin';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://www.sqlalchemy.org/fonts/google_libre_franklin_400.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    font-family: "Libre Franklin";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://www.sqlalchemy.org/fonts/google_libre_franklin_400.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC,
+        U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: 'Libre Franklin';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(https://www.sqlalchemy.org/fonts/google_libre_franklin_700.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    font-family: "Libre Franklin";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(https://www.sqlalchemy.org/fonts/google_libre_franklin_700.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC,
+        U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 
 $primary-font-family: "Libre Franklin", sans-serif;
 $header-font-family: "Libre Franklin", Arial, sans-serif;
 $top-header-font-family: "Libre Franklin", Arial, sans-serif;
 $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
+$mobile-max-screen-width: 980px;
 
-$primary-background-color: #FDFBFC;
-$topmost-header-color: #EBEBEE;
-$popout-color: #FBFBEE;
-$sidebar-color: #EFEFEF;
-$sidebar-header-background-color: #DDDDDD;
+$primary-background-color: #fdfbfc;
+$topmost-header-color: #ebebee;
+$popout-color: #fbfbee;
+$sidebar-color: #efefef;
+$sidebar-header-background-color: #dddddd;
 $sidebar-header-color: #222222;
-$notebox-background-color: #EEFFEF;
-$code-sig-background-color: #EFEFEF;
-$deprecated-background-color: #FCF0F6;
-$warning-background-color: #FCF0F6;
-$deepalchemy-background-color: #F6E8FD;
-$versionchanged-background-color: #F9F9D9;
-$border-style: 1px solid #CCC;
-$divider-line-style: 1px solid #CCC;
+$notebox-background-color: #eeffef;
+$code-sig-background-color: #efefef;
+$deprecated-background-color: #fcf0f6;
+$warning-background-color: #fcf0f6;
+$deepalchemy-background-color: #f6e8fd;
+$versionchanged-background-color: #f9f9d9;
+$border-style: 1px solid #ccc;
+$divider-line-style: 1px solid #ccc;
 
-$box-shadow-style: 2px 2px 3px #DFDFDF;
+$box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
-$box-padding: 2px 1em 2px 1em;
+$box-padding: 1rem 1em 2px 1rem;
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
-$box-background-color: #F8F9F0;
+$box-background-color: #f8f9f0;
 
 $hyperlink-color: #990000;
 $keyword-color: #480717;
 $keyword-background-color: #f2f2f2;
 
-$highlighted-nav-link-background-color: #DDD;
-$orm-background-color: #E2F3F4;
-$core-background-color: #AECAF7;
+$highlighted-nav-link-background-color: #ddd;
+$orm-background-color: #e2f3f4;
+$core-background-color: #aecaf7;
 
 $sidebar-popout-height: 160px;
 
@@ -73,16 +75,14 @@ $docs-body-sidebar-left: 338px;
 
 /* global */
 
-
 .body-background {
-  background-color: $primary-background-color;
+    background-color: $primary-background-color;
 }
 
 body {
-  background-color: $primary-background-color;
-  margin:0 38px;
-  color:#333333;
-
+    background-color: $primary-background-color;
+    margin: 0 38px;
+    color: #333333;
 }
 
 blockquote {
@@ -90,27 +90,28 @@ blockquote {
 }
 
 a {
-    font-weight:normal;
-    text-decoration:none;
+    font-weight: normal;
+    text-decoration: none;
 }
 
 form {
-    display:inline;
+    display: inline;
 }
 
 label > input {
-  margin: 10px 0px;
-
+    margin: 10px 0px;
 }
 
 /* hyperlinks */
 
-a:link, a:visited, a:active {
+a:link,
+a:visited,
+a:active {
     color: $hyperlink-color;
 }
 a:hover {
-    color: #FF0000;
-    text-decoration:underline;
+    color: #ff0000;
+    text-decoration: underline;
 }
 
 /* paragraph links after sections.
@@ -137,167 +138,157 @@ a.headerlink:hover {
     color: white;
 }
 
-
-
-
 /* Container setup */
 
 #docs-container {
-  max-width:$max-container-width;
-  margin: 10px auto;
-  position: relative;
-  font-size: 120%;
-  line-height: 1.4em;
+    max-width: $max-container-width;
+    margin: 10px auto;
+    position: relative;
+    font-size: 120%;
+    line-height: 1.4em;
 }
-
 
 /* header/footer elements */
 
 #docs-header {
-  font-family: $primary-font-family;
+    font-family: $primary-font-family;
 
-  font-size:.9em;
-  position: relative;
+    font-size: 0.9em;
+    position: relative;
 
-  background-color: $topmost-header-color;
-  border: $border-style;
-  height: 75px;
+    background-color: $topmost-header-color;
+    border: $border-style;
+    height: 75px;
 
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  h1 {
-    font-size: 20px;
-    color: #222222;
-    margin-left: 10px;
-  }
+    h1 {
+        font-size: 20px;
+        color: #222222;
+        margin-left: 10px;
+    }
 }
 
 #docs-sidebar-popout,
 #docs-bottom-navigation,
-#index-nav {
-  font-family: $sidebar-font-family;
-  background-color: $popout-color;
-  border: $border-style;
-  font-size:.8em;
+#index-nav,
+#mobile-index-nav {
+    font-family: $sidebar-font-family;
+    background-color: $popout-color;
+    border: $border-style;
+    font-size: 0.8em;
 }
 
 #docs-bottom-navigation,
 #index-nav {
-  padding:10px;
+    padding: 10px;
 }
 
 #docs-version-header {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
 }
 
 .docs-navigation-links {
-  font-family: $primary-font-family;
+    font-family: $primary-font-family;
 }
 
 #docs-bottom-navigation {
-    margin: 1em 0 1em 5px;
+    margin: 1em 0 1em 0;
 }
 
 #docs-bottom-navigation.withsidebar {
-  margin-left: $docs-body-sidebar-left;
+    margin-left: $docs-body-sidebar-left;
 }
 
 #docs-copyright {
-    font-size:.85em;
-    padding:5px 0px;
+    font-size: 0.85em;
+    padding: 5px 0px;
 }
 
 #docs-header h1,
 #docs-mobile-top-navigation h1,
 #docs-mobile-top-navigation h2 {
-  font-family: $top-header-font-family;
-  font-weight:normal;
+    font-family: $top-header-font-family;
+    font-weight: normal;
 }
 
 #docs-top-page-control {
-  position: absolute;
-  right: 20px;
-  bottom: 14px;
-  ul {
-    padding:0;
-    margin:0;
-  }
-  li {
-      font-size:.9em;
-      list-style-type:none;
-      padding:1px 8px;
-  }
+    position: absolute;
+    right: 20px;
+    bottom: 14px;
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        font-size: 0.9em;
+        list-style-type: none;
+        padding: 1px 8px;
+    }
 }
-
 
 #docs-container .version-num {
     font-weight: bold;
 }
 
-
 /* content container, sidebar */
 
 #docs-body-container {
-  position: relative;
+    position: relative;
 }
 
 #docs-body,
-#index-nav
- {
-  font-family: $primary-font-family;
-  font-size:.85em;
-  line-height:1.5em;
+#index-nav {
+    font-family: $primary-font-family;
+    font-size: 0.85em;
+    line-height: 1.5em;
 
-  h2 {
-      line-height:1.3em;
-  }
+    h2 {
+        line-height: 1.3em;
+    }
 }
 
 #docs-body {
-  min-height: 700px;
+    min-height: 700px;
 }
 
-
-
-
 #index-nav {
-  position: relative;
-  margin-top:10px;
-  padding:10px 10px;
+    position: relative;
+    margin-top: 10px;
+    padding: 10px 10px 25px 10px;
 }
 
 #index-nav form {
-  padding-top:10px;
-  float:right;
+    padding-top: 10px;
+    float: right;
 }
 
 #sidebar-paginate {
-  position: absolute;
-  bottom: 4.5em;
-  left: 10px;
+    position: absolute;
+    bottom: 4.5em;
+    left: 10px;
 }
 
 #sidebar-topnav {
 }
 
 #sidebar-search {
-  margin: 10px 0px 10px 0px;
+    margin: 10px 0px 10px 0px;
 }
 
-
 #docs-sidebar {
-  top: $sidebar-popout-height + 18px;
-  width: $fixed-sidebar-width;
-  bottom: 0;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin-top:5px;
-  margin-right: 5px;
-  z-index: 3;
+    top: $sidebar-popout-height + 5px;
+    width: $fixed-sidebar-width;
+    bottom: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 5px;
+    margin-right: 5px;
+    z-index: 3;
 }
 
 #sidebar-banner {
@@ -305,195 +296,207 @@ a.headerlink:hover {
     padding: 0px;
 }
 
-#sidebar-prerelease, #sidebar-legacy, #sidebar-current, #sidebar-beta {
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 1.1em;
-  padding: 2px 5px 2px 5px;
-  width: 11em;
-  text-align: center;
+#sidebar-prerelease,
+#sidebar-legacy,
+#sidebar-current,
+#sidebar-beta {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 2px 5px 2px 5px;
+    width: 11em;
+    text-align: center;
 }
 
-#sidebar-prerelease, #sidebar-legacy {
-  background: #F11;
-  color: #BBB;
+#sidebar-prerelease,
+#sidebar-legacy {
+    background: #f11;
+    color: #bbb;
 }
 
 #sidebar-beta {
-  background: #FFFF80;
-  color: #555;
+    background: #ffff80;
+    color: #555;
 }
 
 #sidebar-current {
-  background: #4C4;
-  color: #555;
+    background: #4c4;
+    color: #555;
 }
 
 #docs-version-header {
-  #sidebar-prerelease, #sidebar-legacy, #sidebar-current {
-      width: 14em;
-      font-size: 1.0em;
-  }
+    #sidebar-prerelease,
+    #sidebar-legacy,
+    #sidebar-current {
+        width: 14em;
+        font-size: 1em;
+    }
 }
 
 #docs-sidebar-inner {
-  padding-left:10px;
-  /*width:212px;*/
+    padding-left: 10px;
+    /*width:212px;*/
 
-  font-family: $sidebar-font-family;
-
-  font-size:.85em;
-
-  border: $border-style;
-  background-color: $sidebar-color;
-
-  > ul {
-    font-size:.85em;
-  }
-
-  span.link-container {
-    display: block;
-    margin-left: -100px;
-    padding-left: 100px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-  }
-
-  li.current > span.link-container {
-    background-color: $highlighted-nav-link-background-color;
-  }
-
-  h3, h4 {
-    background-color: $sidebar-header-background-color;
-    color: $sidebar-header-color;
     font-family: $sidebar-font-family;
-    font-size: 1.1em;
-    font-weight: normal;
-    margin: 10px 0 0 -15px;
-    padding: 5px 10px 5px 15px;
-    text-shadow: 1px 1px 0 white;
 
-    a {
-      color: $sidebar-header-color;
+    font-size: 0.85em;
+
+    border: $border-style;
+    background-color: $sidebar-color;
+
+    > ul {
+        font-size: 0.85em;
     }
-  }
 
-  h3:first-child {
-    margin-top: 0px;
-  }
+    span.link-container {
+        display: block;
+        margin-left: -100px;
+        padding-left: 100px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
 
-  ul {
-    margin: 10px 0px 10px 0px;
-    padding: 0;
-    list-style: none outside none;
+    li.current > span.link-container {
+        background-color: $highlighted-nav-link-background-color;
+    }
+
+    h3,
+    h4 {
+        background-color: $sidebar-header-background-color;
+        color: $sidebar-header-color;
+        font-family: $sidebar-font-family;
+        font-size: 1.1em;
+        font-weight: normal;
+        margin: 10px 0 0 -15px;
+        padding: 5px 10px 5px 15px;
+        text-shadow: 1px 1px 0 white;
+
+        a {
+            color: $sidebar-header-color;
+        }
+    }
+
+    h3:first-child {
+        margin-top: 0px;
+    }
+
     ul {
-        margin-bottom: 0;
-        margin-top: 0;
-        list-style: square outside none;
-        margin-left: 20px;
+        margin: 10px 0px 10px 0px;
+        padding: 0;
+        list-style: none outside none;
+        ul {
+            margin-bottom: 0;
+            margin-top: 0;
+            list-style: square outside none;
+            margin-left: 20px;
+        }
     }
-  }
-
 }
 
-
 #docs-sidebar-popout {
-  height: $sidebar-popout-height;
-  max-height: $sidebar-popout-height;
-  width: 100%;
-  padding-left:10px;
-  padding-top:10px;
-  position: relative;
-  line-height: 1.2em;
-  font-size:.75em;
+    height: $sidebar-popout-height;
+    max-height: $sidebar-popout-height;
+    width: 100%;
+    padding-left: 10px;
+    padding-top: 10px;
+    position: relative;
+    line-height: 1.2em;
+    font-size: 0.75em;
 
-  p, form {
-    margin:5px 0 5px 0px;
-  }
+    p,
+    form {
+        margin: 5px 0 5px 0px;
+    }
 
-  h3 {
-    margin:0 0 10px 0;
-  }
-
+    h3 {
+        margin: 0 0 10px 0;
+    }
 }
 
 #fixed-sidebar {
-  position: relative;
-  box-sizing: border-box;
+    position: relative;
+    box-sizing: border-box;
 }
 
 #fixed-sidebar.withsidebar {
-  float: left;
-  width:$fixed-sidebar-width;
+    float: left;
+    width: $fixed-sidebar-width;
 }
 
 #fixed-sidebar.preautomated {
     position: fixed;
     float: none;
-    top:0;
+    top: 0;
     bottom: 0;
 }
 
-#fixed-sidebar.preautomated #docs-sidebar,
-#fixed-sidebar.preautomated #docs-sidebar-popout {
-  position:absolute;
+#fixed-sidebar.preautomated #docs-sidebar {
+/*#fixed-sidebar.preautomated #docs-sidebar-popout {*/
+    position: absolute;
 }
 
 #fixed-sidebar.preautomated #docs-sidebar:after {
-  content: " ";
-  display:block;
-  height: 150px;
+    content: " ";
+    display: block;
+    height: 150px;
 }
-
 
 #docs-sidebar.preautomated {
-  position: fixed;
+    position: fixed;
 }
-
 
 #docs-body {
-  background-color:#FFFFFF;
-  padding:1px 10px 10px 10px;
+    background-color: #ffffff;
+    padding: 1px 10px 10px 10px;
 
-  border: $border-style;
-  margin-top:10px;
+    border: $border-style;
+    margin-top: 10px;
 }
 
-
 #docs-body.withsidebar {
-  margin-left: $docs-body-sidebar-left;
+    margin-left: $docs-body-sidebar-left;
 
-  div.section, section {
-    /* to limit text width inside the container */
-    /*max-width: 1024px;*/
-  }
-
+    div.section,
+    section {
+        /* to limit text width inside the container */
+        /*max-width: 1024px;*/
+    }
 }
 
 #docs-mobile-top-navigation {
     display: none;
 }
 
+#mobile-index-nav {
+    display: none;
+}
+
 /* disable sidebar on mobile */
-@media only screen and (max-width: 980px) {
+@media only screen and (max-width: $mobile-max-screen-width) {
     #fixed-sidebar {
-        display:none;
+        display: none;
     }
+    #mobile-index-nav {
+        display: block;
+        padding: 1rem;
+        margin: 10px 0 10px 0;
+    }
+
     #docs-body.withsidebar {
-        margin-left:0;
+        margin-left: 0;
     }
     #docs-bottom-navigation.withsidebar {
         margin-left: 0;
     }
 
     #docs-mobile-top-navigation {
-        display:inline;
+        display: block;
     }
     #docs-top-navigation-container h1 {
         position: absolute;
         top: 10px;
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
         left: 8px;
     }
 
@@ -501,309 +504,299 @@ a.headerlink:hover {
         height: 124px;
     }
     #docs-version-header {
-        position:absolute;
+        position: absolute;
         left: 8px;
         right: 0;
-        bottom: 0;
+        bottom: 8px;
     }
-
 }
 
-
 #docs-mobile-top-navigation {
+    border: $border-style;
+    background-color: $sidebar-color;
+
     h2 {
-        margin:16px 4px 7px 5px;
-        font-size:1.6em;
+        margin: 16px 4px 7px 5px;
+        font-size: 1.6em;
     }
     p {
         margin: 0;
     }
 }
 
-
 #docs-body h1,
 #docs-body h2,
 #docs-body h3,
 #docs-body h4,
-#docs-body .h2
-{
-  font-family: $header-font-family;
-
-  /* don't put a clear:both here. use less floats */
+#docs-body .h2 {
+    font-family: $header-font-family;
+    font-weight: bold;
+    /* don't put a clear:both here. use less floats */
 }
 
 #docs-body {
-  #sqlalchemy-documentation h1 {
-    /* hide the <h1> for each content section. */
-    display:none;
-    font-size:2.0em;
-  }
+    #sqlalchemy-documentation h1 {
+        /* hide the <h1> for each content section. */
+        display: none;
+        font-size: 2em;
+    }
 
-  h2 {
-    font-size:1.8em;
-    border-top: $divider-line-style;
-    padding-top:20px;
-  }
+    h2 {
+        font-size: 1.8em;
+        border-top: $divider-line-style;
+        padding-top: 20px;
+    }
 
-  #sqlalchemy-documentation h2 {
-    border-top:none;
-    padding-top:0;
-  }
-  h3 {
-    font-size:1.4em;
-  }
+    #sqlalchemy-documentation h2 {
+        border-top: none;
+        padding-top: 0;
+    }
+    h3 {
+        font-size: 1.4em;
+    }
 
-  h4 {
-    font-size:1.2em;
-  }
-
+    h4 {
+        font-size: 1.2em;
+    }
 }
-
-
-
 
 /* SQL popup, code styles */
 
 .highlight {
-  background:none;
+    background: none;
 }
 
 #docs-container {
+    pre {
+        font-size: 1.2em;
+        background-color: #f0f0f0;
+        border: $border-style;
+        box-shadow: $box-shadow-style;
+        padding: 10px;
+        margin: $box-margin;
+        overflow: auto;
+        line-height: 1.3em;
+        clear: both;
+    }
 
-  pre {
-    font-size:1.2em;
-    background-color: #f0f0f0;
-    border: $border-style;
-    box-shadow: $box-shadow-style;
-    padding:10px;
-    margin: $box-margin;
-    overflow:auto;
-    line-height:1.3em;
-    clear: both;
-  }
+    /* the [SQL] links used to display SQL */
+    .sql_link {
+        font-weight: normal;
+        font-family: helvetica, arial, sans-serif;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        color: #990000;
+        border: 1px solid;
+        padding: 1px 2px 1px 2px;
+        margin: 0px 10px 0px 15px;
+        float: right;
+        line-height: 1.2em;
+    }
 
+    a.sql_link,
+    .sql_link {
+        text-decoration: none;
+        padding: 1px 2px;
+    }
 
-  /* the [SQL] links used to display SQL */
-  .sql_link
-  {
-    font-weight:normal;
-    font-family: helvetica, arial, sans-serif;
-    font-size:.9em;
-    text-transform: uppercase;
-    color:#990000;
-    border:1px solid;
-    padding:1px 2px 1px 2px;
-    margin:0px 10px 0px 15px;
-    float:right;
-    line-height:1.2em;
-  }
+    a.sql_link:hover {
+        text-decoration: none;
+        color: #fff;
+        border: 1px solid #900;
+        background-color: #900;
+    }
 
-  a.sql_link, .sql_link
-  {
-      text-decoration: none;
-      padding:1px 2px;
-  }
-
-  a.sql_link:hover {
-      text-decoration: none;
-      color:#fff;
-      border:1px solid #900;
-      background-color: #900;
-  }
-
-  a.changeset-link {
-      font-size: 0.8em;
-      padding: 0 4px 0 4px;
-      text-decoration: none;
-  }
-
-
-
-
+    a.changeset-link {
+        font-size: 0.8em;
+        padding: 0 4px 0 4px;
+        text-decoration: none;
+    }
 }
 
-.popup_sql, .show_sql
-{
+.popup_sql,
+.show_sql {
     background-color: $popout-color;
-    padding:5px 10px;
-    margin:10px -5px;
-    border:1px dashed;
+    padding: 5px 10px;
+    margin: 10px -5px;
+    border: 1px dashed;
 }
-
+/* SQL popups are always on at the moment, disable the button */
+.sql_link {
+    display: none;
+}
 
 /* tables */
 
 .sliding-table {
     width: 100%;
     overflow: auto;
-
 }
 
-.section > table.docutils, .sliding-table > table.docutils, section > table.docutils {
-  border: none;
-  border-collapse: collapse;
-
-  tr {
+.section > table.docutils,
+.sliding-table > table.docutils,
+section > table.docutils {
+    border: none;
     border-collapse: collapse;
-    border-spacing: 0;
-    empty-cells: show;
 
-    td, th {
-      border: 1px solid #e1e4e5;
-      background-color: transparent;
-      vertical-align: middle;
-      font-size: 90%;
-      margin: 0;
-      overflow: visible;
-      padding: 8px 16px;
+    tr {
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+
+        td,
+        th {
+            border: 1px solid #e1e4e5;
+            background-color: transparent;
+            vertical-align: middle;
+            font-size: 90%;
+            margin: 0;
+            overflow: visible;
+            padding: 8px 16px;
+        }
     }
 
-
-  }
-
-
-  tr.row-even {
-      td {
-        background-color: #f3f6f6;
-      }
-  }
-
-
-
+    tr.row-even {
+        td {
+            background-color: #f3f6f6;
+        }
+    }
 }
 
 /* docutils-specific elements */
 
-
 th.field-name {
-    text-align:right;
+    text-align: right;
     position: absolute;
     padding: 0px;
     margin: 0px;
 }
 
 td.field-body {
-  padding-top: 1em;
-  ul.first {
-    padding-left: 17px;
     padding-top: 1em;
-  }
+    ul.first {
+        padding-left: 17px;
+        padding-top: 1em;
+    }
 }
 
-
-
 div.faq {
-  background-color: #EFEFEF;
+    background-color: #efefef;
 }
 
 div.faq ul {
-  list-style: square outside none;
+    list-style: square outside none;
 }
 
 /* box styles */
 
 .footnote-reference {
-  vertical-align: super;
+    vertical-align: super;
 }
 dl.footnote {
-  font-size: .95em;
-  border: $border-style;
-  background-color: $box-background-color;
-  margin: $box-margin;
-  padding: 10px 20px 0 20px;
+    font-size: 0.95em;
+    border: $border-style;
+    background-color: $box-background-color;
+    margin: $box-margin;
+    padding: 10px 20px 0 20px;
 
-  dt {
-    float: left;
-    background-color: $box-header-color;
-    margin: -10px 0 0 -20px;
-    padding: 0 10px 0 10px;
-  }
-  dd {
-    margin-right:40px;
-
-    p {
-      margin-top: 0;
+    dt {
+        float: left;
+        background-color: $box-header-color;
+        margin: -10px 0 0 -20px;
+        padding: 0 10px 0 10px;
     }
-  }
+    dd {
+        margin-right: 40px;
+
+        p {
+            margin-top: 0;
+        }
+    }
 }
 
-p.deprecated, div.deprecated  {
-    background-color:$deprecated-background-color;
+p.deprecated,
+div.deprecated {
+    background-color: $deprecated-background-color;
 }
 
-.versionchanged, .versionadded, .versionmodified added {
-    background-color:$versionchanged-background-color;
+.versionchanged,
+.versionadded,
+.versionmodified added {
+    background-color: $versionchanged-background-color;
 }
-
 
 div.warning .admonition-title {
-    color:#FF0000;
+    color: #ff0000;
 }
-
-
 
 div {
-  .admonition, .sidebar, .topic, .docutils-header, .docutils-footer {
-    clear:both;
+    .admonition,
+    .sidebar,
+    .topic,
+    .docutils-header,
+    .docutils-footer {
+        clear: both;
 
-    .admonition-title, .sidebar-title, .topic-title {
-        background-color: $box-header-color;
-        padding:$box-title-padding;
+        .admonition-title,
+        .sidebar-title,
+        .topic-title {
+            background-color: $box-header-color;
+            padding: $box-title-padding;
 
-        margin:0 -20px 20px -20px;
+            margin: 0 -20px 20px -20px;
 
-        font-weight:bold;
-        border-left: $border-style;
-        border-right: $border-style;
-        border-bottom: $border-style;
+            font-weight: bold;
+            border-left: $border-style;
+            border-right: $border-style;
+            border-bottom: $border-style;
+        }
+
+        > p {
+            font-size: 0.9em;
+        }
+
+        padding: 0 20px 0 20px;
+        background-color: $box-background-color;
+        border: $border-style;
+        box-shadow: $box-shadow-style;
+
+        margin: $box-margin;
     }
-
-    > p {
-      font-size:.9em;
-    }
-
-    padding: 0 20px 0 20px;
-    background-color: $box-background-color;
-    border: $border-style;
-    box-shadow: $box-shadow-style;
-
-    margin: $box-margin;
-  }
 }
 
-
 div.sidebar {
-    background-color: #FFFFEE;
+    background-color: #ffffee;
     float: right;
     width: 40%;
     margin: 10px 10px 5px 10px;
 }
 
-div.deprecated, div.versionadded, div.versionchanged, div.versionmodified {
-  padding: $box-padding;
+div.deprecated,
+div.versionadded,
+div.versionchanged,
+div.versionmodified {
+    padding: $box-padding;
 
-  margin: $box-margin;
-
+    margin: $box-margin;
 }
-
 
 div .versionwarning,
 div .version-warning {
-  font-size:12px;
-  font-color:red;
-  border:  $border-style;
-  padding:4px 4px;
-  margin:8px 0px 2px 0px;
-  background:#FFBBBB;
+    font-size: 12px;
+    font-color: red;
+    border: $border-style;
+    padding: 4px 4px;
+    margin: 8px 0px 2px 0px;
+    background: #ffbbbb;
 }
 
-
-div.note, div.warning {
+div.note,
+div.warning {
     > .admonition-title {
-      margin-left: -140px;
+        margin-left: -140px;
     }
     background-image: url("dragons.png");
-    background-color:$notebox-background-color;
+    background-color: $notebox-background-color;
     background-position: 1em top;
     background-repeat: no-repeat;
     clear: right;
@@ -812,24 +805,25 @@ div.note, div.warning {
 }
 
 div.warning {
-    background-color:$warning-background-color;
+    background-color: $warning-background-color;
 }
 
 div.deepalchemy {
     > .admonition-title {
-      margin-left: -140px;
+        margin-left: -140px;
     }
     background-image: url("deepalchemy.png");
     background-position: left top;
     background-repeat: no-repeat;
-    background-color:$deepalchemy-background-color;
+    background-color: $deepalchemy-background-color;
     clear: right;
     min-height: 180px;
     padding-left: 140px;
 }
 
-@media only screen and (max-width: 980px) {
-    div.note, div.warning {
+@media only screen and (max-width: $mobile-max-screen-width) {
+    div.note,
+    div.warning {
         > .admonition-title {
             margin-left: -14px;
             padding-left: 10px;
@@ -847,9 +841,6 @@ div.deepalchemy {
     }
 }
 
-
-
-
 /* grrr sphinx changing your document structures, removing classes.... */
 
 .versionadded .versionmodified,
@@ -857,22 +848,19 @@ div.deepalchemy {
 .deprecated .versionmodified,
 .versionadded > p:first-child > span:first-child,
 .versionchanged > p:first-child > span:first-child,
-.deprecated > p:first-child > span:first-child
-{
+.deprecated > p:first-child > span:first-child {
     color: #990000;
     font-weight: bold;
 }
 
-
-
 div.class-bases {
     border: $border-style;
     box-shadow: $box-shadow-style;
-    padding:5px 5px;
+    padding: 5px 5px;
 
     padding: $box-padding;
 
-    font-size:.9em;
+    font-size: 0.9em;
     margin: $box-margin;
     background-color: #eefbfb;
 }
@@ -880,18 +868,18 @@ div.class-bases {
 div.inherited-member {
     border: $border-style;
     box-shadow: $box-shadow-style;
-    padding:5px 5px;
-    font-size:.9em;
+    padding: 5px 5px;
+    font-size: 0.9em;
     background-color: #eefbfb;
 
     p {
-      margin: 0;
+        margin: 0;
     }
 }
 
-
-.viewcode-back, .viewcode-link {
-    float:right;
+.viewcode-back,
+.viewcode-link {
+    float: right;
 }
 
 dl.function > dt,
@@ -899,64 +887,65 @@ dl.attribute > dt,
 dl.classmethod > dt,
 dl.method > dt,
 dl.class > dt,
-dl.exception > dt
-{
+dl.exception > dt {
     border: $border-style;
     box-shadow: $box-shadow-style;
     background-color: $code-sig-background-color;
-    margin:25px -10px 10px 10px;
+    margin: 25px -10px 10px 10px;
     padding: 8px 10px;
 }
 
 /* parameters / returns lists for functions and methods */
 dl.field-list {
-  border-left: $border-style;
-  border-right: $border-style;
-  border-bottom: $border-style;
-  box-shadow: $box-shadow-style;
-  margin: $box-top-margin 10px 0 0;
+    border-left: $border-style;
+    border-right: $border-style;
+    border-bottom: $border-style;
+    box-shadow: $box-shadow-style;
+    margin: $box-top-margin 10px 0 0;
 
-  li > p {
-      margin: .5em 0 .5em 0;
-  }
+    li > p {
+        margin: 0.5em 0 0.5em 0;
+    }
 }
 
 dl.field-list > dt {
-  border-top: $border-style;
-  border-bottom: $border-style;
-  font-weight: bold;
-  background-color: $code-sig-background-color;
-  padding: $box-title-padding;
+    border-top: $border-style;
+    border-bottom: $border-style;
+    font-weight: bold;
+    background-color: $code-sig-background-color;
+    padding: $box-title-padding;
 }
 
 dl.glossary > dt {
-  font-weight:bold;
-  font-size:1.1em;
-  padding-top:10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding-top: 10px;
 }
 
-
-dt:target, span.highlight {
-    background-color:#FBE54E;
+dt:target,
+span.highlight {
+    background-color: #fbe54e;
 }
 
 .clearboth {
-    clear:both;
+    clear: both;
 }
 
 .nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 /* sphinx 1.3 now using 'code' and not 'tt' for code / docstring elements */
 /* sphinx 1.4 now using 'span' and not 'code' for code / docstring elements */
 
-
-span.descclassname, span.descname, code, tt {
-    padding:0 1px;
+span.descclassname,
+span.descname,
+code,
+tt {
+    padding: 0 1px;
 
     color: $keyword-color;
-    font-family: "Courier New",Courier,fixed,monospace;
+    font-family: "Courier New", Courier, fixed, monospace;
     font-weight: 400;
     font-size: 95%;
 
@@ -964,214 +953,239 @@ span.descclassname, span.descname, code, tt {
     }
 }
 
-
-span.descname, code.descname, tt.descname {
-    background-color:transparent;
-    font-size:1.2em;
-    font-weight:bold;
+span.descname,
+code.descname,
+tt.descname {
+    background-color: transparent;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
-span.descclassname, code.descclassname, tt.descclassname {
-    background-color:transparent;
+span.descclassname,
+code.descclassname,
+tt.descclassname {
+    background-color: transparent;
 }
 
 a {
-  code, tt {
-      > .pre {
-        color: $hyperlink-color;
-      }
+    code,
+    tt {
+        > .pre {
+            color: $hyperlink-color;
+        }
     }
-  span.sig-name, code.sig-name {
-      color: $hyperlink-color;
-  }
+    span.sig-name,
+    code.sig-name {
+        color: $hyperlink-color;
+    }
 }
 
-
-
 /* syntax highlighting overrides */
-.k, .kn {color:#0908CE;}
-.o {color:#BF0005;}
-.go {color:#804049;}
-
+.k,
+.kn {
+    color: #0908ce;
+}
+.o {
+    color: #bf0005;
+}
+.go {
+    color: #804049;
+}
 
 /* special "index page" sections
    with specific formatting
 */
 
 div#sqlalchemy-documentation {
-  font-size:.95em;
+    font-size: 0.95em;
 }
 div#sqlalchemy-documentation em {
-  font-style:normal;
+    font-style: normal;
 }
-div#sqlalchemy-documentation .rubric{
-  font-size:14px;
-  background-color:#EEFFEF;
-  padding:5px;
-  border:1px solid #BFBFBF;
+div#sqlalchemy-documentation .rubric {
+    font-size: 14px;
+    background-color: #eeffef;
+    padding: 5px;
+    border: 1px solid #bfbfbf;
 }
-div#sqlalchemy-documentation a, div#sqlalchemy-documentation li {
-  padding:5px 0px;
+div#sqlalchemy-documentation a,
+div#sqlalchemy-documentation li {
+    padding: 5px 0px;
 }
 
 div#getting-started {
-  border-bottom: $divider-line-style;
+    border-bottom: $divider-line-style;
 }
 
 div#tutorials {
-  border-bottom: $divider-line-style;
+    border-bottom: $divider-line-style;
 }
-
 
 /* new index layout thing */
 
 #docs-body.index {
-  padding:0;
+    padding: 0;
 }
 
 div.left-right-container {
-  display:flex;
-  border-bottom:  $divider-line-style;
+    display: flex;
+    border-bottom: $divider-line-style;
 
-  .orm {
-      background-color: $orm-background-color;
-  }
+    .orm {
+        background-color: $orm-background-color;
+    }
 
-  .core {
-      background-color: $core-background-color;
-  }
+    .core {
+        background-color: $core-background-color;
+    }
 
-  p.h2 {
-    display: block;
-    font-weight: bold;
-    font-size:1.4em;
-  }
+    p.h2 {
+        display: block;
+        font-weight: bold;
+        font-size: 1.4em;
+    }
 
-  .leftmost {
-      width: 15em;
-      max-width: 15em;
-      background-color: #e4e4e8;
-      padding-left:10px;
-  }
+    .leftmost {
+        width: 15em;
+        max-width: 15em;
+        background-color: #e4e4e8;
+        padding-left: 10px;
+    }
 
-  div {
-      flex: 3;
-      padding-left:10px;
-  }
+    div {
+        flex: 3;
+        padding-left: 10px;
+    }
 }
+@media only screen and (max-width: $mobile-max-screen-width) {
+    div#docs-header {
+        padding-bottom: 1rem;
 
+    }
+    div.left-right-container {
+        display: block;
+        margin: 0;
+        max-width: none;
+        .leftmost {
+            width: auto;
+            max-width: none;
+            padding: 10px 10px 10px 10px;
+        }
+
+        div.container {
+            padding-bottom: 1rem;
+            max-width: none;
+        }
+
+        .orm, .core {
+            padding-bottom: 1rem;
+        }
+
+    }
+
+}
 
 /* legacy index layout thing */
 
 div#sqlalchemy-documentation {
-  li p {
-    margin: 0;
-  }
+    li p {
+        margin: 0;
+    }
 }
 
-div#sqlalchemy-documentation > .section, div#sqlalchemy-documentation > section {
-  padding-left:10px;
-
-
-
+div#sqlalchemy-documentation > .section,
+div#sqlalchemy-documentation > section {
+    padding-left: 10px;
 }
 
 div#sqlalchemy-documentation div#sqlalchemy-orm {
-  float:left;
-  width:48%;
-  min-height:400px;
-  padding-left:10px;
-  border-right:  $divider-line-style;
-  h2 {
-    margin: 0;
-  }
+    float: left;
+    width: 48%;
+    min-height: 400px;
+    padding-left: 10px;
+    border-right: $divider-line-style;
+    h2 {
+        margin: 0;
+    }
 }
 
 div#sqlalchemy-documentation div#sqlalchemy-core {
-  margin:0;
-  padding-left:10px;
-  min-height:400px;
-  padding-left:50%;
-
-  h2 {
     margin: 0;
-  }
+    padding-left: 10px;
+    min-height: 400px;
+    padding-left: 50%;
 
+    h2 {
+        margin: 0;
+    }
 }
-
 
 div#dialect-documentation {
-  border-top:  $divider-line-style;
-  clear:both;
+    border-top: $divider-line-style;
+    clear: both;
 }
-
-
 
 /* core/orm tabbed thing */
 
 @mixin card-line-style() {
-  box-shadow: 0px 0px 2px #CCC;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  border-radius: 10px;
+    box-shadow: 0px 0px 2px #ccc;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 10px;
 
-  h2 {
-    border-top: none;
-  }
-
+    h2 {
+        border-top: none;
+    }
 }
 
 #docs-body {
-
-  div.orm-core {
-
-    h2, h3, h4 {
-      border: none;
-    }
-  }
-
-  div.orm-header {
-
-    @include card-line-style();
-    border-left: 3em solid $orm-background-color;
-
-    padding-left: 1em;
-    padding-right: 1em;
-    margin-bottom: 2em;
-
-    > h2, > h3 {
-      border: none;
-      padding-top: 0;
-    }
-  }
-
-  div.core-header {
-
-    @include card-line-style();
-    border-right: 3em solid $core-background-color;
-
-    padding-left: 1em;
-    padding-right: 1em;
-    margin-bottom: 2em;
-
-    > h2, > h3 {
-      border: none;
-      padding-top: 0;
+    div.orm-core {
+        h2,
+        h3,
+        h4 {
+            border: none;
+        }
     }
 
-  }
+    div.orm-header {
+        @include card-line-style();
+        border-left: 3em solid $orm-background-color;
 
-  div.orm-dependency {
-    border-left: 1em solid $orm-background-color;
-  }
+        padding-left: 1em;
+        padding-right: 1em;
+        margin-bottom: 2em;
 
-  div.orm-addin {
-    @include card-line-style();
-    border-left: 1em solid $orm-background-color;
+        > h2,
+        > h3 {
+            border: none;
+            padding-top: 0;
+        }
+    }
 
-    padding-left: 10px;
-    margin: 10px 0 10px 0;
-  }
+    div.core-header {
+        @include card-line-style();
+        border-right: 3em solid $core-background-color;
 
+        padding-left: 1em;
+        padding-right: 1em;
+        margin-bottom: 2em;
 
+        > h2,
+        > h3 {
+            border: none;
+            padding-top: 0;
+        }
+    }
+
+    div.orm-dependency {
+        border-left: 1em solid $orm-background-color;
+    }
+
+    div.orm-addin {
+        @include card-line-style();
+        border-left: 1em solid $orm-background-color;
+
+        padding-left: 10px;
+        margin: 10px 0 10px 0;
+    }
 }

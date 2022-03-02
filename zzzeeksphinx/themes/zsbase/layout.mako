@@ -142,6 +142,7 @@ withsidebar = bool(toc) and (
     % endif
 
     % if withsidebar:
+
         <div id="docs-sidebar-popout">
             <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
             % if is_beta_version:
@@ -220,43 +221,66 @@ withsidebar = bool(toc) and (
 
     </div>
 
-    <div id="docs-mobile-top-navigation">
-        <ul>
-        % if prevtopic:
-            <li>Previous:
-            <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a></li>
+    <div id="mobile-index-nav">
+        <form class="search" action="${pathto('search')}" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="${_('Search')}" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="${pathto('contents') or pathto('index')}">Contents</a> |
+        <a href="${pathto('genindex')}">Index</a>
+        % if zip_url:
+        | <a href="${zip_url}">Download as ZIP file</a>
         % endif
-        % if nexttopic:
-            <li>Next:
-            <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a></li>
-        % endif
-
-        % if parents:
-            % for _parent in parents:
-                % if loop.index == 0:
-                <li>Up: <a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
-                % else:
-                <ul><li><a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
-                % endif
-            % endfor
-        % endif
-
-
-        <li>On this page:</li>
-        ${toc}
-
-        % for _parent in parents:
-            % if loop.index != 0:
-                </ul>
-            % endif
-        % endfor
-
-        </ul>
-        <h2>
-            ${self.show_title()}
-        </h2>
+        </p>
 
     </div>
+
+    % if withsidebar:
+
+        <div id="docs-mobile-top-navigation">
+            <ul>
+            % if prevtopic:
+                <li>Previous:
+                <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a></li>
+            % endif
+            % if nexttopic:
+                <li>Next:
+                <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a></li>
+            % endif
+
+            % if parents:
+                % for _parent in parents:
+                    % if loop.index == 0:
+                    <li>Up: <a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
+                    % else:
+                    <ul><li><a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
+                    % endif
+                % endfor
+            % endif
+
+
+            <li>On this page:</li>
+            ${toc}
+
+            % for _parent in parents:
+                % if loop.index != 0:
+                    </ul>
+                % endif
+            % endfor
+
+            </ul>
+
+        </div>
+
+    % endif
+
 
     <div id="docs-body" role="main" class="${'withsidebar' if withsidebar else ''} ${current_page_name.replace("/", "-")}" >
         ${next.body()}
