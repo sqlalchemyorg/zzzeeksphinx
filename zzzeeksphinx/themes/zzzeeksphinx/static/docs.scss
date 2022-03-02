@@ -280,7 +280,7 @@ a.headerlink:hover {
 }
 
 #docs-sidebar {
-    top: $sidebar-popout-height + 5px;
+    top: $sidebar-popout-height + 18px;
     width: $fixed-sidebar-width;
     bottom: 0;
     min-height: 0;
@@ -396,7 +396,7 @@ a.headerlink:hover {
 #docs-sidebar-popout {
     height: $sidebar-popout-height;
     max-height: $sidebar-popout-height;
-    width: 100%;
+    width: auto;
     padding-left: 10px;
     padding-top: 10px;
     position: relative;
@@ -514,6 +514,8 @@ a.headerlink:hover {
 #docs-mobile-top-navigation {
     border: $border-style;
     background-color: $sidebar-color;
+    font-family: $sidebar-font-family;
+    font-size: 0.85rem;
 
     h2 {
         margin: 16px 4px 7px 5px;
