@@ -34,7 +34,7 @@ $header-font-family: "Libre Franklin", Arial, sans-serif;
 $top-header-font-family: "Libre Franklin", Arial, sans-serif;
 $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
-$mobile-max-screen-width: 980px;
+$narrow-max-screen-width: 980px;
 
 $primary-background-color: #fdfbfc;
 $topmost-header-color: #ebebee;
@@ -173,7 +173,7 @@ a.headerlink:hover {
 #docs-sidebar-popout,
 #docs-bottom-navigation,
 #index-nav,
-#mobile-index-nav {
+#narrow-index-nav {
     font-family: $sidebar-font-family;
     background-color: $popout-color;
     border: $border-style;
@@ -209,8 +209,8 @@ a.headerlink:hover {
 }
 
 #docs-header h1,
-#docs-mobile-top-navigation h1,
-#docs-mobile-top-navigation h2 {
+#docs-narrow-top-navigation h1,
+#docs-narrow-top-navigation h2 {
     font-family: $top-header-font-family;
     font-weight: normal;
 }
@@ -463,20 +463,20 @@ a.headerlink:hover {
     }
 }
 
-#docs-mobile-top-navigation {
+#docs-narrow-top-navigation {
     display: none;
 }
 
-#mobile-index-nav {
+#narrow-index-nav {
     display: none;
 }
 
-/* disable sidebar on mobile */
-@media only screen and (max-width: $mobile-max-screen-width) {
+/* disable sidebar on narrow screens */
+@media only screen and (max-width: $narrow-max-screen-width) {
     #fixed-sidebar {
         display: none;
     }
-    #mobile-index-nav {
+    #narrow-index-nav {
         display: block;
         padding: 1rem;
         margin: 10px 0 10px 0;
@@ -489,7 +489,7 @@ a.headerlink:hover {
         margin-left: 0;
     }
 
-    #docs-mobile-top-navigation {
+    #docs-narrow-top-navigation {
         display: block;
     }
     #docs-top-navigation-container h1 {
@@ -511,7 +511,7 @@ a.headerlink:hover {
     }
 }
 
-#docs-mobile-top-navigation {
+#docs-narrow-top-navigation {
     border: $border-style;
     background-color: $sidebar-color;
     font-family: $sidebar-font-family;
@@ -823,7 +823,7 @@ div.deepalchemy {
     padding-left: 140px;
 }
 
-@media only screen and (max-width: $mobile-max-screen-width) {
+@media only screen and (max-width: $narrow-max-screen-width) {
     div.note,
     div.warning {
         > .admonition-title {
@@ -1059,7 +1059,7 @@ div.left-right-container {
         padding-left: 10px;
     }
 }
-@media only screen and (max-width: $mobile-max-screen-width) {
+@media only screen and (max-width: $narrow-max-screen-width) {
     div#docs-header {
         padding-bottom: 1rem;
 

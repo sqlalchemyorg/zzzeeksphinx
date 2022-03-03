@@ -222,7 +222,7 @@ withsidebar = bool(toc) and (
 
     </div>
 
-    <div id="mobile-index-nav">
+    <div id="narrow-index-nav">
         <form class="search" action="${pathto('search')}" method="get">
             <label>
                 Search terms:
@@ -246,7 +246,7 @@ withsidebar = bool(toc) and (
 
     % if withsidebar:
 
-        <div id="docs-mobile-top-navigation">
+        <div id="docs-narrow-top-navigation">
             <ul>
             % if prevtopic:
                 <li>Previous:
@@ -337,7 +337,6 @@ withsidebar = bool(toc) and (
     % endfor
     <!-- end iterate through sphinx environment script_files -->
 
-    <script type="text/javascript" src="${pathto('_static/detectmobile.js', 1)}"></script>
     <script type="text/javascript" src="${pathto('_static/init.js', 1)}"></script>
 
 </%block>

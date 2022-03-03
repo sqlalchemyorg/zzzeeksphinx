@@ -1,74 +1,134 @@
 
 function initSQLPopups() {
+    /* initializes the [SQL] popup buttons that are in the 1.x tutorials.
+       Currently this toggle is disabled and the SQL display is fixed at
+       visible.
+    */
     $('div.popup_sql').hide();
-    $('a.sql_link').click(function() {
+    $('a.sql_link').click(function () {
         $(this).nextAll('div.popup_sql:first').toggle();
         return false;
     });
 }
 
+_debug = true;
+
 function initFloatyThings() {
+    /* switches the left navbar between css fixed and css flowing */
+
+    if (_debug) {
+        console.log("initfloatingthing");
+    }
     if (!$("#fixed-sidebar.withsidebar")) {
+        if (_debug) {
+            console.log("no side bar, returning")
+        }
         return;
     }
 
-    var docsBodyOffset = $("#docs-body").offset().top;
-    var padding = docsBodyOffset -
-            ($("#docs-top-navigation-container").offset().top +
-            $("#docs-top-navigation-container").height());
+    if (_debug) {
+        console.log("sidebar, doing things");
+    }
 
-    var automatedBreakpoint = $("#docs-container").position().top +
-        $("#docs-top-navigation-container").height();
+    var docsBodyOffset;
+    var padding;
+    var automatedBreakpoint;
 
     // this turns on the whole thing, without this
     // we are in graceful degradation assuming no JS
     $("#fixed-sidebar.withsidebar").addClass("preautomated");
 
+    /*
+
+        Before the introduction of responsive design which adds vertical
+        elements when the window shrinks past a threshold, the
+        variables here could be fixed.   however, we now have to recalculate
+        them when the window resizes since the rendered height of the
+        top of the page can change.
+
+        It's likely that the whole thing can just be in one function that
+        runs for the resize and scroll events together, and that would be fine.
+        It's unknown if jquery calls like css_element.height() are expensive
+        or not on different browsers.  it all certainly seems to be
+        faster than instantaneous on any browser here.
+
+
+     */
+    function setScrollWithRecalc() {
+        docsBodyOffset = $("#docs-body").offset().top;
+
+        padding = docsBodyOffset -
+            ($("#docs-top-navigation-container").offset().top +
+                $("#docs-top-navigation-container").height());
+
+        automatedBreakpoint = $("#docs-container").position().top +
+            $("#docs-top-navigation-container").height();
+
+        if (_debug) {
+            console.log("new breakpoint " + automatedBreakpoint);
+        }
+        setScroll();
+    }
+
     function setScroll() {
         var scrolltop = $(window).scrollTop();
         var fix = scrolltop >= automatedBreakpoint;
+
+        if (_debug) {
+            console.log(
+                "scrolltop: " + scrolltop + " breakpoint: " + automatedBreakpoint
+            );
+        }
 
         if (fix) {
             $("#fixed-sidebar.withsidebar").css("top", padding);
             $("#fixed-sidebar.withsidebar").css("position", "fixed");
             $("#fixed-sidebar.withsidebar").css("height", '');
+            if (_debug) {
+                console.log("setting fixed sidebar");
+            }
         }
         else {
             $("#fixed-sidebar.withsidebar").css("top", 0);
             $("#fixed-sidebar.withsidebar").css(
                 "height", $(window).height() - docsBodyOffset + scrolltop);
             $("#fixed-sidebar.withsidebar").css("position", "absolute");
+            if (_debug) {
+                console.log("setting flowing sidebar");
+            }
         }
     }
     $(window).scroll(setScroll);
-    $(window).resize(setScroll);
-    setScroll();
+    $(window).resize(setScrollWithRecalc);
+    setScrollWithRecalc();
 }
 
 function highlightLinks() {
-    function bisection(x){
-      var low = 0;
-      var high = divCollection.length;
+    /* Highlights the active section in the left navbar */
 
-      var mid;
+    function bisection(x) {
+        var low = 0;
+        var high = divCollection.length;
 
-      while (low < high) {
-        mid = (low + high) >> 1;
+        var mid;
 
-        if (x < divCollection[mid]['active']) {
-          high = mid;
-        } else {
-          low = mid + 1;
+        while (low < high) {
+            mid = (low + high) >> 1;
+
+            if (x < divCollection[mid]['active']) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
         }
-      }
 
-      return low;
+        return low;
     }
 
     var divCollection = [];
     var currentIdx = -1;
     var docHeight = $(document).height();
-    $("div.section,section").each(function(index) {
+    $("div.section,section").each(function (index) {
         var active = $(this).offset().top - 20;
         divCollection.push({
             'id': this.id,
@@ -109,11 +169,9 @@ function highlightLinks() {
 }
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     /*initSQLPopups();*/
-    if (!$.browser.mobile) {
-        initFloatyThings();
-        highlightLinks();
-    }
+    initFloatyThings();
+    highlightLinks();
 });
 
