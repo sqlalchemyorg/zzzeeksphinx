@@ -245,33 +245,28 @@ withsidebar = bool(toc) and (
         <div id="docs-narrow-top-navigation">
             <ul>
             % if prevtopic:
-                <li>Previous:
+                <li><b>Previous:</b>
                 <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a></li>
             % endif
             % if nexttopic:
-                <li>Next:
+                <li><b>Next:</b>
                 <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a></li>
             % endif
 
+            <li><b>Up:</b> <a href="${pathto('index')}">Home</a></li>
             % if parents:
                 % for _parent in parents:
-                    % if loop.index == 0:
-                    <li>Up: <a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
-                    % else:
                     <ul><li><a href="${_parent['link']|h}" title="${_parent['title']}">${_parent['title']}</a></li>
-                    % endif
                 % endfor
             % endif
-
-
-            <li>On this page:</li>
-            ${toc}
-
             % for _parent in parents:
-                % if loop.index != 0:
-                    </ul>
-                % endif
+                </ul>
             % endfor
+
+
+
+            <li><b>On this page:</b></li>
+            ${local_toc(current_page_name, apply_exact_top_anchor=True)}
 
             </ul>
 

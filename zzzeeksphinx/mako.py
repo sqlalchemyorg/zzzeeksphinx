@@ -86,6 +86,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
         context["toolbar"] = False
         context["base"] = "static_base.mako"
         context["parent_toc"] = self.get_current_subtoc
+        context["local_toc"] = self.get_local_toc
         context["bridge"] = self
         context.setdefault("toc", None)
         context.setdefault("pdf_url", None)
