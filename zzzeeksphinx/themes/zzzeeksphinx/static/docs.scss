@@ -937,6 +937,21 @@ span.highlight {
     white-space: nowrap;
 }
 
+/* copybutton styles
+   requires https://sphinx-copybutton.readthedocs.io/
+*/
+button.copybtn {
+    top: 1em;
+    right: 1.8em;
+    width: 2.5em;
+    height: 2.5em;
+
+    svg {
+        width: 2em;
+        height: 2em;
+    }
+}
+
 /* sphinx 1.3 now using 'code' and not 'tt' for code / docstring elements */
 /* sphinx 1.4 now using 'span' and not 'code' for code / docstring elements */
 
