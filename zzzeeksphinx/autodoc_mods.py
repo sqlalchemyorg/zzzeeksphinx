@@ -235,7 +235,11 @@ def fix_up_autodoc_headers(app, doctree):
             qualified = "%s.%s." % (modname, clsname)
 
             start_index = 0
+            is_classmethod = False
             if sig[0].rawsource == "async ":
+                start_index = 1
+            elif "classmethod" in sig[0].rawsource:
+                is_classmethod = True
                 start_index = 1
 
             sig.insert(
@@ -248,12 +252,15 @@ def fix_up_autodoc_headers(app, doctree):
                 ),
             )
 
-            sig.insert(
-                start_index,
-                addnodes.desc_annotation(
-                    objtype, nodes.Text(objtype + " ", objtype + " ")
-                ),
-            )
+            # sphinx seems to put the qualifier "classmethod" for classmethods,
+            # so don't add our "method" qualifier in that case
+            if not is_classmethod:
+                sig.insert(
+                    start_index,
+                    addnodes.desc_annotation(
+                        objtype, nodes.Text(objtype + " ", objtype + " ")
+                    ),
+                )
 
         elif objtype == "function":
             sig = node.children[0]
@@ -407,8 +414,23 @@ def work_around_issue_6785():
     autodoc.PropertyDocumenter.priority = -100
 
 
+def work_around_issue_10351():
+    """disable all @overload parsing
+
+    see  https://github.com/sphinx-doc/sphinx/issues/10351
+
+    """
+    from sphinx.pycode import parser
+
+    def add_overload_entry(self, func):
+        pass
+
+    parser.VariableCommentPicker.add_overload_entry = add_overload_entry
+
+
 def setup(app):
     work_around_issue_6785()
+    work_around_issue_10351()
 
     app.connect("autodoc-skip-member", autodoc_skip_member)
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
