@@ -167,7 +167,12 @@ def write_autosummaries(app, doctree):
 
             # what = ad_node.attributes["objtype"]
             sig = ad_node.children[0]
-            refid = sig.attributes.get("ids", [None])[0]
+
+            ids = sig.attributes.get("ids", [None])
+            if not ids:
+                continue
+
+            refid = ids[0]
             if not refid:
                 continue
 
