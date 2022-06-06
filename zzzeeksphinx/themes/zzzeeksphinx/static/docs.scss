@@ -543,8 +543,12 @@ a.headerlink:hover {
         font-size: 2em;
     }
 
+    h1 {
+        font-size: 1.7rem;
+    }
+
     h2 {
-        font-size: 1.8em;
+        font-size: 1.6rem;
         border-top: $divider-line-style;
         padding-top: 20px;
     }
@@ -554,11 +558,11 @@ a.headerlink:hover {
         padding-top: 0;
     }
     h3 {
-        font-size: 1.4em;
+        font-size: 1.4rem;
     }
 
     h4 {
-        font-size: 1.2em;
+        font-size: 1.2rem;
     }
 }
 
