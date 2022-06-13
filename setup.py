@@ -35,7 +35,7 @@ setup(
     url="https://github.com/sqlalchemyorg/zzzeeksphinx",
     license="MIT",
     packages=["zzzeeksphinx"],
-    install_requires=["libsass", "mako", "requests", "sphinx>=4.5.0,<5"],
+    install_requires=["libsass", "mako", "requests", "sphinx>=4.5.0,<5.1"],
     include_package_data=True,
     zip_safe=False,
     entry_points={
