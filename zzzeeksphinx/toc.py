@@ -79,7 +79,7 @@ class TOCMixin:
                             break
 
                     local_text = elem.children[0:index]
-                    name = local_text[0].rawsource
+                    name = str(local_text[0])
                     remainders = elem.children[index:]
 
                     yield level, refuri, name, local_text
