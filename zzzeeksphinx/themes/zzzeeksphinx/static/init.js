@@ -34,10 +34,6 @@ function initFloatyThings() {
     var padding;
     var automatedBreakpoint;
 
-    // this turns on the whole thing, without this
-    // we are in graceful degradation assuming no JS
-    $("#fixed-sidebar.withsidebar").addClass("preautomated");
-
     /*
 
         Before the introduction of responsive design which adds vertical
@@ -85,7 +81,7 @@ function initFloatyThings() {
             $("#fixed-sidebar.withsidebar").css("position", "fixed");
             $("#fixed-sidebar.withsidebar").css("height", '');
             if (_debug) {
-                console.log("setting fixed sidebar");
+                console.log("setting fixed sidebar, padding: " + padding);
             }
         }
         else {
@@ -98,6 +94,7 @@ function initFloatyThings() {
             }
         }
     }
+
     $(window).scroll(setScroll);
     $(window).resize(setScrollWithRecalc);
     setScrollWithRecalc();
@@ -163,8 +160,8 @@ function highlightLinks() {
             $("#docs-sidebar li a.reference[href='#" + ref + "']").parents("li").first().addClass('current');
         }
     }
-    $(window).scroll(setLink);
 
+    $(window).scroll(setLink);
     setLink();
 }
 

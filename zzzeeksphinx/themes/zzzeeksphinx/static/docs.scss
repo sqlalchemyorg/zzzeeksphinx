@@ -414,8 +414,12 @@ a.headerlink:hover {
 }
 
 #fixed-sidebar {
-    position: relative;
+    // note that init.js will change this dynamically
+    // to "fixed" or "absolute"
+    position: absolute;
     box-sizing: border-box;
+    top: 0;
+    bottom: 0;
 }
 
 #fixed-sidebar.withsidebar {
@@ -423,41 +427,20 @@ a.headerlink:hover {
     width: $fixed-sidebar-width;
 }
 
-#fixed-sidebar.preautomated {
-    position: fixed;
-    float: none;
-    top: 0;
-    bottom: 0;
-}
-
-#fixed-sidebar.preautomated #docs-sidebar {
-/*#fixed-sidebar.preautomated #docs-sidebar-popout {*/
+#fixed-sidebar #docs-sidebar {
     position: absolute;
 }
 
-#fixed-sidebar.preautomated #docs-sidebar:after {
+#fixed-sidebar #docs-sidebar:after {
     content: " ";
     display: block;
     height: 150px;
 }
 
-/* non .preautomated sidebar.  this is immediately replaced in init.js
-   by adding the .preautomated class.   in non-js mode, .preautomated
-   would not be present so the sidebar is an absolute positioned element
-   near the top of the content.   more recently, firefox has been observed
-   to mis-calculate the window when this non-js directive isn't present,
-   as it appears that when the js comes and changes things, firefox is
-   still holding onto the previous layout in some way when we look for
-   element dimensions, causing anchor links to not work properly.
-*/
 #docs-sidebar {
     position: absolute;
     top:178px;
     bottom: auto;
-}
-
-#docs-sidebar.preautomated {
-    position: fixed;
 }
 
 #docs-body {
