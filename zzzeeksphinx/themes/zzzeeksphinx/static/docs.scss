@@ -414,17 +414,19 @@ a.headerlink:hover {
 }
 
 #fixed-sidebar {
+    position: relative;
+    box-sizing: border-box;
+}
+
+
+#fixed-sidebar.withsidebar {
     // note that init.js will change this dynamically
     // to "fixed" or "absolute"
     position: absolute;
-    box-sizing: border-box;
-    top: 0;
-    bottom: 0;
-}
-
-#fixed-sidebar.withsidebar {
     float: left;
     width: $fixed-sidebar-width;
+    top: 0;
+    bottom: 0;
 }
 
 #fixed-sidebar #docs-sidebar {
