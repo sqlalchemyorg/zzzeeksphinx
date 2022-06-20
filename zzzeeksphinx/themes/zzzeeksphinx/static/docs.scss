@@ -440,9 +440,7 @@ a.headerlink:hover {
 }
 
 #docs-sidebar {
-    position: absolute;
-    top:178px;
-    bottom: auto;
+    position: fixed;
 }
 
 #docs-body {
