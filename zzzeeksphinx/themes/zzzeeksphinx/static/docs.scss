@@ -1168,7 +1168,7 @@ div#dialect-documentation {
 
     div.orm-header, section.orm-header {
         @include card-line-style();
-        border-left: 3em solid $orm-background-color;
+        border-left: 2.2em solid $orm-background-color;
 
         padding-left: 1em;
         padding-right: 1em;
@@ -1183,7 +1183,7 @@ div#dialect-documentation {
 
     div.core-header, section.core-header {
         @include card-line-style();
-        border-right: 3em solid $core-background-color;
+        border-right: 2.2em solid $core-background-color;
 
         padding-left: 1em;
         padding-right: 1em;
@@ -1197,12 +1197,12 @@ div#dialect-documentation {
     }
 
     div.orm-dependency, section.orm-dependency {
-        border-left: 1em solid $orm-background-color;
+        border-left: .6em solid $orm-background-color;
     }
 
     div.orm-addin, section.orm-addin {
         @include card-line-style();
-        border-left: 1em solid $orm-background-color;
+        border-left: .6em solid $orm-background-color;
 
         padding-left: 10px;
         margin: 10px 0 10px 0;
