@@ -1158,7 +1158,7 @@ div#dialect-documentation {
 }
 
 #docs-body {
-    div.orm-core {
+    div.orm-core, section.orm-core {
         h2,
         h3,
         h4 {
@@ -1166,7 +1166,7 @@ div#dialect-documentation {
         }
     }
 
-    div.orm-header {
+    div.orm-header, section.orm-header {
         @include card-line-style();
         border-left: 3em solid $orm-background-color;
 
@@ -1181,7 +1181,7 @@ div#dialect-documentation {
         }
     }
 
-    div.core-header {
+    div.core-header, section.core-header {
         @include card-line-style();
         border-right: 3em solid $core-background-color;
 
@@ -1196,11 +1196,11 @@ div#dialect-documentation {
         }
     }
 
-    div.orm-dependency {
+    div.orm-dependency, section.orm-dependency {
         border-left: 1em solid $orm-background-color;
     }
 
-    div.orm-addin {
+    div.orm-addin, section.orm-addin {
         @include card-line-style();
         border-left: 1em solid $orm-background-color;
 
