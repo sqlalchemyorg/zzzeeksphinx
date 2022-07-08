@@ -145,10 +145,115 @@ class PopupLatexFormatter(LatexFormatter):
         LatexFormatter.format(self, self._filter_tokens(tokensource), outfile)
 
 
+ARROW_ANNOTATION = (
+    (Token.Operator, "-"),
+    (Token.Operator, ">"),
+)
+COLON_ANNOTATION = (
+    (Token.Name,),
+    (Token.Punctuation, ":"),
+)
+
+
+class DetectAnnotationsFilter(Filter):
+    annotated = None
+
+    def filter(self, lexer, stream):
+        first, second = None, None
+
+        annotated = False
+        for i, (ttype, value) in enumerate(stream):
+            first = second
+            second = ttype, value
+
+            # print(f"{first} {second}")
+            yield ttype, value
+
+            if annotated:
+                continue
+
+            if (first, second) == ARROW_ANNOTATION:
+                annotated = True
+            elif first and (first[0:1], second) == COLON_ANNOTATION:
+                annotated = True
+
+        self.annotated = annotated
+
+
+class DetectAnnotationsFormatterMixin:
+    annotated = None
+
+    def __init__(self, app, link, **kw):
+        self.app = app
+        self.link = link
+        super().__init__(**kw)
+
+    def __call__(self, **kw):
+        """a hack to allow pygments bridge to 'instantiate' an already
+        stateful formatter"""
+
+        return self.__class__(app=self.app, link=self.link, **kw)
+
+    def _format_lines(self, tokensource):
+        detect_annotations = DetectAnnotationsFilter()
+
+        for ttype, value in super()._format_lines(
+            apply_filters(tokensource, [detect_annotations])
+        ):
+            yield ttype, value
+
+        self.annotated = detect_annotations.annotated
+
+    def _wrap_pre(self, inner):
+        for level, tag in super()._wrap_pre(inner):
+            yield level, tag
+            if level == 0 and self.annotated is not None and tag == "</pre>":
+                yield (
+                    1,
+                    f'<div class="code-annotations-key">'
+                    f'<a href="{self.link}">annotated example</a></div>'
+                    if self.annotated
+                    else f'<div class="code-annotations-key">'
+                    f'<a href="{self.link}">non-annotated example</a></div>',
+                )
+
+    def _wrap_code(self, inner):
+
+        for level, tag in super()._wrap_code(inner):
+            yield level, tag
+            if level == 0 and self.annotated is not None and tag == "</code>":
+                yield (
+                    1,
+                    f'<div class="code-annotations-key">'
+                    f'<a href="{self.link}">annotated example</a></div>'
+                    if self.annotated
+                    else f'<div class="code-annotations-key">'
+                    f'<a href="{self.link}">non-annotated example</a></div>',
+                )
+
+
+class AnnoPopupSQLFormatter(
+    DetectAnnotationsFormatterMixin, PopupSQLFormatter
+):
+    pass
+
+
+def setup_formatters(app, config):
+    if config.zzzeeksphinx_annotation_key:
+        PygmentsBridge.html_formatter = AnnoPopupSQLFormatter(
+            app, config.zzzeeksphinx_annotation_key
+        )
+    else:
+        PygmentsBridge.html_formatter = PopupSQLFormatter
+
+    PygmentsBridge.latex_formatter = PopupLatexFormatter
+
+
 def setup(app):
     # pass lexer class instead of lexer instance
     app.add_lexer("pycon+sql", PyConWithSQLLexer)
     app.add_lexer("python+sql", PythonWithSQLLexer)
 
-    PygmentsBridge.html_formatter = PopupSQLFormatter
-    PygmentsBridge.latex_formatter = PopupLatexFormatter
+    app.add_config_value("zzzeeksphinx_annotation_key", None, "env")
+
+    app.connect("config-inited", setup_formatters)

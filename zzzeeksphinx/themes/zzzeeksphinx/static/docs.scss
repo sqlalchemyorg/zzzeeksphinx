@@ -583,6 +583,13 @@ a.headerlink:hover {
         clear: both;
     }
 
+    /* python annotation key */
+    div.code-annotations-key {
+        position:absolute;
+        right:2em;
+        bottom:1em;
+    }
+
     /* the [SQL] links used to display SQL */
     .sql_link {
         font-weight: normal;
