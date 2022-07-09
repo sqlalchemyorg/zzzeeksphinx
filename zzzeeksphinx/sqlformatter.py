@@ -228,11 +228,9 @@ class DetectAnnotationsFormatterMixin:
             if level == 0 and self.annotated is not None and tag == "</code>":
                 yield (
                     1,
-                    f'<div class="code-annotations-key">'
-                    f'<a href="{self.link}">annotated example</a></div>'
+                    '<div class="code-annotations-key"></div>'
                     if self.annotated
-                    else f'<div class="code-annotations-key">'
-                    f'<a href="{self.link}">non-annotated example</a></div>',
+                    else '<div class="code-annotations-key"></div>',
                 )
 
 
