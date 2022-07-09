@@ -583,6 +583,23 @@ a.headerlink:hover {
         clear: both;
     }
 
+    /* python annotation key */
+    div.code-annotations-key, div.code-non-annotations-key {
+        position:absolute;
+        right:1.2em;
+        bottom:.05em;
+        width: 180px;
+        background-size: 180px;
+        height: 30px;
+    }
+    div.code-annotations-key {
+        background-image: url("annotated.png");
+    }
+    div.code-non-annotations-key {
+        background-image: url("nonannotated.png");
+    }
+
+
     /* the [SQL] links used to display SQL */
     .sql_link {
         font-weight: normal;
@@ -621,7 +638,7 @@ a.headerlink:hover {
 .show_sql {
     background-color: $popout-color;
     padding: 5px 10px;
-    margin: 10px -5px;
+    margin: 10px -5px 22px -5px;
     border: 1px dashed;
 }
 /* SQL popups are always on at the moment, disable the button */
