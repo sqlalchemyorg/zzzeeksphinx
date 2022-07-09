@@ -154,30 +154,36 @@ COLON_ANNOTATION = (
     (Token.Punctuation, ":"),
 )
 
+NEWLINE = (Token.Text, "\n")
+
 
 class DetectAnnotationsFilter(Filter):
-    annotated = None
+    annotated = False
 
     def filter(self, lexer, stream):
         first, second = None, None
+        found_colon = False
 
-        annotated = False
-        for i, (ttype, value) in enumerate(stream):
+        for ttype, value in stream:
             first = second
             second = ttype, value
 
             # print(f"{first} {second}")
             yield ttype, value
 
-            if annotated:
+            if self.annotated:
                 continue
 
             if (first, second) == ARROW_ANNOTATION:
-                annotated = True
+                self.annotated = True
+            elif found_colon:
+                if (ttype, value) == NEWLINE:
+                    found_colon = False
+                elif ttype == Token.Name:
+                    found_colon = False
+                    self.annotated = True
             elif first and (first[0:1], second) == COLON_ANNOTATION:
-                annotated = True
-
-        self.annotated = annotated
+                found_colon = True
 
 
 class DetectAnnotationsFormatterMixin:
@@ -210,11 +216,9 @@ class DetectAnnotationsFormatterMixin:
             if level == 0 and self.annotated is not None and tag == "</pre>":
                 yield (
                     1,
-                    f'<div class="code-annotations-key">'
-                    f'<a href="{self.link}">annotated example</a></div>'
+                    '<div class="code-annotations-key"></div>'
                     if self.annotated
-                    else f'<div class="code-annotations-key">'
-                    f'<a href="{self.link}">non-annotated example</a></div>',
+                    else '<div class="code-non-annotations-key"></div>',
                 )
 
     def _wrap_code(self, inner):
