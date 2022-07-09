@@ -583,6 +583,12 @@ a.headerlink:hover {
         clear: both;
     }
 
+    @media only screen and (max-width: ($narrow-max-screen-width + 100)) {
+        pre {
+            padding: 10px 10px 30px 10px;
+        }
+    }
+
     /* python annotation key */
     div.code-annotations-key, div.code-non-annotations-key {
         position:absolute;
