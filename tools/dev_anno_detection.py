@@ -39,6 +39,12 @@ COLON_ANNOTATION = (
     (Token.Punctuation, ":"),
 )
 
+# names like "id" etc
+COLON_ANNOTATION_2 = (
+    (Token.Name.Builtin,),
+    (Token.Punctuation, ":"),
+)
+
 NEWLINE = (Token.Text, "\n")
 
 
@@ -67,7 +73,10 @@ class DetectAnnotationsFilter(Filter):
                 elif ttype == Token.Name:
                     found_colon = False
                     self.annotated = True
-            elif first and (first[0:1], second) == COLON_ANNOTATION:
+            elif first and (
+                (first[0:1], second) == COLON_ANNOTATION
+                or (first[0:1], second) == COLON_ANNOTATION_2
+            ):
                 found_colon = True
 
 
@@ -162,42 +171,28 @@ class AnnoPopupSQLFormatter(
 
 code1 = """
 
->>> from sqlalchemy.orm import Session
 
->>> with Session(engine) as session:
-...
-...     spongebob = User(
-...         name="spongebob",
-...         fullname="Spongebob Squarepants",
-...         addresses=[Address(email_address="spongebob@sqlalchemy.org")],
-...     )
-...     sandy = User(
-...         name="sandy",
-...         fullname="Sandy Cheeks",
-...         addresses=[
-...             Address(email_address="sandy@sqlalchemy.org"),
-...             Address(email_address="sandy@squirrelpower.org"),
-...         ],
-...     )
-...     patrick = User(name="patrick", fullname="Patrick Star")
-...
-...     session.add_all([spongebob, sandy, patrick])
-...
-...     session.commit()
-BEGIN (implicit)
-INSERT INTO user_account (name, fullname) VALUES (?, ?)
-[...] ('spongebob', 'Spongebob Squarepants')
-INSERT INTO user_account (name, fullname) VALUES (?, ?)
-[...] ('sandy', 'Sandy Cheeks')
-INSERT INTO user_account (name, fullname) VALUES (?, ?)
-[...] ('patrick', 'Patrick Star')
-INSERT INTO address (email_address, user_id) VALUES (?, ?)
-[...] ('spongebob@sqlalchemy.org', 1)
-INSERT INTO address (email_address, user_id) VALUES (?, ?)
-[...] ('sandy@sqlalchemy.org', 2)
-INSERT INTO address (email_address, user_id) VALUES (?, ?)
-[...] ('sandy@squirrelpower.org', 2)
-COMMIT
+class Association(Base):
+    __tablename__ = "association"
+
+    left_id = mapped_column(ForeignKey("left.id"), primary_key=True)
+    right_id = mapped_column(ForeignKey("right.id"), primary_key=True)
+    extra_data = mapped_column(String(50))
+
+    child = relationship("Child", backref="parent_associations")
+    parent = relationship("Parent", backref="child_associations")
+
+
+class Parent(Base):
+    __tablename__ = "left"
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    children = relationship("Child", secondary="association")
+
+
+class Child(Base):
+    __tablename__ = "right"
+    id: Mapped[int] = mapped_column(primary_key=True)
 
 """
 
