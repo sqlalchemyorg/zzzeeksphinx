@@ -153,11 +153,6 @@ COLON_ANNOTATION = (
     (Token.Name,),
     (Token.Punctuation, ":"),
 )
-# names like "id" etc
-COLON_ANNOTATION_2 = (
-    (Token.Name.Builtin,),
-    (Token.Punctuation, ":"),
-)
 
 NEWLINE = (Token.Text, "\n")
 
@@ -170,6 +165,9 @@ class DetectAnnotationsFilter(Filter):
         found_colon = False
 
         for ttype, value in stream:
+            if ttype is Token.Name.Builtin:
+                ttype = Token.Name
+
             first = second
             second = ttype, value
 
@@ -187,10 +185,7 @@ class DetectAnnotationsFilter(Filter):
                 elif ttype == Token.Name:
                     found_colon = False
                     self.annotated = True
-            elif first and (
-                (first[0:1], second) == COLON_ANNOTATION
-                or (first[0:1], second) == COLON_ANNOTATION_2
-            ):
+            elif first and ((first[0:1], second) == COLON_ANNOTATION):
                 found_colon = True
 
 
