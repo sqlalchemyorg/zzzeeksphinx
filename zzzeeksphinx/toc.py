@@ -1,10 +1,14 @@
 #!coding: utf-8
+import re
 from typing import cast
 
 from docutils import nodes as docutils_nodes
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.environment.adapters.toctree import TocTree
+
+
+UNDERSCORE_RE = re.compile(r"_\w+\.(.+)$")
 
 
 class TOCMixin:
@@ -254,6 +258,7 @@ class TOCMixin:
         )["fragment"]
 
     def _link_node(self, refuri, text_nodes):
+        text_nodes = list(self._sub_out_underscores(text_nodes))
         link = docutils_nodes.reference("", "", text_nodes[0], refuri=refuri)
         link.extend(text_nodes[1:])
         cp = docutils_nodes.inline(classes=["link-container"])
@@ -263,7 +268,7 @@ class TOCMixin:
     def _strong_node(self, refuri, text_nodes):
         cp = docutils_nodes.inline(classes=["link-container"])
         n1 = docutils_nodes.strong()
-        n1.extend(text_nodes)
+        n1.extend(self._sub_out_underscores(text_nodes))
         cp.append(n1)
         paramlink = docutils_nodes.reference(
             "",
@@ -278,3 +283,12 @@ class TOCMixin:
 
         cp.append(paramlink)
         return cp
+
+    def _sub_out_underscores(self, nodes):
+        for node in nodes:
+            for lt in node.traverse(docutils_nodes.Text):
+                m = UNDERSCORE_RE.match(str(lt))
+                if m:
+                    lt.parent.replace(lt, docutils_nodes.Text(m.group(1)))
+
+            yield node
