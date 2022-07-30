@@ -11,7 +11,84 @@ function initSQLPopups() {
     });
 }
 
-_debug = true;
+function collapseDocStrings() {
+    var collapse_classes = false;
+    var collapse_functions_etc = false;
+
+    var all_not_classes =
+        "dl.py.method," +
+        "dl.py.classmethod," +
+        "dl.py.attribute";
+
+    if (collapse_functions_etc) {
+        all_not_classes += ", "
+            "dl.py.function," +
+            "dl.py.exception," +
+            "dl.py.data";
+    }
+
+    if (collapse_classes) {
+        $("dl.py.class > dd").children(":not(dl)").hide();
+    }
+
+    $(all_not_classes).children("dd").children().hide();
+
+
+    $("dl.py > dd > p:first-of-type").show()
+
+    var moretext = "more..."
+    var lesstext = "less"
+    var autodoc_collapse = "<a class='autodoc-collapse'>" + moretext + "</a>"
+
+    if (collapse_classes) {
+        $("dl.py.class").
+        children("dt").
+        append(autodoc_collapse);
+
+    }
+    $(all_not_classes).children("dt").append(autodoc_collapse);
+
+    function showmore(target) {
+        $(target).
+            parent("dt").
+            next("dd").
+            children(":not(p:first-of-type , .autodoc-collapse , dl)").
+            toggle();
+        var text = $(target).text();
+        var grew = text == moretext;
+        $(target).text(grew ? lesstext : moretext);
+        return grew;
+    }
+
+    $('a.autodoc-collapse').
+        prev("a.headerlink").
+        click(
+            function () { showmore($(this).next(".autodoc-collapse")) }
+        );
+    $('a.autodoc-collapse').click(function () {
+        if (showmore(this)) {
+            var hash = $(this).parent("dt").attr("id");
+            var aTag = $("*[id='" + hash + "']");
+            if (aTag) {
+                $(window).scrollTop(aTag.offset().top);
+            }
+        }
+
+    });
+
+    if (location.hash) {
+        var hash = location.hash.substring(1,);
+        var aTag = $("*[id='" + hash + "']");
+        if (aTag) {
+            $(window).scrollTop(aTag.offset().top);
+        }
+    }
+
+}
+
+
+
+_debug = false;
 
 function initFloatyThings() {
     /* switches the left navbar between css fixed and css flowing */
@@ -167,7 +244,7 @@ function highlightLinks() {
 
 
 $(document).ready(function () {
-    /*initSQLPopups();*/
+    collapseDocStrings();
     initFloatyThings();
     highlightLinks();
 });
