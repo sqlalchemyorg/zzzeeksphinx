@@ -1127,6 +1127,9 @@ div.left-right-container {
     }
 }
 @media only screen and (max-width: $narrow-max-screen-width) {
+
+    #mobile-element { display: none; }
+
     div#docs-header {
         padding-bottom: 1rem;
 

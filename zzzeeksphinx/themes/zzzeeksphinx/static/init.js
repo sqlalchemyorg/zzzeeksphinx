@@ -66,7 +66,12 @@ function collapseDocStrings() {
             function () { showmore($(this).next(".autodoc-collapse")) }
         );
     $('a.autodoc-collapse').click(function () {
-        if (showmore(this)) {
+        // empty div in layout.mako set to None in css for
+        // narrow media.  the jquery scrolling doesn't seem to work
+        // in android so just shut it off
+        var is_mobile = $("#mobile-element").css("display") == "none";
+
+        if (showmore(this) && ! is_mobile) {
             var hash = $(this).parent("dt").attr("id");
             var aTag = $("*[id='" + hash + "']");
             if (aTag) {

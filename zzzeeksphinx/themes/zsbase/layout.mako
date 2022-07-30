@@ -309,6 +309,8 @@ withsidebar = bool(toc) and (
 
 </div>
 
+<div id="mobile-element"></div>
+
 <%block name="lower_scripts">
 
     <script type="text/javascript">
