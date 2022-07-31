@@ -221,8 +221,8 @@ def write_autosummaries(app, doctree):
             except IndexError:
                 text = nodes.Text("", "")
 
-            if "Column" in str(name_node):
-                breakpoint()
+            #            if "Column" in str(name_node):
+            #                breakpoint()
 
             entry = nodes.entry("", text)
 
@@ -261,20 +261,42 @@ def write_autosummaries(app, doctree):
                     elif objtype == "attribute":
                         attribute_nodes.append(attr_ref)
 
-                methods = nodes.paragraph(
-                    "",
-                    "",
-                )
-
                 if method_nodes:
-                    methods.append(
-                        nodes.strong("", nodes.Text("Methods:")),
-                    )
-                    for ref in method_nodes:
-                        methods.append(ref)
-                        methods.append(nodes.Text(", "))
+                    method_table = nodes.table("", classes=["longtable"])
+                    method_group = nodes.tgroup("", cols=2)
 
-                    entry.append(methods)
+                    method_table.append(method_group)
+                    method_group.append(nodes.colspec("", colwidth=10))
+                    method_group.append(nodes.colspec("", colwidth=90))
+
+                    method_header = nodes.thead("")
+                    method_header.append(
+                        nodes.row(
+                            "",
+                            nodes.entry(
+                                "", nodes.Text("Object Name", "Object Name")
+                            ),
+                            nodes.entry(
+                                "", nodes.Text("Description", "Description")
+                            ),
+                        )
+                    )
+                    method_group.append(method_header)
+
+                    method_body = nodes.tbody("")
+                    method_group.append(method_body)
+
+                    for ref in method_nodes:
+                        method_body.append(
+                            nodes.row(
+                                "",
+                                nodes.entry("", nodes.Text("todo")),
+                                # nodes.entry("", ref),
+                                nodes.entry("", nodes.Text("todo")),
+                            )
+                        )
+
+                    entry.append(method_table)
 
                 # TODO: attributes
 
