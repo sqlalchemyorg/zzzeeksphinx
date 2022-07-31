@@ -221,7 +221,43 @@ def write_autosummaries(app, doctree):
             except IndexError:
                 text = nodes.Text("", "")
 
-            row.append(nodes.entry("", text))
+            #            if "Column" in str(name_node):
+            #               breakpoint()
+
+            if ad_node.attributes.get("objtype") == "class":
+                methods = []
+                attributes = []
+
+                for desc in ad_node.traverse(addnodes.desc):
+                    objtype = desc.attributes.get("objtype")
+
+                    if objtype == "method":
+                        name = str(
+                            desc.traverse(addnodes.desc_name)[0].traverse(
+                                nodes.Text
+                            )[0]
+                        )
+                        methods.append(name)
+                    elif objtype == "attribute":
+                        name = str(
+                            desc.traverse(addnodes.desc_name)[0].traverse(
+                                nodes.Text
+                            )[0]
+                        )
+                        attributes.append(name)
+
+                methods = nodes.paragraph(
+                    "",
+                    "",
+                    nodes.Text(f"Attributes: {', '.join(attributes)}"),
+                    nodes.Text(f"Methods: {', '.join(methods)}"),
+                )
+                entry = nodes.entry("", text, methods)
+            else:
+                entry = nodes.entry("", text)
+
+            row.append(entry)
+
             body.append(row)
 
         if where > 0:
