@@ -680,6 +680,11 @@ section > table.docutils {
             overflow: visible;
             padding: 8px 16px;
         }
+
+        td.autosummary-name {
+            vertical-align: top;
+        }
+
     }
 
     tr.row-even {
@@ -698,12 +703,14 @@ th.field-name {
     margin: 0px;
 }
 
+
 td.field-body {
     padding-top: 1em;
     ul.first {
         padding-left: 17px;
         padding-top: 1em;
     }
+
 }
 
 div.faq {

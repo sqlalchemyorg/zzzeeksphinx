@@ -211,7 +211,9 @@ def write_autosummaries(app, doctree):
                 nodes.Text(param_str, param_str),
             )
 
-            row.append(nodes.entry("", p, classes=["nowrap"]))
+            row.append(
+                nodes.entry("", p, classes=["nowrap", "autosummary-name"])
+            )
             try:
                 para = ad_node[1][0]
                 if isinstance(para, nodes.paragraph):
@@ -221,14 +223,10 @@ def write_autosummaries(app, doctree):
             except IndexError:
                 text = nodes.Text("", "")
 
-            #            if "Column" in str(name_node):
-            #                breakpoint()
-
             entry = nodes.entry("", text)
 
             if ad_node.attributes.get("objtype") == "class":
-                method_nodes = []
-                attribute_nodes = []
+                member_nodes = []
 
                 for attr_desc in ad_node.traverse(addnodes.desc):
                     objtype = attr_desc.attributes.get("objtype")
@@ -256,49 +254,18 @@ def write_autosummaries(app, doctree):
                         classes=["reference", "internal"],
                     )
 
-                    if objtype == "method":
-                        method_nodes.append(attr_ref)
-                    elif objtype == "attribute":
-                        attribute_nodes.append(attr_ref)
+                    member_nodes.append(attr_ref)
 
-                if method_nodes:
-                    method_table = nodes.table("", classes=["longtable"])
-                    method_group = nodes.tgroup("", cols=2)
-
-                    method_table.append(method_group)
-                    method_group.append(nodes.colspec("", colwidth=10))
-                    method_group.append(nodes.colspec("", colwidth=90))
-
-                    method_header = nodes.thead("")
-                    method_header.append(
-                        nodes.row(
-                            "",
-                            nodes.entry(
-                                "", nodes.Text("Object Name", "Object Name")
-                            ),
-                            nodes.entry(
-                                "", nodes.Text("Description", "Description")
-                            ),
-                        )
+                if member_nodes:
+                    method_list = nodes.paragraph(
+                        "", "", nodes.strong("", nodes.Text("Members:"))
                     )
-                    method_group.append(method_header)
 
-                    method_body = nodes.tbody("")
-                    method_group.append(method_body)
+                    for ref in member_nodes:
+                        method_list.append(ref)
+                        method_list.append(nodes.Text(", "))
 
-                    for ref in method_nodes:
-                        method_body.append(
-                            nodes.row(
-                                "",
-                                nodes.entry("", nodes.Text("todo")),
-                                # nodes.entry("", ref),
-                                nodes.entry("", nodes.Text("todo")),
-                            )
-                        )
-
-                    entry.append(method_table)
-
-                # TODO: attributes
+                    entry.append(method_list)
 
             row.append(entry)
 
