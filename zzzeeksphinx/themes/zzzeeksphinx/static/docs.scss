@@ -54,7 +54,8 @@ $divider-line-style: 1px solid #ccc;
 $box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
-$box-padding: 1rem 1em 2px 1rem;
+//$box-padding: 1rem 1em 2px 1rem;
+$box-padding: 0 1em 0 1rem;
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
 $box-background-color: #f8f9f0;
@@ -887,7 +888,7 @@ div.deepalchemy {
     font-weight: bold;
 }
 
-div.class-bases {
+div.class-bases, div.class-members {
     border: $border-style;
     box-shadow: $box-shadow-style;
     padding: 5px 5px;
@@ -896,7 +897,12 @@ div.class-bases {
 
     font-size: 0.9em;
     margin: $box-margin;
+}
+div.class-bases {
     background-color: #eefbfb;
+}
+div.class-members {
+    background-color: #ebedfa;
 }
 
 div.inherited-member {

@@ -223,14 +223,12 @@ def write_autosummaries(app, doctree):
             except IndexError:
                 text = nodes.Text("", "")
 
-            entry = nodes.entry("", text)
-
             if ad_node.attributes.get("objtype") == "class":
                 member_nodes = []
 
                 for attr_desc in ad_node.traverse(addnodes.desc):
                     objtype = attr_desc.attributes.get("objtype")
-                    if objtype not in ("method", "attribute"):
+                    if objtype not in ("classmethod", "method", "attribute"):
                         continue
 
                     attr_sig = attr_desc.children[0]
@@ -246,6 +244,9 @@ def write_autosummaries(app, doctree):
                     attr_name_node = attr_desc.traverse(addnodes.desc_name)[0]
                     attr_name_node = attr_name_node.deepcopy()
 
+                    if objtype in ("classmethod", "method"):
+                        attr_name_node.append(nodes.Text("()"))
+
                     attr_ref = nodes.reference(
                         "",
                         "",
@@ -257,15 +258,30 @@ def write_autosummaries(app, doctree):
                     member_nodes.append(attr_ref)
 
                 if member_nodes:
-                    method_list = nodes.paragraph(
-                        "", "", nodes.strong("", nodes.Text("Members:"))
+                    method_list = nodes.paragraph("", "", member_nodes[0])
+
+                    for ref in member_nodes[1:]:
+                        method_list.append(nodes.Text(", "))
+                        method_list.append(ref)
+
+                    method_box = nodes.container(
+                        "",
+                        nodes.paragraph(
+                            "", "", nodes.strong("", nodes.Text("Members"))
+                        ),
+                        method_list,
+                        classes=["class-members"],
                     )
 
-                    for ref in member_nodes:
-                        method_list.append(ref)
-                        method_list.append(nodes.Text(", "))
+                    content = ad_node.traverse(addnodes.desc_content)
+                    if content:
+                        content = content[0]
+                        for i, n in enumerate(content.children):
+                            if isinstance(n, (addnodes.index, addnodes.desc)):
+                                content.insert(i - 1, method_box)
+                                break
 
-                    entry.append(method_list)
+            entry = nodes.entry("", text)
 
             row.append(entry)
 
