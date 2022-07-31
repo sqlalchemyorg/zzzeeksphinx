@@ -221,40 +221,62 @@ def write_autosummaries(app, doctree):
             except IndexError:
                 text = nodes.Text("", "")
 
-            #            if "Column" in str(name_node):
-            #               breakpoint()
+            if "Column" in str(name_node):
+                breakpoint()
+
+            entry = nodes.entry("", text)
 
             if ad_node.attributes.get("objtype") == "class":
-                methods = []
-                attributes = []
+                method_nodes = []
+                attribute_nodes = []
 
-                for desc in ad_node.traverse(addnodes.desc):
-                    objtype = desc.attributes.get("objtype")
+                for attr_desc in ad_node.traverse(addnodes.desc):
+                    objtype = attr_desc.attributes.get("objtype")
+                    if objtype not in ("method", "attribute"):
+                        continue
+
+                    attr_sig = attr_desc.children[0]
+
+                    attr_ids = attr_sig.attributes.get("ids", [None])
+                    if not attr_ids:
+                        continue
+
+                    attr_ref_id = attr_ids[0]
+                    if not attr_ref_id:
+                        continue
+
+                    attr_name_node = attr_desc.traverse(addnodes.desc_name)[0]
+                    attr_name_node = attr_name_node.deepcopy()
+
+                    attr_ref = nodes.reference(
+                        "",
+                        "",
+                        attr_name_node,
+                        refid=attr_ref_id,
+                        classes=["reference", "internal"],
+                    )
 
                     if objtype == "method":
-                        name = str(
-                            desc.traverse(addnodes.desc_name)[0].traverse(
-                                nodes.Text
-                            )[0]
-                        )
-                        methods.append(name)
+                        method_nodes.append(attr_ref)
                     elif objtype == "attribute":
-                        name = str(
-                            desc.traverse(addnodes.desc_name)[0].traverse(
-                                nodes.Text
-                            )[0]
-                        )
-                        attributes.append(name)
+                        attribute_nodes.append(attr_ref)
 
                 methods = nodes.paragraph(
                     "",
                     "",
-                    nodes.Text(f"Attributes: {', '.join(attributes)}"),
-                    nodes.Text(f"Methods: {', '.join(methods)}"),
                 )
-                entry = nodes.entry("", text, methods)
-            else:
-                entry = nodes.entry("", text)
+
+                if method_nodes:
+                    methods.append(
+                        nodes.strong("", nodes.Text("Methods:")),
+                    )
+                    for ref in method_nodes:
+                        methods.append(ref)
+                        methods.append(nodes.Text(", "))
+
+                    entry.append(methods)
+
+                # TODO: attributes
 
             row.append(entry)
 
