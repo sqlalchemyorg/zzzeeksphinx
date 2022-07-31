@@ -22,10 +22,24 @@ function collapseDocStrings() {
 
     if (collapse_functions_etc) {
         all_not_classes += ", "
-            "dl.py.function," +
+        "dl.py.function," +
             "dl.py.exception," +
             "dl.py.data";
     }
+
+
+    var hash = null;
+    var maintain_symbol = "";
+    if (location.hash) {
+        // omit # symbol at position 0
+        hash = location.hash.substring(1,);
+
+        params_token = hash.indexOf(".params.")
+        if (params_token != -1) {
+            maintain_symbol = hash.substring(0, params_token)
+        }
+    }
+
 
     if (collapse_classes) {
         $("dl.py.class > dd").children(":not(dl)").hide();
@@ -42,8 +56,8 @@ function collapseDocStrings() {
 
     if (collapse_classes) {
         $("dl.py.class").
-        children("dt").
-        append(autodoc_collapse);
+            children("dt").
+            append(autodoc_collapse);
 
     }
     $(all_not_classes).children("dt").append(autodoc_collapse);
@@ -52,13 +66,18 @@ function collapseDocStrings() {
         $(target).
             parent("dt").
             next("dd").
-            children(":not(p:first-of-type , .autodoc-collapse , dl)").
+            children(":not(p:first-of-type , .autodoc-collapse , dl.py)").
             toggle();
         var text = $(target).text();
         var grew = text == moretext;
         $(target).text(grew ? lesstext : moretext);
         return grew;
     }
+
+    if (maintain_symbol) {
+        showmore($("dt[id='" + maintain_symbol + "'], dt[id='" + maintain_symbol + ".__init__']").children(".autodoc-collapse"))
+    }
+
 
     $('a.autodoc-collapse').
         prev("a.headerlink").
@@ -71,7 +90,7 @@ function collapseDocStrings() {
         // in android so just shut it off
         var is_mobile = $("#mobile-element").css("display") == "none";
 
-        if (showmore(this) && ! is_mobile) {
+        if (showmore(this) && !is_mobile) {
             var hash = $(this).parent("dt").attr("id");
             var aTag = $("*[id='" + hash + "']");
             if (aTag) {
@@ -81,8 +100,8 @@ function collapseDocStrings() {
 
     });
 
-    if (location.hash) {
-        var hash = location.hash.substring(1,);
+    // navigate to current hash as we have resized things
+    if (hash) {
         var aTag = $("*[id='" + hash + "']");
         if (aTag) {
             $(window).scrollTop(aTag.offset().top);
