@@ -606,23 +606,8 @@ a.headerlink:hover {
     }
 
 
-    .autodoc-collapse {
-        /*float: right;*/
-        position: absolute;
-        right:1em;
-        top: auto;
-        font-weight: normal;
-        font-family: helvetica, arial, sans-serif;
-        font-size: 0.9em;
-        color: #990000;
-        border: 1px solid;
-        line-height: 1.2em;
-        width: 55px;
-        text-align: center;
-    }
-
     /* the [SQL] links used to display SQL */
-    .sql_link  {
+    .sql_link {
         font-weight: normal;
         font-family: helvetica, arial, sans-serif;
         font-size: 0.9em;
@@ -636,12 +621,12 @@ a.headerlink:hover {
     }
 
     a.sql_link,
-    .sql_link, .autodoc-collapse {
+    .sql_link {
         text-decoration: none;
         padding: 1px 2px;
     }
 
-    a.sql_link:hover, a.autodoc-collapse:hover {
+    a.sql_link:hover {
         text-decoration: none;
         color: #fff;
         border: 1px solid #900;
@@ -933,30 +918,8 @@ dl.exception > dt {
     border: $border-style;
     box-shadow: $box-shadow-style;
     background-color: $code-sig-background-color;
-    margin: 25px 25px 10px 10px;
+    margin: 25px -10px 10px 10px;
     padding: 8px 10px;
-
-    position: relative;
-
-
-}
-
-dl.attribute > dt,
-dl.classmethod > dt,
-dl.method > dt
-{
-    /* make room for the 'more' link */
-    padding: 8px 40px 8px 10px;
-}
-
-
-dl.function,
-dl.attribute,
-dl.classmethod,
-dl.method,
-dl.class,
-dl.exception {
-
 }
 
 /* parameters / returns lists for functions and methods */
@@ -1137,9 +1100,6 @@ div.left-right-container {
     }
 }
 @media only screen and (max-width: $narrow-max-screen-width) {
-
-    #mobile-element { display: none; }
-
     div#docs-header {
         padding-bottom: 1rem;
 
