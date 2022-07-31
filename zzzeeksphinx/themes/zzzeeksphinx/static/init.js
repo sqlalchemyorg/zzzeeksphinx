@@ -249,7 +249,7 @@ function highlightLinks() {
 
 
 $(document).ready(function () {
-    collapseDocStrings();
+    //collapseDocStrings();
     initFloatyThings();
     highlightLinks();
 });
