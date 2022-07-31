@@ -607,8 +607,10 @@ a.headerlink:hover {
 
 
     .autodoc-collapse {
-        float: right;
-
+        /*float: right;*/
+        position: absolute;
+        right:1em;
+        top: auto;
         font-weight: normal;
         font-family: helvetica, arial, sans-serif;
         font-size: 0.9em;
@@ -937,6 +939,14 @@ dl.exception > dt {
     position: relative;
 
 
+}
+
+dl.attribute > dt,
+dl.classmethod > dt,
+dl.method > dt
+{
+    /* make room for the 'more' link */
+    padding: 8px 40px 8px 10px;
 }
 
 
