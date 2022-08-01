@@ -54,8 +54,14 @@ $divider-line-style: 1px solid #ccc;
 $box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
-//$box-padding: 1rem 1em 2px 1rem;
-$box-padding: 0 1em 0 1rem;
+
+// this is optimized for the site.  with the vanilla docs, the
+// vertical padding is too much.   not sure how to fix
+$box-padding: 1rem 1em 2px 1rem;
+
+// looks better with vanilla docs but not w/ the site
+// $box-padding: 0 1em 0 1rem;
+
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
 $box-background-color: #f8f9f0;
