@@ -158,7 +158,7 @@ NEWLINE = (Token.Text, "\n")
 
 
 class DetectAnnotationsFilter(Filter):
-    annotated = False
+    annotated = None
 
     def filter(self, lexer, stream):
         first, second = None, None
@@ -176,6 +176,8 @@ class DetectAnnotationsFilter(Filter):
 
             if self.annotated:
                 continue
+            elif self.annotated is None and ttype is not Token.Text:
+                self.annotated = False
 
             if (first, second) == ARROW_ANNOTATION:
                 self.annotated = True
