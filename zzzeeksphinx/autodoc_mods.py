@@ -9,6 +9,15 @@ LOG = logging.getLogger(__name__)
 
 
 def autodoc_skip_member(app, what, name, obj, skip, options):
+    # sphinx is putting blank __init__ methods, not sure why.
+    # even if I turn off all the extensions here
+    if (
+        what == "class"
+        and name == "__init__"
+        and (not inspect.isfunction(obj) or not obj.__doc__)
+    ):
+        return True
+
     if (
         what == "class"
         and skip
@@ -423,7 +432,7 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                     if attrname in supercls.__dict__:
                         found = True
                         break
-                if found and supercls is not cls:
+                if found and supercls is not cls and supercls is not object:
                     adjusted_mod = _adjust_rendered_mod_name(
                         app.env.config, supercls.__module__, supercls.__name__
                     )
