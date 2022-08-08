@@ -250,7 +250,9 @@ def write_autosummaries(app, doctree):
                     if not attr_ref_id:
                         continue
 
-                    attr_name_node = attr_desc.traverse(addnodes.desc_name)[0]
+                    attr_name_node = list(
+                        attr_desc.traverse(addnodes.desc_name)
+                    )[0]
                     attr_name_node = attr_name_node.deepcopy()
 
                     if objtype in ("classmethod", "method"):
@@ -284,7 +286,7 @@ def write_autosummaries(app, doctree):
 
                     content = ad_node.traverse(addnodes.desc_content)
                     if content:
-                        content = content[0]
+                        content = list(content)[0]
                         for i, n in enumerate(content.children):
                             if isinstance(n, (addnodes.index, addnodes.desc)):
                                 content.insert(i - 1, method_box)
