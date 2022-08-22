@@ -1,6 +1,8 @@
 ## coding: utf-8
 
 <%!
+    import datetime
+
     local_script_files = []
 
     default_css_files = [
@@ -304,6 +306,9 @@ withsidebar = bool(toc) and (
     % if show_sphinx:
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
+
+    Documentation last generated: ${datetime.datetime.now().strftime("%c")}
+
     </div>
 </div>
 
