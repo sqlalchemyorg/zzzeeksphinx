@@ -45,6 +45,7 @@ $sidebar-header-color: #222222;
 $notebox-background-color: #eeffef;
 $code-sig-background-color: #efefef;
 $deprecated-background-color: #fcf0f6;
+$legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
@@ -805,6 +806,7 @@ div {
     }
 }
 
+
 div.sidebar {
     background-color: #ffffee;
     float: right;
@@ -860,6 +862,10 @@ div.deepalchemy {
     clear: right;
     min-height: 180px;
     padding-left: 140px;
+}
+
+div.legacy {
+    background-color: $legacy-background-color;
 }
 
 @media only screen and (max-width: $narrow-max-screen-width) {

@@ -22,6 +22,16 @@ class DeepAlchemy(BaseAdmonition):
     node_class = deepalchemy
 
 
+class legacy(Admonition, Element):
+    pass
+
+
+class Legacy(BaseAdmonition):
+
+    required_arguments = 0
+    node_class = legacy
+
+
 class FooterTopic(Topic):
 
     node_class = footer_topic
@@ -39,11 +49,17 @@ def visit_deepalchemy(self, node):
     self.visit_admonition(node, "deepalchemy")
 
 
-def depart_deepalchemy(self, node):
+def visit_legacy(self, node):
+    self.visit_admonition(node, "legacy")
+
+
+def depart_admonition(self, node):
     self.depart_admonition(node)
 
 
-deepalchemy_visit = (visit_deepalchemy, depart_deepalchemy)
+deepalchemy_visit = (visit_deepalchemy, depart_admonition)
+
+legacy_visit = (visit_legacy, depart_admonition)
 
 footer_topic_visit = (visit_footer_topic, depart_footer_topic)
 
@@ -58,29 +74,28 @@ def move_footer(app, doctree):
             f1.parent.remove(f1)
 
 
+visit_keys = [
+    "html",
+    "html5",
+    "latex",
+    "text",
+    "xml",
+    "texinfo",
+    "manpage",
+]
+
+
 def setup(app):
-
-    admonitionlabels["deepalchemy"] = _("Deep Alchemy")
-
-    app.add_directive("deepalchemy", DeepAlchemy)
 
     app.add_directive("footer_topic", FooterTopic)
 
-    app.add_node(
-        deepalchemy,
-        **{
-            key: deepalchemy_visit
-            for key in [
-                "html",
-                "html5",
-                "latex",
-                "text",
-                "xml",
-                "texinfo",
-                "manpage",
-            ]
-        }
-    )
+    admonitionlabels["deepalchemy"] = _("Deep Alchemy")
+    app.add_directive("deepalchemy", DeepAlchemy)
+    app.add_node(deepalchemy, **{key: deepalchemy_visit for key in visit_keys})
+
+    admonitionlabels["legacy"] = _("Legacy Feature")
+    app.add_directive("legacy", Legacy)
+    app.add_node(legacy, **{key: legacy_visit for key in visit_keys})
 
     app.add_node(
         footer_topic, **{key: footer_topic_visit for key in ["html", "html5"]}
