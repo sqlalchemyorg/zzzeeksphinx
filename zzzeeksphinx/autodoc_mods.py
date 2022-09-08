@@ -220,9 +220,7 @@ def write_autosummaries(app, doctree):
                 nodes.Text(param_str, param_str),
             )
 
-            row.append(
-                nodes.entry("", p, classes=["nowrap", "autosummary-name"])
-            )
+            row.append(nodes.entry("", p, classes=["autosummary-name"]))
             try:
                 para = ad_node[1][0]
                 if isinstance(para, nodes.paragraph):
