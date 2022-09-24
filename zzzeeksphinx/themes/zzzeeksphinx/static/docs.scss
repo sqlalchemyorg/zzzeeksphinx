@@ -369,7 +369,8 @@ a.headerlink:hover {
     }
 
     h3,
-    h4 {
+    h4,
+    h5 {
         background-color: $sidebar-header-background-color;
         color: $sidebar-header-color;
         font-family: $sidebar-font-family;
@@ -536,6 +537,7 @@ a.headerlink:hover {
 #docs-body h2,
 #docs-body h3,
 #docs-body h4,
+#docs-body h5,
 #docs-body .h2 {
     font-family: $header-font-family;
     font-weight: bold;
@@ -569,6 +571,10 @@ a.headerlink:hover {
 
     h4 {
         font-size: 1.2rem;
+    }
+
+    h5 {
+        font-size: 1.05rem;
     }
 }
 
@@ -1209,7 +1215,8 @@ div#dialect-documentation {
     div.orm-core, section.orm-core {
         h2,
         h3,
-        h4 {
+        h4,
+        h5 {
             border: none;
         }
     }
