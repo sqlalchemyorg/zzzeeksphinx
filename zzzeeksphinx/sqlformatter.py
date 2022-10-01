@@ -14,6 +14,7 @@ from pygments.lexers import PythonConsoleLexer
 from pygments.lexers import PythonLexer
 from pygments.lexers import SqlLexer
 from pygments.token import Token
+from sphinx import highlighting
 from sphinx.highlighting import PygmentsBridge
 
 
@@ -33,6 +34,42 @@ class StripDocTestFilter(Filter):
             ) and re.match(r"#\s*doctest:", value):
                 continue
             yield ttype, value
+
+
+class DetectAnnotationsFilter(Filter):
+    def filter(self, lexer, stream):
+        first, second = None, None
+        found_colon = False
+
+        annotated = None
+
+        for ttype, value in stream:
+
+            if ttype is Token.Name.Builtin:
+                ttype = Token.Name
+
+            first = second
+            second = ttype, value
+
+            yield ttype, value
+
+            if annotated:
+                continue
+            elif annotated is None and ttype is not Token.Text:
+                annotated = False
+
+            if (first, second) == ARROW_ANNOTATION:
+                annotated = True
+            elif found_colon:
+                if (ttype, value) == NEWLINE:
+                    found_colon = False
+                elif ttype == Token.Name:
+                    found_colon = False
+                    annotated = True
+            elif first and ((first[0:1], second) == COLON_ANNOTATION):
+                found_colon = True
+
+        yield Token.Other, f"pep484 annotations detected: {annotated}"
 
 
 class PyConWithSQLLexer(RegexLexer):
@@ -157,67 +194,32 @@ COLON_ANNOTATION = (
 NEWLINE = (Token.Text, "\n")
 
 
-class DetectAnnotationsFilter(Filter):
-    annotated = None
-
-    def filter(self, lexer, stream):
-        first, second = None, None
-        found_colon = False
-
-        for ttype, value in stream:
-            if ttype is Token.Name.Builtin:
-                ttype = Token.Name
-
-            first = second
-            second = ttype, value
-
-            # print(f"{first} {second}")
-            yield ttype, value
-
-            if self.annotated:
-                continue
-            elif self.annotated is None and ttype is not Token.Text:
-                self.annotated = False
-
-            if (first, second) == ARROW_ANNOTATION:
-                self.annotated = True
-            elif found_colon:
-                if (ttype, value) == NEWLINE:
-                    found_colon = False
-                elif ttype == Token.Name:
-                    found_colon = False
-                    self.annotated = True
-            elif first and ((first[0:1], second) == COLON_ANNOTATION):
-                found_colon = True
-
-
 class DetectAnnotationsFormatterMixin:
     annotated = None
 
-    def __init__(self, app, link, **kw):
-        self.app = app
-        self.link = link
-        super().__init__(**kw)
-
-    def __call__(self, **kw):
-        """a hack to allow pygments bridge to 'instantiate' an already
-        stateful formatter"""
-
-        return self.__class__(app=self.app, link=self.link, **kw)
-
     def _format_lines(self, tokensource):
-        detect_annotations = DetectAnnotationsFilter()
 
-        for ttype, value in super()._format_lines(
-            apply_filters(tokensource, [detect_annotations])
-        ):
-            yield ttype, value
+        self.annotated = None
 
-        self.annotated = detect_annotations.annotated
+        def go(tokensource):
+            for ttype, value in tokensource:
+                if ttype is Token.Other and value.startswith(
+                    "pep484 annotations detected:"
+                ):
+                    self.annotated = (
+                        value == "pep484 annotations detected: True"
+                    )
+                    continue
+
+                yield ttype, value
+
+        for level, tag in super()._format_lines(go(tokensource)):
+            yield level, tag
 
     def _wrap_pre(self, inner):
         for level, tag in super()._wrap_pre(inner):
             yield level, tag
+
             if level == 0 and self.annotated is not None and tag == "</pre>":
                 yield (
                     1,
@@ -230,6 +232,7 @@ class DetectAnnotationsFormatterMixin:
 
         for level, tag in super()._wrap_code(inner):
             yield level, tag
+
             if level == 0 and self.annotated is not None and tag == "</code>":
                 yield (
                     1,
@@ -247,16 +250,34 @@ class AnnoPopupSQLFormatter(
 
 def setup_formatters(app, config):
     if config.zzzeeksphinx_annotation_key:
-        PygmentsBridge.html_formatter = AnnoPopupSQLFormatter(
-            app, config.zzzeeksphinx_annotation_key
-        )
+        PygmentsBridge.html_formatter = AnnoPopupSQLFormatter
     else:
         PygmentsBridge.html_formatter = PopupSQLFormatter
 
     PygmentsBridge.latex_formatter = PopupLatexFormatter
 
+    detect_annotations_filter = DetectAnnotationsFilter()
+    python_lexer = PythonLexer(filters=[detect_annotations_filter])
+    python_console_lexer = PythonConsoleLexer(
+        filters=[detect_annotations_filter]
+    )
+    python_w_sql_lexer = PythonWithSQLLexer(
+        filters=[detect_annotations_filter]
+    )
+    pycon_w_sql_lexer = PyConWithSQLLexer(filters=[detect_annotations_filter])
+
+    highlighting.lexers["python"] = highlighting.lexers[
+        "python3"
+    ] = python_lexer
+    highlighting.lexers["pycon"] = highlighting.lexers[
+        "pycon3"
+    ] = python_console_lexer
+    highlighting.lexers["python+sql"] = python_w_sql_lexer
+    highlighting.lexers["pycon+sql"] = pycon_w_sql_lexer
+
 
 def setup(app):
+
     # pass lexer class instead of lexer instance
     app.add_lexer("pycon+sql", PyConWithSQLLexer)
     app.add_lexer("python+sql", PythonWithSQLLexer)
