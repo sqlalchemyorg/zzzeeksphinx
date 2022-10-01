@@ -40,13 +40,16 @@ class DetectAnnotationsFilter(Filter):
     def filter(self, lexer, stream):
         first, second = None, None
         found_colon = False
-
+        should_report = False
         annotated = None
 
         for ttype, value in stream:
 
             if ttype is Token.Name.Builtin:
                 ttype = Token.Name
+
+            if ttype is Token.Keyword and value == "class":
+                should_report = True
 
             first = second
             second = ttype, value
@@ -68,8 +71,11 @@ class DetectAnnotationsFilter(Filter):
                     annotated = True
             elif first and ((first[0:1], second) == COLON_ANNOTATION):
                 found_colon = True
+                should_report = True
 
-        yield Token.Other, f"pep484 annotations detected: {annotated}"
+        # report only on examples that have class defs
+        if annotated is not None and should_report:
+            yield Token.Other, f"pep484 annotations detected: {annotated}"
 
 
 class PyConWithSQLLexer(RegexLexer):
@@ -251,29 +257,21 @@ class AnnoPopupSQLFormatter(
 def setup_formatters(app, config):
     if config.zzzeeksphinx_annotation_key:
         PygmentsBridge.html_formatter = AnnoPopupSQLFormatter
+        filters = [DetectAnnotationsFilter()]
     else:
         PygmentsBridge.html_formatter = PopupSQLFormatter
-
-    PygmentsBridge.latex_formatter = PopupLatexFormatter
-
-    detect_annotations_filter = DetectAnnotationsFilter()
-    python_lexer = PythonLexer(filters=[detect_annotations_filter])
-    python_console_lexer = PythonConsoleLexer(
-        filters=[detect_annotations_filter]
-    )
-    python_w_sql_lexer = PythonWithSQLLexer(
-        filters=[detect_annotations_filter]
-    )
-    pycon_w_sql_lexer = PyConWithSQLLexer(filters=[detect_annotations_filter])
+        filters = []
 
     highlighting.lexers["python"] = highlighting.lexers[
         "python3"
-    ] = python_lexer
+    ] = PythonLexer(filters=filters)
     highlighting.lexers["pycon"] = highlighting.lexers[
         "pycon3"
-    ] = python_console_lexer
-    highlighting.lexers["python+sql"] = python_w_sql_lexer
-    highlighting.lexers["pycon+sql"] = pycon_w_sql_lexer
+    ] = PythonConsoleLexer(filters=filters)
+    highlighting.lexers["python+sql"] = PythonWithSQLLexer(filters=filters)
+    highlighting.lexers["pycon+sql"] = PyConWithSQLLexer(filters=filters)
+
+    PygmentsBridge.latex_formatter = PopupLatexFormatter
 
 
 def setup(app):
