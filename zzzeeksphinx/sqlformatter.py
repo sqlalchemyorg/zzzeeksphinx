@@ -10,9 +10,11 @@ from pygments.formatters import LatexFormatter
 from pygments.lexer import bygroups
 from pygments.lexer import RegexLexer
 from pygments.lexer import using
+from pygments.lexer import words
 from pygments.lexers import PythonConsoleLexer
 from pygments.lexers import PythonLexer
 from pygments.lexers import SqlLexer
+from pygments.token import Keyword
 from pygments.token import Token
 from sphinx import highlighting
 from sphinx.highlighting import PygmentsBridge
@@ -24,6 +26,12 @@ def _strip_trailing_whitespace(iter_):
         buf[-1] = (buf[-1][0], buf[-1][1].rstrip())
     for t, v in buf:
         yield t, v
+
+
+class RealWorldSQLLexer(SqlLexer):
+    tokens = {k: l[:] for (k, l) in SqlLexer.tokens.items()}
+
+    tokens["root"].insert(0, (words(("RETURNING",), suffix=r"\b"), Keyword))
 
 
 class StripDocTestFilter(Filter):
@@ -131,7 +139,7 @@ class PythonWithSQLLexer(RegexLexer):
 
 class PopupSQLFormatter(HtmlFormatter):
     def _format_lines(self, tokensource):
-        sql_lexer = SqlLexer()
+        sql_lexer = RealWorldSQLLexer()
 
         formatter = HtmlFormatter(nowrap=True)
         buf = []
@@ -261,6 +269,8 @@ def setup_formatters(app, config):
     else:
         PygmentsBridge.html_formatter = PopupSQLFormatter
         filters = []
+
+    highlighting.lexers["sql"] = RealWorldSQLLexer()
 
     highlighting.lexers["python"] = highlighting.lexers[
         "python3"
