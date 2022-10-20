@@ -47,7 +47,18 @@ class DialectDirective(SphinxDirective):
 
         content = self._parse_content()
 
-        parent_section_ref = self.state.parent.children[0]["ids"][0]
+        # in sphinx 5.1.1 and earlier, we did this:
+        # old_parent_section_ref = self.state.parent.children[0]["ids"][0]
+
+        # however in 5.3.0, parent is an empty section.  not clear if this is
+        # due to content changes or changes in how automodule works, etc.
+        # so now we manufacture it as follows:
+        parent_section_ref = (
+            f"module-sqlalchemy.dialects.{dialect_name}.{dbapi_name}"
+        )
+        # if automodule's naming scheme changes etc., this would silently
+        # break
+
         self._append_dbapi_bullet(
             dialect_name, dbapi_name, content["name"], parent_section_ref
         )
