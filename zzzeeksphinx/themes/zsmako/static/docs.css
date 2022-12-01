@@ -170,9 +170,13 @@ a.headerlink:hover {
 
 #docs-sidebar {
   float:left;
-  width:212px;
+  width:237px;
   padding: 10px 0 0 15px;
   /*font-size:.85em;*/
+}
+
+#docs-sidebar #sidebar-toc {
+    overflow:auto;
 }
 
 #docs-sidebar h3, #docs-sidebar h4 {
@@ -184,7 +188,7 @@ a.headerlink:hover {
     margin: 10px 0 0 -15px;
     padding: 5px 10px 5px 10px;
     text-shadow: 1px 1px 0 white;
-    width:210px;
+    width:235px;
 }
 
 #docs-sidebar h3 a, #docs-sidebar h4 a {
@@ -210,7 +214,7 @@ a.headerlink:hover {
 }
 
 #docs-body.withsidebar {
-  margin: 0 0 0 230px;
+  margin: 0 0 0 255px;
   border-left:3px solid #DFDFDF;
 }
 
