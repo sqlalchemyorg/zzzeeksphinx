@@ -58,7 +58,7 @@ a.headerlink:hover {
 /* Container setup */
 
 #docs-container {
-  max-width:1000px;
+  max-width:1100px;
   clear:both;
 }
 
@@ -149,7 +149,7 @@ a.headerlink:hover {
 #docs-body-container {
   background-color:#EFEFEF;
   border: solid 1px #CCC;
-
+  display: flex;
 }
 
 #docs-body,
@@ -169,8 +169,7 @@ a.headerlink:hover {
 }
 
 #docs-sidebar {
-  float:left;
-  width:212px;
+  width: max-content;
   padding: 10px 0 0 15px;
   /*font-size:.85em;*/
 }
@@ -184,7 +183,6 @@ a.headerlink:hover {
     margin: 10px 0 0 -15px;
     padding: 5px 10px 5px 10px;
     text-shadow: 1px 1px 0 white;
-    width:210px;
 }
 
 #docs-sidebar h3 a, #docs-sidebar h4 a {
@@ -210,8 +208,8 @@ a.headerlink:hover {
 }
 
 #docs-body.withsidebar {
-  margin: 0 0 0 230px;
   border-left:3px solid #DFDFDF;
+  min-width: 0;
 }
 
 #docs-body h1,
