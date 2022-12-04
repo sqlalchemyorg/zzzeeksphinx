@@ -376,7 +376,7 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
     # skipping superclass classlevel docs for now, as these
     # get in the way of using autosummary.
 
-    if what == "class":
+    if what in ("class", "exception"):
         _track_autodoced[name] = obj
 
         # need to translate module names for bases, others
