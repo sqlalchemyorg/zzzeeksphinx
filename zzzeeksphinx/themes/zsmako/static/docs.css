@@ -267,12 +267,16 @@ a.headerlink:hover {
   border-bottom: 1px solid;
 }
 
-.popup_sql, .show_sql
+.popup_sql, .show_sql, .show_sql_print
 {
-    background-color: #FBFBEE;
     padding:5px 10px;
     margin:10px -5px;
     border:1px dashed;
+}
+
+.popup_sql, .show_sql
+{
+    background-color: #FBFBEE;
 }
 
 /* the [SQL] links used to display SQL */

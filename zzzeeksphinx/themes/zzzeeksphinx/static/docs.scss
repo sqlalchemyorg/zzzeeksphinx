@@ -655,11 +655,15 @@ a.headerlink:hover {
 }
 
 .popup_sql,
-.show_sql {
-    background-color: $popout-color;
+.show_sql,
+.show_sql_print {
     padding: 5px 10px;
     margin: 10px -5px 22px -5px;
     border: 1px dashed;
+}
+.popup_sql,
+.show_sql {
+    background-color: $popout-color;
 }
 /* SQL popups are always on at the moment, disable the button */
 .sql_link {
