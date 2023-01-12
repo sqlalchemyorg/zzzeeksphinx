@@ -95,7 +95,9 @@ class PyConWithSQLLexer(RegexLexer):
     tokens = {
         "root": [
             (r"{sql}", Token.Sql.Link, "sqlpopup"),
-            (r"{opensql}", Token.Sql.Open, "opensqlpopup"),
+            (r"{execsql}", Token.Sql.Exec, "execsql"),
+            (r"{opensql}", Token.Sql.Exec, "opensql"),  # alias of execsql
+            (r"{printsql}", Token.Sql.Print, "printsql"),
             (r".*?\n", using(PythonConsoleLexer)),
         ],
         "sqlpopup": [
@@ -108,7 +110,9 @@ class PyConWithSQLLexer(RegexLexer):
                 "#pop",
             )
         ],
-        "opensqlpopup": [(r".*?(?:{stop}\n*|$)", Token.Sql, "#pop")],
+        "execsql": [(r".*?(?:{stop}\n*|$)", Token.Sql.ExecState, "#pop")],
+        "opensql": [(r".*?(?:{stop}\n*|$)", Token.Sql.ExecState, "#pop")],
+        "printsql": [(r".*?(?:{stop}\n*|$)", Token.Sql.PrintState, "#pop")],
     }
 
 
@@ -121,7 +125,9 @@ class PythonWithSQLLexer(RegexLexer):
     tokens = {
         "root": [
             (r"{sql}", Token.Sql.Link, "sqlpopup"),
-            (r"{opensql}", Token.Sql.Open, "opensqlpopup"),
+            (r"{execsql}", Token.Sql.Exec, "execsql"),
+            (r"{opensql}", Token.Sql.Exec, "opensql"),  # alias of execsql
+            (r"{printsql}", Token.Sql.Print, "printsql"),
             (r".*?\n", using(PythonLexer)),
         ],
         "sqlpopup": [
@@ -133,7 +139,9 @@ class PythonWithSQLLexer(RegexLexer):
                 "#pop",
             )
         ],
-        "opensqlpopup": [(r".*?(?:{stop}\n*|$)", Token.Sql, "#pop")],
+        "execsql": [(r".*?(?:{stop}\n*|$)", Token.Sql.ExecState, "#pop")],
+        "opensql": [(r".*?(?:{stop}\n*|$)", Token.Sql.ExecState, "#pop")],
+        "printsql": [(r".*?(?:{stop}\n*|$)", Token.Sql.PrintState, "#pop")],
     }
 
 
@@ -150,10 +158,15 @@ class PopupSQLFormatter(HtmlFormatter):
                     yield t, v
                 buf = []
 
-                if ttype is Token.Sql:
+                if ttype in (Token.Sql.ExecState, Token.Sql.PrintState):
+                    class_ = (
+                        "show_sql"
+                        if ttype is Token.Sql.ExecState
+                        else "show_sql_print"
+                    )
                     yield (
                         1,
-                        "<div class='show_sql'>%s</div>"
+                        f"<div class='{class_}'>%s</div>"
                         % pygments.highlight(
                             re.sub(r"(?:{stop}|\n+)\s*$", "", value),
                             sql_lexer,
@@ -185,7 +198,11 @@ class PopupLatexFormatter(LatexFormatter):
     def _filter_tokens(self, tokensource):
         for ttype, value in apply_filters(tokensource, [StripDocTestFilter()]):
             if ttype in Token.Sql:
-                if ttype is not Token.Sql.Link and ttype is not Token.Sql.Open:
+                if ttype not in (
+                    Token.Sql.Link,
+                    Token.Sql.Exec,
+                    Token.Sql.Print,
+                ):
                     yield Token.Literal, re.sub(r"{stop}", "", value)
                 else:
                     continue
