@@ -50,8 +50,25 @@ class DetectAnnotationsFilter(Filter):
         found_colon = False
         should_report = False
         annotated = None
+        found_sql = False
 
         for ttype, value in stream:
+
+            # any encounting of SQL blocks, stop immediately.  This is
+            # likely not a class def example and we don't want the
+            # "anno/non-anno" label to appear under SQL boxes at all
+            if ttype is Token.Name and value in (
+                "execsql",
+                "printsql",
+                "opensql",
+                "sqlpopup",
+            ):
+                found_sql = True
+                should_report = False
+
+            if found_sql:
+                yield ttype, value
+                continue
 
             if ttype is Token.Name.Builtin:
                 ttype = Token.Name
@@ -79,7 +96,7 @@ class DetectAnnotationsFilter(Filter):
                     annotated = True
             elif first and ((first[0:1], second) == COLON_ANNOTATION):
                 found_colon = True
-                should_report = True
+                # should_report = True
 
         # report only on examples that have class defs
         if annotated is not None and should_report:
