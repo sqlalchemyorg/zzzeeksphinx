@@ -49,8 +49,8 @@ $legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
-$border-style: 1px solid #ccc;
-$divider-line-style: 1px solid #ccc;
+$border-style: 1px solid #f1f1f1;
+$divider-line-style: 1px solid #f1f1f1;
 
 $box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
@@ -349,7 +349,6 @@ a.headerlink:hover {
 
     font-size: 0.85em;
 
-    border: $border-style;
     background-color: $sidebar-color;
 
     > ul {
@@ -456,7 +455,6 @@ a.headerlink:hover {
     background-color: #ffffff;
     padding: 1px 10px 10px 10px;
 
-    border: $border-style;
     margin-top: 10px;
 }
 
