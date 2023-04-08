@@ -52,7 +52,6 @@ $versionchanged-background-color: #f9f9d9;
 $border-style: 1px solid #f1f1f1;
 $divider-line-style: 1px solid #f1f1f1;
 
-$box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
 
@@ -587,7 +586,6 @@ a.headerlink:hover {
         font-size: .85rem;
         background-color: #f0f0f0;
         border: $border-style;
-        box-shadow: $box-shadow-style;
         padding: 10px;
         margin: $box-margin;
         overflow: auto;
@@ -808,7 +806,6 @@ div {
         padding: 0 20px 0 20px;
         background-color: $box-background-color;
         border: $border-style;
-        box-shadow: $box-shadow-style;
 
         margin: $box-margin;
     }
@@ -911,7 +908,6 @@ div.legacy {
 
 div.class-bases, div.class-members {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
 
     padding: $box-padding;
@@ -928,7 +924,6 @@ div.class-members {
 
 div.inherited-member {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
     font-size: 0.9em;
     background-color: #eefbfb;
@@ -950,7 +945,6 @@ dl.method > dt,
 dl.class > dt,
 dl.exception > dt {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     background-color: $code-sig-background-color;
     margin: 25px -10px 10px 10px;
     padding: 8px 10px;
@@ -961,7 +955,6 @@ dl.field-list {
     border-left: $border-style;
     border-right: $border-style;
     border-bottom: $border-style;
-    box-shadow: $box-shadow-style;
     margin: $box-top-margin 10px 0 0;
 
     li > p {
