@@ -790,15 +790,11 @@ div {
         .admonition-title,
         .sidebar-title,
         .topic-title {
-            background-color: $box-header-color;
             padding: $box-title-padding;
 
-            margin: 0 -20px 20px -20px;
+            margin: 10px -20px 20px -20px;
 
             font-weight: bold;
-            border-left: $border-style;
-            border-right: $border-style;
-            border-bottom: $border-style;
         }
 
         > p {
