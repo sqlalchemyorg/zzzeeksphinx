@@ -39,7 +39,7 @@ $narrow-max-screen-width: 980px;
 $primary-background-color: #fdfbfc;
 $topmost-header-color: #ebebee;
 $popout-color: #fbfbee;
-$sidebar-color: #efefef;
+$sidebar-border-color: #e9eaeb;
 $sidebar-header-background-color: #dddddd;
 $sidebar-header-color: #222222;
 $notebox-background-color: #eeffef;
@@ -71,7 +71,7 @@ $hyperlink-color: #f00000;
 $keyword-color: #480717;
 $keyword-background-color: #f2f2f2;
 
-$highlighted-nav-link-background-color: #ddd;
+$highlighted-nav-link-background-color: #e8e8e8;
 $orm-background-color: #e2f3f4;
 $core-background-color: #aecaf7;
 
@@ -161,20 +161,28 @@ a.headerlink:hover {
 #docs-header {
     font-family: $primary-font-family;
 
-    font-size: 0.9em;
+    font-size: 0.75em;
     position: relative;
 
     background-color: $topmost-header-color;
     border: $border-style;
-    height: 75px;
+    padding: 10px;
 
     display: flex;
     align-items: center;
 
     h1 {
-        font-size: 20px;
-        color: #222222;
-        margin-left: 10px;
+        &, a {
+            margin: 0;
+            font-size: 1em;
+            color: #222222;
+            font-weight: bold;
+        }
+    }
+
+    #docs-version-header {
+        order: 2;
+        margin-left: auto;
     }
 }
 
@@ -183,20 +191,19 @@ a.headerlink:hover {
 #index-nav,
 #narrow-index-nav {
     font-family: $sidebar-font-family;
+    font-size: 0.8em;
+}
+
+#docs-bottom-navigation,
+#index-nav,
+#narrow-index-nav {
     background-color: $popout-color;
     border: $border-style;
-    font-size: 0.8em;
 }
 
 #docs-bottom-navigation,
 #index-nav {
     padding: 10px;
-}
-
-#docs-version-header {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
 }
 
 .docs-navigation-links {
@@ -280,21 +287,18 @@ a.headerlink:hover {
     left: 10px;
 }
 
-#sidebar-topnav {
-}
-
 #sidebar-search {
     margin: 10px 0px 10px 0px;
 }
 
 #docs-sidebar {
-    top: $sidebar-popout-height + 18px;
+    top: $sidebar-popout-height;
     width: $fixed-sidebar-width;
+    padding-top: 18px;
     bottom: 0;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 5px;
     margin-right: 5px;
     z-index: 3;
 }
@@ -349,7 +353,7 @@ a.headerlink:hover {
 
     font-size: 0.85em;
 
-    background-color: $sidebar-color;
+    border-right: 1px solid $sidebar-border-color;
 
     > ul {
         font-size: 0.85em;
@@ -370,17 +374,17 @@ a.headerlink:hover {
     h3,
     h4,
     h5 {
-        background-color: $sidebar-header-background-color;
         color: $sidebar-header-color;
         font-family: $sidebar-font-family;
-        font-size: 1.1em;
-        font-weight: normal;
-        margin: 10px 0 0 -15px;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: 15px 0 0 -15px;
         padding: 5px 10px 5px 15px;
-        text-shadow: 1px 1px 0 white;
-
+        
         a {
             color: $sidebar-header-color;
+            font-weight: bold;
         }
     }
 
@@ -398,6 +402,10 @@ a.headerlink:hover {
             list-style: square outside none;
             margin-left: 20px;
         }
+    }
+
+    a {
+        color: inherit;
     }
 }
 
@@ -418,6 +426,15 @@ a.headerlink:hover {
 
     h3 {
         margin: 0 0 10px 0;
+        &, a {
+            color: inherit;
+        }
+    }
+
+    #sidebar-topnav {
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
     }
 }
 
@@ -518,7 +535,6 @@ a.headerlink:hover {
 
 #docs-narrow-top-navigation {
     border: $border-style;
-    background-color: $sidebar-color;
     font-family: $sidebar-font-family;
     font-size: 0.85rem;
 

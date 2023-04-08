@@ -90,6 +90,8 @@ withsidebar = bool(toc) and (
 
 <div id="docs-top-navigation-container" class="body-background">
 <div id="docs-header">
+    <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
+
     <div id="docs-version-header">
         Release: <span class="version-num">${release}</span>
 
@@ -110,8 +112,6 @@ withsidebar = bool(toc) and (
         % endif
 
     </div>
-
-    <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
 
 </div>
 </div>
@@ -146,7 +146,6 @@ withsidebar = bool(toc) and (
     % if withsidebar:
 
         <div id="docs-sidebar-popout">
-            <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
             % if is_beta_version:
                 <p id="sidebar-beta">beta release</p>
             % elif is_prerelease_version:
