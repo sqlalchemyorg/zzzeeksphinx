@@ -544,6 +544,10 @@ a.headerlink:hover {
     /* don't put a clear:both here. use less floats */
 }
 
+#docs-body a {
+    text-decoration: underline;
+}
+
 #docs-body {
     #sqlalchemy-documentation h1 {
         /* hide the <h1> for each content section. */
