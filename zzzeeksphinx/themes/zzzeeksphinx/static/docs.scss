@@ -49,8 +49,8 @@ $legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
-$border-style: 1px solid #f1f1f1;
-$divider-line-style: 1px solid #f1f1f1;
+$border-style: 1px solid #e6e9ec;
+$divider-line-style: 1px solid #e6e9ec;
 
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
@@ -64,7 +64,8 @@ $box-padding: 1rem 1em 2px 1rem;
 
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
-$box-background-color: #f8f9f0;
+$box-background-color: #F8F9FA;
+$box-border-radius: 4px;
 
 $hyperlink-color: #f00000;
 $keyword-color: #480717;
@@ -584,7 +585,8 @@ a.headerlink:hover {
 #docs-container {
     pre {
         font-size: .85rem;
-        background-color: #f0f0f0;
+        background-color: #F8F9FA;
+        border-radius: $box-border-radius;
         border: $border-style;
         padding: 10px;
         margin: $box-margin;
