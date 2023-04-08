@@ -1198,7 +1198,7 @@ div#dialect-documentation {
     box-shadow: 0px 0px 2px #ccc;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-radius: 10px;
+    border-radius: $box-border-radius;
 
     h2 {
         border-top: none;
