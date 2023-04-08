@@ -49,7 +49,8 @@ $legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
-$border-style: 1px solid #e6e9ec;
+$border-color: #e6e9ec;
+$border-style: 1px solid $border-color;
 $divider-line-style: 1px solid #e6e9ec;
 
 $box-top-margin: 10px;
@@ -57,7 +58,7 @@ $box-margin: $box-top-margin 10px 20px 0px;
 
 // this is optimized for the site.  with the vanilla docs, the
 // vertical padding is too much.   not sure how to fix
-$box-padding: 1rem 1em 2px 1rem;
+$box-padding: 1rem;
 
 // looks better with vanilla docs but not w/ the site
 // $box-padding: 0 1em 0 1rem;
@@ -176,6 +177,8 @@ a.headerlink:hover {
             margin: 0;
             font-size: 1em;
             color: #222222;
+            font-family: $header-font-family;
+            font-weight: normal;
             font-weight: bold;
         }
     }
@@ -289,6 +292,23 @@ a.headerlink:hover {
 
 #sidebar-search {
     margin: 10px 0px 10px 0px;
+
+    input {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        font-size: 0.75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        box-sizing: border-box;
+    }
 }
 
 #docs-sidebar {
@@ -840,6 +860,10 @@ div.versionmodified {
     padding: $box-padding;
 
     margin: $box-margin;
+     
+    p {
+        margin: 0;
+    }
 }
 
 div .versionwarning,

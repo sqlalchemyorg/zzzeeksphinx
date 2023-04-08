@@ -146,15 +146,6 @@ withsidebar = bool(toc) and (
     % if withsidebar:
 
         <div id="docs-sidebar-popout">
-            % if is_beta_version:
-                <p id="sidebar-beta">beta release</p>
-            % elif is_prerelease_version:
-                <p id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</p>
-            % elif is_legacy_version:
-                <p id="sidebar-legacy">legacy version</p>
-            % elif is_current_version:
-                <p id="sidebar-current">current release</p>
-            % endif
             <p id="sidebar-topnav">
                 <a href="${pathto('index')}">Home</a>
                 % if zip_url:
