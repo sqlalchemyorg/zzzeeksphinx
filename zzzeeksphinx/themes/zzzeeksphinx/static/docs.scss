@@ -76,11 +76,11 @@ $highlighted-nav-link-background-color: #e8e8e8;
 $orm-background-color: #e2f3f4;
 $core-background-color: #aecaf7;
 
-$sidebar-popout-height: 160px;
+$sidebar-popout-height: 130px;
 
 $max-container-width: 100em; // 100 * 16 == 1600px;
 $fixed-sidebar-width: 328px;
-$docs-body-sidebar-left: 338px;
+$docs-body-sidebar-left: 348px;
 
 /* global */
 
@@ -293,6 +293,10 @@ a.headerlink:hover {
 #sidebar-search {
     margin: 10px 0px 10px 0px;
 
+    form, label {
+        width: 100%;
+    }
+
     input {
         display: block;
         width: 100%;
@@ -314,18 +318,18 @@ a.headerlink:hover {
 #docs-sidebar {
     top: $sidebar-popout-height;
     width: $fixed-sidebar-width;
-    padding-top: 18px;
     bottom: 0;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     margin-right: 5px;
     z-index: 3;
+    line-height: 1.2em;
 }
 
-#sidebar-banner {
-    margin: 0px;
-    padding: 0px;
+/* targeting the internal div plays nicely with adblockers */
+#sidebar-banner > div {
+    margin: 0px $box-padding 30px 0;
 }
 
 #sidebar-prerelease,
@@ -367,13 +371,12 @@ a.headerlink:hover {
 
 #docs-sidebar-inner {
     padding-left: 10px;
+    padding-right: 10px;
     /*width:212px;*/
 
     font-family: $sidebar-font-family;
 
     font-size: 0.85em;
-
-    border-right: 1px solid $sidebar-border-color;
 
     > ul {
         font-size: 0.85em;
@@ -383,8 +386,8 @@ a.headerlink:hover {
         display: block;
         margin-left: -100px;
         padding-left: 100px;
-        padding-top: 3px;
-        padding-bottom: 3px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     li.current > span.link-container {
@@ -426,6 +429,8 @@ a.headerlink:hover {
 
     a {
         color: inherit;
+        /* improve link reachability, with inline block the whole box can be clicked*/
+        display: inline-block;
     }
 }
 
@@ -461,6 +466,9 @@ a.headerlink:hover {
 #fixed-sidebar {
     position: relative;
     box-sizing: border-box;
+
+    border-right: 1px solid $sidebar-border-color;
+    padding-right: $box-padding;
 }
 
 
@@ -490,9 +498,7 @@ a.headerlink:hover {
 
 #docs-body {
     background-color: #ffffff;
-    padding: 1px 10px 10px 10px;
-
-    margin-top: 10px;
+    padding-left: 15px;
 }
 
 #docs-body.withsidebar {
