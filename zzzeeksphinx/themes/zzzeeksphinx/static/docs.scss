@@ -34,6 +34,7 @@ $header-font-family: "Libre Franklin", Arial, sans-serif;
 $top-header-font-family: "Libre Franklin", Arial, sans-serif;
 $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
+$mobile-max-screen-width: 480px;
 $narrow-max-screen-width: 980px;
 
 $primary-background-color: #fdfbfc;
@@ -53,8 +54,8 @@ $border-color: #e6e9ec;
 $border-style: 1px solid $border-color;
 $divider-line-style: 1px solid #e6e9ec;
 
-$box-top-margin: 10px;
-$box-margin: $box-top-margin 10px 20px 0px;
+$box-top-margin: 30px;
+$box-margin: $box-top-margin 0px 30px 0px;
 
 // this is optimized for the site.  with the vanilla docs, the
 // vertical padding is too much.   not sure how to fix
@@ -65,7 +66,7 @@ $box-padding: 1rem;
 
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
-$box-background-color: #F8F9FA;
+$box-background-color: #f8f9f0;
 $box-border-radius: 4px;
 
 $hyperlink-color: #f00000;
@@ -151,7 +152,6 @@ a.headerlink:hover {
 
 #docs-container {
     max-width: $max-container-width;
-    margin: 10px auto;
     position: relative;
     font-size: 120%;
     line-height: 1.4em;
@@ -643,6 +643,11 @@ a.headerlink:hover {
         }
     }
 
+    @media only screen and (max-width: ($mobile-max-screen-width + 1)) {
+        pre {
+            font-size: .8rem;
+        }
+    }
     /* python annotation key */
     div.code-annotations-key, div.code-non-annotations-key {
         position:absolute;
@@ -906,7 +911,7 @@ div.deepalchemy {
     }
     background-image: url("deepalchemy.png");
     background-size: auto 100px;
-    background-position: 6px 9px;
+    background-position: 10px 29px;
     background-repeat: no-repeat;
     background-color: $deepalchemy-background-color;
     clear: right;
@@ -1038,9 +1043,11 @@ span.highlight {
 */
 button.copybtn {
     top: 1em;
-    right: 1.8em;
+    right: 1em;
     width: 2.5em;
     height: 2.5em;
+    display: grid;
+    place-content: center;
 
     svg {
         width: 2em;
