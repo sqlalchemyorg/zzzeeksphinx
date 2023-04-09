@@ -553,6 +553,7 @@ a.headerlink:hover {
     #docs-narrow-top-navigation {
         display: block;
     }
+
     #docs-top-navigation-container h1 {
         position: absolute;
         top: 10px;
@@ -595,6 +596,13 @@ a.headerlink:hover {
     font-family: $header-font-family;
     font-weight: bold;
     /* don't put a clear:both here. use less floats */
+    margin-top: 2em;
+    margin-bottom: 1.45em;
+}
+
+#docs-body h1 {
+    margin-top: 0;
+    padding-top: 2em;
 }
 
 #docs-body {
@@ -611,7 +619,7 @@ a.headerlink:hover {
     h2 {
         font-size: 1.6rem;
         border-top: $divider-line-style;
-        padding-top: 20px;
+        padding-top: 2em;
     }
 
     #sqlalchemy-documentation h2 {
@@ -637,7 +645,7 @@ a.headerlink:hover {
     background: none;
 }
 
-#docs-container {
+main.docs #docs-container {
     pre {
         font-size: .85rem;
         background-color: #F8F9FA;
