@@ -197,14 +197,13 @@ a.headerlink:hover {
     font-size: 0.8em;
 }
 
-#docs-bottom-navigation,
 #index-nav,
+.docs-bottom-navigation--nextprev,
 #narrow-index-nav {
     background-color: $popout-color;
     border: $border-style;
 }
 
-#docs-bottom-navigation,
 #index-nav {
     padding: 10px;
 }
@@ -213,17 +212,25 @@ a.headerlink:hover {
     font-family: $primary-font-family;
 }
 
-#docs-bottom-navigation {
-    margin: 1em 0 1em 0;
+#docs-bottom-navigation.withsidebar {
+    margin-left: $docs-body-sidebar-left + 15px;
 }
 
-#docs-bottom-navigation.withsidebar {
-    margin-left: $docs-body-sidebar-left;
+.docs-bottom-navigation--nextprev {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em;
+    margin-bottom: $box-top-margin;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-radius: $box-border-radius;
 }
 
 #docs-copyright {
     font-size: 0.85em;
     padding: 5px 0px;
+    margin-top: $box-top-margin;
 }
 
 #docs-header h1,

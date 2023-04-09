@@ -274,14 +274,20 @@ withsidebar = bool(toc) and (
 </div>
 
 <div id="docs-bottom-navigation" class="docs-navigation-links${', withsidebar' if withsidebar else ''}">
+    <div class="docs-bottom-navigation--nextprev">
     % if prevtopic:
+            <div>
         Previous:
         <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
+            </div>
     % endif
     % if nexttopic:
+            <div>
         Next:
         <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
+            </div>
     % endif
+    </div>
 
     <div id="docs-copyright">
     % if hasdoc('copyright'):
