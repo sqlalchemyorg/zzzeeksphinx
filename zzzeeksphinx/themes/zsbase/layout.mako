@@ -88,29 +88,32 @@ withsidebar = bool(toc) and (
 </%block>
 
 
-<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-top-navigation-container" class="body-background row">
 <div id="docs-header">
     <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
 
     <div id="docs-version-header">
-        Release: <span class="version-num">${release}</span>
+        <div>
+            Release: <span class="version-num">${release}</span>
 
-        % if is_beta_version:
-            <span id="sidebar-beta">beta release</span>
-        % elif is_prerelease_version:
-            <span id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</span>
-        % elif is_legacy_version:
-            <span id="sidebar-legacy">legacy version</span>
-        % elif is_current_version:
-            <span id="sidebar-current">current release</span>
-        % endif
+            % if is_beta_version:
+                <span id="sidebar-beta">beta release</span>
+            % elif is_prerelease_version:
+                <span id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</span>
+            % elif is_legacy_version:
+                <span id="sidebar-legacy">legacy version</span>
+            % elif is_current_version:
+                <span id="sidebar-current">current release</span>
+            % endif
+        </div>
 
-        % if release_date:
-        | Release Date: ${release_date}
-        % else:
-        | Release Date: <b>not released yet</b>
-        % endif
-
+        <div>
+            % if release_date:
+            | Release Date: ${release_date}
+            % else:
+            | Release Date: <b>not released yet</b>
+            % endif
+        </div>
     </div>
 
 </div>
@@ -275,18 +278,18 @@ withsidebar = bool(toc) and (
 
 <div id="docs-bottom-navigation" class="docs-navigation-links${', withsidebar' if withsidebar else ''}">
     <div class="docs-bottom-navigation--nextprev">
-    % if prevtopic:
+        % if prevtopic:
             <div>
-        Previous:
-        <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
+                Previous:
+                <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
             </div>
-    % endif
-    % if nexttopic:
+        % endif
+        % if nexttopic:
             <div>
-        Next:
-        <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
+                Next:
+                <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
             </div>
-    % endif
+        % endif
     </div>
 
     <div id="docs-copyright">
