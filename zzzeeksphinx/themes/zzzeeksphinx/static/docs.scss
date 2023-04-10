@@ -34,12 +34,13 @@ $header-font-family: "Libre Franklin", Arial, sans-serif;
 $top-header-font-family: "Libre Franklin", Arial, sans-serif;
 $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
+$mobile-max-screen-width: 480px;
 $narrow-max-screen-width: 980px;
 
 $primary-background-color: #fdfbfc;
 $topmost-header-color: #ebebee;
 $popout-color: #fbfbee;
-$sidebar-color: #efefef;
+$sidebar-border-color: #e9eaeb;
 $sidebar-header-background-color: #dddddd;
 $sidebar-header-color: #222222;
 $notebox-background-color: #eeffef;
@@ -49,16 +50,16 @@ $legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
-$border-style: 1px solid #ccc;
-$divider-line-style: 1px solid #ccc;
+$border-color: #e6e9ec;
+$border-style: 1px solid $border-color;
+$divider-line-style: 1px solid #e6e9ec;
 
-$box-shadow-style: 2px 2px 3px #dfdfdf;
-$box-top-margin: 10px;
-$box-margin: $box-top-margin 10px 20px 0px;
+$box-top-margin: 30px;
+$box-margin: $box-top-margin 0px 30px 0px;
 
 // this is optimized for the site.  with the vanilla docs, the
 // vertical padding is too much.   not sure how to fix
-$box-padding: 1rem 1em 2px 1rem;
+$box-padding: 1rem;
 
 // looks better with vanilla docs but not w/ the site
 // $box-padding: 0 1em 0 1rem;
@@ -66,20 +67,21 @@ $box-padding: 1rem 1em 2px 1rem;
 $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
 $box-background-color: #f8f9f0;
+$box-border-radius: 4px;
 
-$hyperlink-color: #990000;
+$hyperlink-color: #f00000;
 $keyword-color: #480717;
 $keyword-background-color: #f2f2f2;
 
-$highlighted-nav-link-background-color: #ddd;
+$highlighted-nav-link-background-color: #e8e8e8;
 $orm-background-color: #e2f3f4;
 $core-background-color: #aecaf7;
 
-$sidebar-popout-height: 160px;
+$sidebar-popout-height: 130px;
 
 $max-container-width: 100em; // 100 * 16 == 1600px;
 $fixed-sidebar-width: 328px;
-$docs-body-sidebar-left: 338px;
+$docs-body-sidebar-left: 348px;
 
 /* global */
 
@@ -150,7 +152,6 @@ a.headerlink:hover {
 
 #docs-container {
     max-width: $max-container-width;
-    margin: 10px auto;
     position: relative;
     font-size: 120%;
     line-height: 1.4em;
@@ -161,20 +162,32 @@ a.headerlink:hover {
 #docs-header {
     font-family: $primary-font-family;
 
-    font-size: 0.9em;
+    font-size: 0.75em;
     position: relative;
 
     background-color: $topmost-header-color;
     border: $border-style;
-    height: 75px;
+    padding: 10px 20px;
 
     display: flex;
     align-items: center;
 
     h1 {
-        font-size: 20px;
-        color: #222222;
-        margin-left: 10px;
+        &, a {
+            margin: 0;
+            font-size: 1em;
+            color: #222222;
+            font-family: $header-font-family;
+            font-weight: normal;
+            font-weight: bold;
+        }
+    }
+
+    #docs-version-header {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        flex-wrap: wrap;
     }
 }
 
@@ -183,37 +196,43 @@ a.headerlink:hover {
 #index-nav,
 #narrow-index-nav {
     font-family: $sidebar-font-family;
-    background-color: $popout-color;
-    border: $border-style;
     font-size: 0.8em;
 }
 
-#docs-bottom-navigation,
-#index-nav {
-    padding: 10px;
+#index-nav,
+.docs-bottom-navigation--nextprev,
+#narrow-index-nav {
+    background-color: $popout-color;
+    border: $border-style;
 }
 
-#docs-version-header {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
+#index-nav {
+    padding: 10px;
 }
 
 .docs-navigation-links {
     font-family: $primary-font-family;
 }
 
-#docs-bottom-navigation {
-    margin: 1em 0 1em 0;
+#docs-bottom-navigation.withsidebar {
+    margin-left: $docs-body-sidebar-left + 15px;
 }
 
-#docs-bottom-navigation.withsidebar {
-    margin-left: $docs-body-sidebar-left;
+.docs-bottom-navigation--nextprev {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em;
+    margin-bottom: $box-top-margin;
+    font-weight: bold;
+    font-size: 0.9em;
+    border-radius: $box-border-radius;
 }
 
 #docs-copyright {
     font-size: 0.85em;
     padding: 5px 0px;
+    margin-top: $box-top-margin;
 }
 
 #docs-header h1,
@@ -240,6 +259,10 @@ a.headerlink:hover {
 
 #docs-container .version-num {
     font-weight: bold;
+}
+
+#docs-top-navigation-container {
+    margin-bottom: $box-padding;
 }
 
 /* content container, sidebar */
@@ -280,28 +303,46 @@ a.headerlink:hover {
     left: 10px;
 }
 
-#sidebar-topnav {
-}
-
 #sidebar-search {
     margin: 10px 0px 10px 0px;
+
+    form, label {
+        width: 100%;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        font-size: 0.75rem;
+        font-weight: 400;
+        line-height: 1.5;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        box-sizing: border-box;
+    }
 }
 
 #docs-sidebar {
-    top: $sidebar-popout-height + 18px;
+    top: $sidebar-popout-height;
     width: $fixed-sidebar-width;
     bottom: 0;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-top: 5px;
     margin-right: 5px;
     z-index: 3;
+    line-height: 1.2em;
 }
 
-#sidebar-banner {
-    margin: 0px;
-    padding: 0px;
+/* targeting the internal div plays nicely with adblockers */
+#sidebar-banner > div {
+    margin: 0px $box-padding 30px 0;
 }
 
 #sidebar-prerelease,
@@ -343,14 +384,12 @@ a.headerlink:hover {
 
 #docs-sidebar-inner {
     padding-left: 10px;
+    padding-right: 10px;
     /*width:212px;*/
 
     font-family: $sidebar-font-family;
 
     font-size: 0.85em;
-
-    border: $border-style;
-    background-color: $sidebar-color;
 
     > ul {
         font-size: 0.85em;
@@ -360,8 +399,8 @@ a.headerlink:hover {
         display: block;
         margin-left: -100px;
         padding-left: 100px;
-        padding-top: 3px;
-        padding-bottom: 3px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     li.current > span.link-container {
@@ -371,17 +410,17 @@ a.headerlink:hover {
     h3,
     h4,
     h5 {
-        background-color: $sidebar-header-background-color;
         color: $sidebar-header-color;
         font-family: $sidebar-font-family;
-        font-size: 1.1em;
-        font-weight: normal;
-        margin: 10px 0 0 -15px;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: 15px 0 0 -15px;
         padding: 5px 10px 5px 15px;
-        text-shadow: 1px 1px 0 white;
-
+        
         a {
             color: $sidebar-header-color;
+            font-weight: bold;
         }
     }
 
@@ -399,6 +438,12 @@ a.headerlink:hover {
             list-style: square outside none;
             margin-left: 20px;
         }
+    }
+
+    a {
+        color: inherit;
+        /* improve link reachability, with inline block the whole box can be clicked*/
+        display: inline-block;
     }
 }
 
@@ -419,12 +464,24 @@ a.headerlink:hover {
 
     h3 {
         margin: 0 0 10px 0;
+        &, a {
+            color: inherit;
+        }
+    }
+
+    #sidebar-topnav {
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
     }
 }
 
 #fixed-sidebar {
     position: relative;
     box-sizing: border-box;
+
+    border-right: 1px solid $sidebar-border-color;
+    padding-right: $box-padding;
 }
 
 
@@ -454,10 +511,7 @@ a.headerlink:hover {
 
 #docs-body {
     background-color: #ffffff;
-    padding: 1px 10px 10px 10px;
-
-    border: $border-style;
-    margin-top: 10px;
+    padding-left: 15px;
 }
 
 #docs-body.withsidebar {
@@ -499,6 +553,7 @@ a.headerlink:hover {
     #docs-narrow-top-navigation {
         display: block;
     }
+
     #docs-top-navigation-container h1 {
         position: absolute;
         top: 10px;
@@ -520,7 +575,6 @@ a.headerlink:hover {
 
 #docs-narrow-top-navigation {
     border: $border-style;
-    background-color: $sidebar-color;
     font-family: $sidebar-font-family;
     font-size: 0.85rem;
 
@@ -542,6 +596,13 @@ a.headerlink:hover {
     font-family: $header-font-family;
     font-weight: bold;
     /* don't put a clear:both here. use less floats */
+    margin-top: 2em;
+    margin-bottom: 1.45em;
+}
+
+#docs-body h1 {
+    margin-top: 0;
+    padding-top: 2em;
 }
 
 #docs-body {
@@ -558,7 +619,7 @@ a.headerlink:hover {
     h2 {
         font-size: 1.6rem;
         border-top: $divider-line-style;
-        padding-top: 20px;
+        padding-top: 2em;
     }
 
     #sqlalchemy-documentation h2 {
@@ -584,12 +645,12 @@ a.headerlink:hover {
     background: none;
 }
 
-#docs-container {
+main.docs #docs-container {
     pre {
         font-size: .85rem;
-        background-color: #f0f0f0;
+        background-color: #F8F9FA;
+        border-radius: $box-border-radius;
         border: $border-style;
-        box-shadow: $box-shadow-style;
         padding: 10px;
         margin: $box-margin;
         overflow: auto;
@@ -603,6 +664,11 @@ a.headerlink:hover {
         }
     }
 
+    @media only screen and (max-width: ($mobile-max-screen-width + 1)) {
+        pre {
+            font-size: .8rem;
+        }
+    }
     /* python annotation key */
     div.code-annotations-key, div.code-non-annotations-key {
         position:absolute;
@@ -792,15 +858,11 @@ div {
         .admonition-title,
         .sidebar-title,
         .topic-title {
-            background-color: $box-header-color;
             padding: $box-title-padding;
 
-            margin: 0 -20px 20px -20px;
+            margin: 10px -20px 20px -20px;
 
             font-weight: bold;
-            border-left: $border-style;
-            border-right: $border-style;
-            border-bottom: $border-style;
         }
 
         > p {
@@ -810,7 +872,6 @@ div {
         padding: 0 20px 0 20px;
         background-color: $box-background-color;
         border: $border-style;
-        box-shadow: $box-shadow-style;
 
         margin: $box-margin;
     }
@@ -831,6 +892,10 @@ div.versionmodified {
     padding: $box-padding;
 
     margin: $box-margin;
+     
+    p {
+        margin: 0;
+    }
 }
 
 div .versionwarning,
@@ -867,7 +932,7 @@ div.deepalchemy {
     }
     background-image: url("deepalchemy.png");
     background-size: auto 100px;
-    background-position: 6px 9px;
+    background-position: 10px 29px;
     background-repeat: no-repeat;
     background-color: $deepalchemy-background-color;
     clear: right;
@@ -913,7 +978,6 @@ div.legacy {
 
 div.class-bases, div.class-members {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
 
     padding: $box-padding;
@@ -930,7 +994,6 @@ div.class-members {
 
 div.inherited-member {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
     font-size: 0.9em;
     background-color: #eefbfb;
@@ -952,7 +1015,6 @@ dl.method > dt,
 dl.class > dt,
 dl.exception > dt {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     background-color: $code-sig-background-color;
     margin: 25px -10px 10px 10px;
     padding: 8px 10px;
@@ -963,7 +1025,6 @@ dl.field-list {
     border-left: $border-style;
     border-right: $border-style;
     border-bottom: $border-style;
-    box-shadow: $box-shadow-style;
     margin: $box-top-margin 10px 0 0;
 
     li > p {
@@ -1003,9 +1064,11 @@ span.highlight {
 */
 button.copybtn {
     top: 1em;
-    right: 1.8em;
+    right: 1em;
     width: 2.5em;
     height: 2.5em;
+    display: grid;
+    place-content: center;
 
     svg {
         width: 2em;
@@ -1209,7 +1272,7 @@ div#dialect-documentation {
     box-shadow: 0px 0px 2px #ccc;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-radius: 10px;
+    border-radius: $box-border-radius;
 
     h2 {
         border-top: none;

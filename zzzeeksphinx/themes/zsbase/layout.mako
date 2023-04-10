@@ -88,30 +88,33 @@ withsidebar = bool(toc) and (
 </%block>
 
 
-<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-top-navigation-container" class="body-background row">
 <div id="docs-header">
-    <div id="docs-version-header">
-        Release: <span class="version-num">${release}</span>
-
-        % if is_beta_version:
-            <span id="sidebar-beta">beta release</span>
-        % elif is_prerelease_version:
-            <span id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</span>
-        % elif is_legacy_version:
-            <span id="sidebar-legacy">legacy version</span>
-        % elif is_current_version:
-            <span id="sidebar-current">current release</span>
-        % endif
-
-        % if release_date:
-        | Release Date: ${release_date}
-        % else:
-        | Release Date: <b>not released yet</b>
-        % endif
-
-    </div>
-
     <h1><a href="${pathto('index')}">${docstitle|h}</a></h1>
+
+    <div id="docs-version-header">
+        <div>
+            Release: <span class="version-num">${release}</span>
+
+            % if is_beta_version:
+                <span id="sidebar-beta">beta release</span>
+            % elif is_prerelease_version:
+                <span id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</span>
+            % elif is_legacy_version:
+                <span id="sidebar-legacy">legacy version</span>
+            % elif is_current_version:
+                <span id="sidebar-current">current release</span>
+            % endif
+        </div>
+
+        <div>
+            % if release_date:
+            | Release Date: ${release_date}
+            % else:
+            | Release Date: <b>not released yet</b>
+            % endif
+        </div>
+    </div>
 
 </div>
 </div>
@@ -146,16 +149,6 @@ withsidebar = bool(toc) and (
     % if withsidebar:
 
         <div id="docs-sidebar-popout">
-            <h3><a href="${pathto('index')}">${docstitle|h}</a></h3>
-            % if is_beta_version:
-                <p id="sidebar-beta">beta release</p>
-            % elif is_prerelease_version:
-                <p id="sidebar-prerelease">${"in development" if not release_date else "pre release"}</p>
-            % elif is_legacy_version:
-                <p id="sidebar-legacy">legacy version</p>
-            % elif is_current_version:
-                <p id="sidebar-current">current release</p>
-            % endif
             <p id="sidebar-topnav">
                 <a href="${pathto('index')}">Home</a>
                 % if zip_url:
@@ -284,14 +277,20 @@ withsidebar = bool(toc) and (
 </div>
 
 <div id="docs-bottom-navigation" class="docs-navigation-links${', withsidebar' if withsidebar else ''}">
-    % if prevtopic:
-        Previous:
-        <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
-    % endif
-    % if nexttopic:
-        Next:
-        <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
-    % endif
+    <div class="docs-bottom-navigation--nextprev">
+        % if prevtopic:
+            <div>
+                Previous:
+                <a href="${prevtopic['link']|h}" title="${_('previous chapter')}">${prevtopic['title']}</a>
+            </div>
+        % endif
+        % if nexttopic:
+            <div>
+                Next:
+                <a href="${nexttopic['link']|h}" title="${_('next chapter')}">${nexttopic['title']}</a>
+            </div>
+        % endif
+    </div>
 
     <div id="docs-copyright">
     % if hasdoc('copyright'):
