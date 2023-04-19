@@ -39,7 +39,7 @@ $narrow-max-screen-width: 980px;
 $topmost-header-color: #ebebee;
 $popout-color: #fbfbee;
 $sidebar-color: #efefef;
-$sidebar-header-background-color: #dddddd;
+$sidebar-header-background-color: inherit;
 $sidebar-header-color: #222222;
 $notebox-background-color: #eeffef;
 $code-sig-background-color: #efefef;
@@ -89,9 +89,11 @@ $core-background-color: #aecaf7;
 $sidebar-popout-height: 171px;
 
 $max-container-width: 100em; // 100 * 16 == 1600px;
-$fixed-sidebar-width: 336px;
+$fixed-sidebar-width: 360px;
+$inner-fixed-sidebar-width: $fixed-sidebar-width - 40px;
 
-$docs-body-sidebar-left: 343px;
+$docs-body-sidebar-left: 360px;
+$docs-body-sidebar-horiz-padding: 45px;
 
 /* global */
 
@@ -301,7 +303,7 @@ a.headerlink:hover {
 
 #docs-sidebar {
     top: $sidebar-popout-height + 18px;
-    width: $fixed-sidebar-width - 5px;
+    width: $inner-fixed-sidebar-width;
     bottom: 0;
     min-height: 0;
     overflow-y: auto;
@@ -389,7 +391,7 @@ a.headerlink:hover {
         font-size: 1.1em;
         font-weight: normal;
         margin: 10px 0 0 -15px;
-        padding: 5px 10px 5px 15px;
+        padding: 15px 10px 5px 15px;
         text-shadow: 1px 1px 0 white;
 
         a {
@@ -449,6 +451,7 @@ a.headerlink:hover {
     top: 0;
     bottom: 0;
     background-color: $sidebar-color;
+
 }
 
 #fixed-sidebar #docs-sidebar {
@@ -475,6 +478,8 @@ a.headerlink:hover {
 
 #docs-body.withsidebar {
     margin-left: $docs-body-sidebar-left;
+
+    padding: 0 $docs-body-sidebar-horiz-padding 0 $docs-body-sidebar-horiz-padding;
 
     div.section,
     section {
