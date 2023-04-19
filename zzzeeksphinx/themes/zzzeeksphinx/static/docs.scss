@@ -36,7 +36,6 @@ $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
 $narrow-max-screen-width: 980px;
 
-$primary-background-color: #fdfbfc;
 $topmost-header-color: #ebebee;
 $popout-color: #fbfbee;
 $sidebar-color: #efefef;
@@ -49,10 +48,10 @@ $legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
 $versionchanged-background-color: #f9f9d9;
+$outer-border-style: none;
 $border-style: 1px solid #ccc;
-$divider-line-style: 1px solid #ccc;
+$index-divider-line-style: 1px solid #ccc;
 
-$box-shadow-style: 2px 2px 3px #dfdfdf;
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
 
@@ -67,7 +66,19 @@ $box-title-padding: 0 2em 0 1.5em;
 $box-header-color: #c5cec2;
 $box-background-color: #f8f9f0;
 
-$hyperlink-color: #990000;
+// note main text is on top of docs-body-background
+$primary-background-color: #ffffff;
+
+// passes:
+// https://webaim.org/resources/linkcontrastchecker/?fcolor=110000&bcolor=FFFFFF&lcolor=BB0000
+$docs-body-background: #ffffff;
+$text-color: #110000;
+$hyperlink-color: #BB0000;
+$hyperlink-hover-color: #FF0000;
+
+//$spacing-between-outer-boxes: 10px;
+$spacing-between-outer-boxes: 0;
+
 $keyword-color: #480717;
 $keyword-background-color: #f2f2f2;
 
@@ -75,11 +86,12 @@ $highlighted-nav-link-background-color: #ddd;
 $orm-background-color: #e2f3f4;
 $core-background-color: #aecaf7;
 
-$sidebar-popout-height: 160px;
+$sidebar-popout-height: 171px;
 
 $max-container-width: 100em; // 100 * 16 == 1600px;
-$fixed-sidebar-width: 328px;
-$docs-body-sidebar-left: 338px;
+$fixed-sidebar-width: 336px;
+
+$docs-body-sidebar-left: 343px;
 
 /* global */
 
@@ -90,7 +102,7 @@ $docs-body-sidebar-left: 338px;
 body {
     background-color: $primary-background-color;
     margin: 0 38px;
-    color: #333333;
+    color: $text-color;
 }
 
 blockquote {
@@ -118,7 +130,7 @@ a:active {
     color: $hyperlink-color;
 }
 a:hover {
-    color: #ff0000;
+    color: $hyperlink-hover-color;
     text-decoration: underline;
 }
 
@@ -150,7 +162,7 @@ a.headerlink:hover {
 
 #docs-container {
     max-width: $max-container-width;
-    margin: 10px auto;
+    margin: $spacing-between-outer-boxes auto;
     position: relative;
     font-size: 120%;
     line-height: 1.4em;
@@ -165,7 +177,7 @@ a.headerlink:hover {
     position: relative;
 
     background-color: $topmost-header-color;
-    border: $border-style;
+    border: $outer-border-style;
     height: 75px;
 
     display: flex;
@@ -184,7 +196,7 @@ a.headerlink:hover {
 #narrow-index-nav {
     font-family: $sidebar-font-family;
     background-color: $popout-color;
-    border: $border-style;
+    border: $outer-border-style;
     font-size: 0.8em;
 }
 
@@ -204,11 +216,11 @@ a.headerlink:hover {
 }
 
 #docs-bottom-navigation {
-    margin: 1em 0 1em 0;
+    margin: $spacing-between-outer-boxes 0 $spacing-between-outer-boxes 0;
 }
 
 #docs-bottom-navigation.withsidebar {
-    margin-left: $docs-body-sidebar-left;
+    margin-left: $fixed-sidebar-width;
 }
 
 #docs-copyright {
@@ -265,7 +277,7 @@ a.headerlink:hover {
 
 #index-nav {
     position: relative;
-    margin-top: 10px;
+    margin-top: $spacing-between-outer-boxes;
     padding: 10px 10px 25px 10px;
 }
 
@@ -289,7 +301,7 @@ a.headerlink:hover {
 
 #docs-sidebar {
     top: $sidebar-popout-height + 18px;
-    width: $fixed-sidebar-width;
+    width: $fixed-sidebar-width - 5px;
     bottom: 0;
     min-height: 0;
     overflow-y: auto;
@@ -349,7 +361,7 @@ a.headerlink:hover {
 
     font-size: 0.85em;
 
-    border: $border-style;
+    border: $outer-border-style;
     background-color: $sidebar-color;
 
     > ul {
@@ -436,6 +448,7 @@ a.headerlink:hover {
     width: $fixed-sidebar-width;
     top: 0;
     bottom: 0;
+    background-color: $sidebar-color;
 }
 
 #fixed-sidebar #docs-sidebar {
@@ -453,11 +466,11 @@ a.headerlink:hover {
 }
 
 #docs-body {
-    background-color: #ffffff;
+    background-color: $docs-body-background;
     padding: 1px 10px 10px 10px;
 
-    border: $border-style;
-    margin-top: 10px;
+    border: $outer-border-style;
+    margin-top: $spacing-between-outer-boxes;
 }
 
 #docs-body.withsidebar {
@@ -486,7 +499,7 @@ a.headerlink:hover {
     #narrow-index-nav {
         display: block;
         padding: 1rem;
-        margin: 10px 0 10px 0;
+        margin: $spacing-between-outer-boxes 0 $spacing-between-outer-boxes 0;
     }
 
     #docs-body.withsidebar {
@@ -519,7 +532,7 @@ a.headerlink:hover {
 }
 
 #docs-narrow-top-navigation {
-    border: $border-style;
+    border: $outer-border-style;
     background-color: $sidebar-color;
     font-family: $sidebar-font-family;
     font-size: 0.85rem;
@@ -557,7 +570,7 @@ a.headerlink:hover {
 
     h2 {
         font-size: 1.6rem;
-        border-top: $divider-line-style;
+        border-top: $index-divider-line-style;
         padding-top: 20px;
     }
 
@@ -589,7 +602,6 @@ a.headerlink:hover {
         font-size: .85rem;
         background-color: #f0f0f0;
         border: $border-style;
-        box-shadow: $box-shadow-style;
         padding: 10px;
         margin: $box-margin;
         overflow: auto;
@@ -810,7 +822,6 @@ div {
         padding: 0 20px 0 20px;
         background-color: $box-background-color;
         border: $border-style;
-        box-shadow: $box-shadow-style;
 
         margin: $box-margin;
     }
@@ -913,7 +924,6 @@ div.legacy {
 
 div.class-bases, div.class-members {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
 
     padding: $box-padding;
@@ -930,7 +940,6 @@ div.class-members {
 
 div.inherited-member {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     padding: 5px 5px;
     font-size: 0.9em;
     background-color: #eefbfb;
@@ -952,7 +961,6 @@ dl.method > dt,
 dl.class > dt,
 dl.exception > dt {
     border: $border-style;
-    box-shadow: $box-shadow-style;
     background-color: $code-sig-background-color;
     margin: 25px -10px 10px 10px;
     padding: 8px 10px;
@@ -963,7 +971,6 @@ dl.field-list {
     border-left: $border-style;
     border-right: $border-style;
     border-bottom: $border-style;
-    box-shadow: $box-shadow-style;
     margin: $box-top-margin 10px 0 0;
 
     li > p {
@@ -1092,11 +1099,11 @@ div#sqlalchemy-documentation li {
 }
 
 div#getting-started {
-    border-bottom: $divider-line-style;
+    border-bottom: $index-divider-line-style;
 }
 
 div#tutorials {
-    border-bottom: $divider-line-style;
+    border-bottom: $index-divider-line-style;
 }
 
 /* new index layout thing */
@@ -1107,15 +1114,6 @@ div#tutorials {
 
 div.left-right-container {
     display: flex;
-    border-bottom: $divider-line-style;
-
-    .orm {
-        background-color: $orm-background-color;
-    }
-
-    .core {
-        background-color: $core-background-color;
-    }
 
     p.h2 {
         display: block;
@@ -1123,11 +1121,33 @@ div.left-right-container {
         font-size: 1.4em;
     }
 
+    .container {
+        border-bottom: $index-divider-line-style;
+        margin: 0 20px 0 20px;
+
+    }
+
+    &:last-of-type {
+        .container {
+            border-bottom: none;
+        }
+    }
+    .orm {
+        background-color: $orm-background-color;
+        margin-right: 0;
+    }
+    .core {
+        background-color: $core-background-color;
+        margin-left: 0;
+    }
+
     .leftmost {
         width: 15em;
         max-width: 15em;
         background-color: #e4e4e8;
         padding-left: 10px;
+        border-bottom: none;
+        margin: 0;
     }
 
     div {
@@ -1181,7 +1201,7 @@ div#sqlalchemy-documentation div#sqlalchemy-orm {
     width: 48%;
     min-height: 400px;
     padding-left: 10px;
-    border-right: $divider-line-style;
+    border-right: $index-divider-line-style;
     h2 {
         margin: 0;
     }
@@ -1199,7 +1219,7 @@ div#sqlalchemy-documentation div#sqlalchemy-core {
 }
 
 div#dialect-documentation {
-    border-top: $divider-line-style;
+    border-top: $index-divider-line-style;
     clear: both;
 }
 
