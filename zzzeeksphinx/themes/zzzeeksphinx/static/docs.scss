@@ -498,7 +498,7 @@ a.headerlink:hover {
     display: none;
 }
 
-/* disable sidebar on narrow screens */
+/* disable sidebar on mobile / narrow screens */
 @media only screen and (max-width: $narrow-max-screen-width) {
     #fixed-sidebar {
         display: none;
@@ -1130,7 +1130,8 @@ div.left-right-container {
 
     .container {
         border-bottom: $index-divider-line-style;
-        margin: 0 20px 0 20px;
+        //margin: 0 20px 0 20px;
+        padding-right:10px;
 
     }
 
@@ -1180,6 +1181,7 @@ div.left-right-container {
         div.container {
             padding-bottom: 1rem;
             max-width: none;
+            margin: 0;
         }
 
         .orm, .core {
