@@ -109,9 +109,9 @@ withsidebar = bool(toc) and (
 
         <div>
             % if release_date:
-            | Release Date: ${release_date}
+            Release Date: ${release_date}
             % else:
-            | Release Date: <b>not released yet</b>
+            Release Date: <b>not released yet</b>
             % endif
         </div>
     </div>

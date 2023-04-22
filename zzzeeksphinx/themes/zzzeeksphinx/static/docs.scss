@@ -28,6 +28,9 @@
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC,
         U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+:root {
+    --bs-gutter-x: 1.5rem;
+}
 
 $primary-font-family: "Libre Franklin", sans-serif;
 $header-font-family: "Libre Franklin", Arial, sans-serif;
@@ -36,8 +39,12 @@ $sidebar-font-family: "Libre Franklin", Verdana, sans-serif;
 
 $mobile-max-screen-width: 480px;
 $narrow-max-screen-width: 980px;
+$large-min-screen-width: 1024px;
+$xl-min-screen-width: 1400px;
+$xxl-min-screen-width: 1600px;
 
 $primary-background-color: #fdfbfc;
+$body-background-color: #fff;
 $topmost-header-color: #ebebee;
 $popout-color: #fbfbee;
 $sidebar-border-color: #e9eaeb;
@@ -54,8 +61,8 @@ $border-color: #e6e9ec;
 $border-style: 1px solid $border-color;
 $divider-line-style: 1px solid #e6e9ec;
 
-$box-top-margin: 30px;
-$box-margin: $box-top-margin 0px 30px 0px;
+$box-top-margin: 50px;
+$box-margin: $box-top-margin 0px 50px 0px;
 
 // this is optimized for the site.  with the vanilla docs, the
 // vertical padding is too much.   not sure how to fix
@@ -86,7 +93,7 @@ $docs-body-sidebar-left: 348px;
 /* global */
 
 .body-background {
-    background-color: $primary-background-color;
+    background-color: $body-background-color;
 }
 
 body {
@@ -121,7 +128,6 @@ a:active {
 }
 a:hover {
     color: #ff0000;
-    text-decoration: underline;
 }
 
 /* paragraph links after sections.
@@ -143,7 +149,6 @@ a.headerlink {
 }
 
 a.headerlink:hover {
-    background-color: #00f;
     /*background-color: #990000;*/
     color: white;
 }
@@ -170,6 +175,8 @@ a.headerlink:hover {
     padding: 10px 20px;
 
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
     align-items: center;
 
     h1 {
@@ -188,6 +195,15 @@ a.headerlink:hover {
         margin-left: auto;
         display: flex;
         flex-wrap: wrap;
+        justify-content: flex-end;
+
+        gap: 4px;
+
+        @media (min-width: $large-min-screen-width) {
+            div:last-child {
+                border-left: 1px solid inherit;
+            }
+        }
     }
 }
 
@@ -215,7 +231,7 @@ a.headerlink:hover {
 }
 
 #docs-bottom-navigation.withsidebar {
-    margin-left: $docs-body-sidebar-left + 15px;
+    margin-left: $docs-body-sidebar-left;
 }
 
 .docs-bottom-navigation--nextprev {
@@ -233,6 +249,7 @@ a.headerlink:hover {
     font-size: 0.85em;
     padding: 5px 0px;
     margin-top: $box-top-margin;
+    margin-bottom: $box-top-margin;
 }
 
 #docs-header h1,
@@ -284,17 +301,62 @@ a.headerlink:hover {
 
 #docs-body {
     min-height: 700px;
+    &.withsidebar {
+        @media (min-width: $large-min-screen-width) {
+            /* double padding on desktop */
+            padding: 10px var(--bs-gutter-x);
+        }
+
+        @media (min-width: $xl-min-screen-width) {
+            /* *4 padding on xl */
+            padding: 10px calc(var(--bs-gutter-x) * 2);
+        }
+
+        @media (min-width: $xxl-min-screen-width) {
+            /* *4 padding on xl */
+            padding: 40px calc(var(--bs-gutter-x) * 4);
+        }
+    }
+}
+
+
+#docs-copyright,
+.docs-bottom-navigation--nextprev {
+    @media (min-width: $large-min-screen-width) {
+        /* double padding on desktop */
+        margin-left: var(--bs-gutter-x);
+        margin-right: var(--bs-gutter-x);
+    }
+
+    @media (min-width: $xl-min-screen-width) {
+        /* *4 padding on xl */
+
+        margin-left: calc(var(--bs-gutter-x) * 2);
+        margin-right: calc(var(--bs-gutter-x) * 2);
+    }
+
+    @media (min-width: $xxl-min-screen-width) {
+        /* *8 padding on xxl */
+
+        margin-left: calc(var(--bs-gutter-x) * 4);
+        margin-right: calc(var(--bs-gutter-x) * 4);
+    }
 }
 
 #index-nav {
     position: relative;
-    margin-top: 10px;
-    padding: 10px 10px 25px 10px;
-}
+    margin-top: $box-top-margin;
+    padding: 10px var(--bs-gutter-x);
+    margin-left: calc(-1 * var(--bs-gutter-x) * 0.5);
+    margin-right: calc(-1 * var(--bs-gutter-x) * 0.5);
+ 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
-#index-nav form {
-    padding-top: 10px;
-    float: right;
+    p {
+        margin: auto 0;
+    }
 }
 
 #sidebar-paginate {
@@ -359,26 +421,27 @@ a.headerlink:hover {
 
 #sidebar-prerelease,
 #sidebar-legacy {
-    background: #f11;
-    color: #bbb;
+    background: #ae3737;
+    color: #ebe4e4;
 }
 
 #sidebar-beta {
-    background: #ffff80;
-    color: #555;
+    background: #dfdf70;
+    color: #4f4f25;
 }
 
 #sidebar-current {
-    background: #4c4;
-    color: #555;
+    background: #3bc53b;
+    color: #203f24;
 }
 
 #docs-version-header {
     #sidebar-prerelease,
     #sidebar-legacy,
     #sidebar-current {
-        width: 14em;
         font-size: 1em;
+        padding: 3px 4px;
+        border-radius: 2px;
     }
 }
 
@@ -401,6 +464,11 @@ a.headerlink:hover {
         padding-left: 100px;
         padding-top: 5px;
         padding-bottom: 5px;
+
+        a:not(.paramlink) {
+            /* improve link reachability, with inline block the whole box can be clicked*/
+            display: block;
+        }
     }
 
     li.current > span.link-container {
@@ -442,7 +510,6 @@ a.headerlink:hover {
 
     a {
         color: inherit;
-        /* improve link reachability, with inline block the whole box can be clicked*/
         display: inline-block;
     }
 }
@@ -479,9 +546,6 @@ a.headerlink:hover {
 #fixed-sidebar {
     position: relative;
     box-sizing: border-box;
-
-    border-right: 1px solid $sidebar-border-color;
-    padding-right: $box-padding;
 }
 
 
@@ -493,6 +557,8 @@ a.headerlink:hover {
     width: $fixed-sidebar-width;
     top: 0;
     bottom: 0;
+    border-right: 1px solid $sidebar-border-color;
+    padding-right: calc(var(--bs-gutter-x) * .5);
 }
 
 #fixed-sidebar #docs-sidebar {
@@ -507,11 +573,6 @@ a.headerlink:hover {
 
 #docs-sidebar {
     position: fixed;
-}
-
-#docs-body {
-    background-color: #ffffff;
-    padding-left: 15px;
 }
 
 #docs-body.withsidebar {
@@ -540,7 +601,7 @@ a.headerlink:hover {
     #narrow-index-nav {
         display: block;
         padding: 1rem;
-        margin: 10px 0 10px 0;
+        margin: 20px 0 20px 0;
     }
 
     #docs-body.withsidebar {
@@ -555,21 +616,13 @@ a.headerlink:hover {
     }
 
     #docs-top-navigation-container h1 {
-        position: absolute;
-        top: 10px;
-        margin: 0;
         padding: 0;
-        left: 8px;
+        margin: 0;
     }
 
-    #docs-header {
-        height: 124px;
-    }
-    #docs-version-header {
-        position: absolute;
-        left: 8px;
-        right: 0;
-        bottom: 8px;
+    #docs-header #docs-version-header {
+        justify-content: flex-start;
+        margin-left: 0;
     }
 }
 
@@ -596,7 +649,7 @@ a.headerlink:hover {
     font-family: $header-font-family;
     font-weight: bold;
     /* don't put a clear:both here. use less floats */
-    margin-top: 2em;
+    margin-top: 1.45em;
     margin-bottom: 1.45em;
 }
 
@@ -619,7 +672,6 @@ a.headerlink:hover {
     h2 {
         font-size: 1.6rem;
         border-top: $divider-line-style;
-        padding-top: 2em;
     }
 
     #sqlalchemy-documentation h2 {
@@ -637,6 +689,10 @@ a.headerlink:hover {
     h5 {
         font-size: 1.05rem;
     }
+
+    a {
+        border-bottom: 1px dashed rgba($hyperlink-color, 0.4);
+    }
 }
 
 /* SQL popup, code styles */
@@ -651,7 +707,7 @@ main.docs #docs-container {
         background-color: #F8F9FA;
         border-radius: $box-border-radius;
         border: $border-style;
-        padding: 10px;
+        padding: var(--bs-gutter-x);
         margin: $box-margin;
         overflow: auto;
         line-height: 1.3em;
@@ -724,8 +780,8 @@ main.docs #docs-container {
 .show_sql,
 .show_sql_print {
     padding: 5px 10px;
-    margin: 10px -5px 10px -5px;
-    border: 1px dashed;
+    margin: 30px 0 10px 0;
+    border: 1px dashed darken(#fbfbee, 50%);
 }
 .popup_sql,
 .show_sql {
@@ -741,6 +797,21 @@ main.docs #docs-container {
 .sliding-table {
     width: 100%;
     overflow: auto;
+}
+
+#docs-body.index {
+    margin-left: calc(-1 * var(--bs-gutter-x) * 0.5);
+    margin-right: calc(-1 * var(--bs-gutter-x) * 0.5);
+    margin-top: $box-top-margin;
+}
+
+#docs-body.index .docutils.leftmost {
+    padding-left: var(--bs-gutter-x);
+    padding-right: var(--bs-gutter-x);
+}
+
+#docs-body:not(.index) .docutils.container {
+    margin: $box-margin;
 }
 
 .section > table.docutils,
@@ -874,6 +945,10 @@ div {
         border: $border-style;
 
         margin: $box-margin;
+
+        &:first-child {
+            margin-top: 0;
+        }
     }
 }
 
@@ -1164,10 +1239,6 @@ div#tutorials {
 
 /* new index layout thing */
 
-#docs-body.index {
-    padding: 0;
-}
-
 div.left-right-container {
     display: flex;
     border-bottom: $divider-line-style;
@@ -1272,7 +1343,6 @@ div#dialect-documentation {
     box-shadow: 0px 0px 2px #ccc;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-radius: $box-border-radius;
 
     h2 {
         border-top: none;
@@ -1289,34 +1359,49 @@ div#dialect-documentation {
         }
     }
 
-    div.orm-header, section.orm-header {
-        @include card-line-style();
-        border-left: 2.2em solid $orm-background-color;
+    div.orm-header, section.orm-header,
+    div.core-header, section.core-header {
+        border-right: 0.6em solid $core-background-color;
 
         padding-left: 1em;
         padding-right: 1em;
         margin-bottom: 2em;
 
+        @media (min-width: $large-min-screen-width) {
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+
+        @media (min-width: $xl-min-screen-width) {
+            margin-bottom: 4em;
+        }
+
         > h2,
         > h3 {
             border: none;
+        }
+
+        & > h1:first-child,
+        & > h2:first-child,
+        & > h3:first-child {
             padding-top: 0;
+            margin-top: 1em;
         }
     }
 
-    div.core-header, section.core-header {
-        @include card-line-style();
-        border-right: 2.2em solid $core-background-color;
-
-        padding-left: 1em;
-        padding-right: 1em;
-        margin-bottom: 2em;
-
-        > h2,
-        > h3 {
-            border: none;
-            padding-top: 0;
-        }
+    
+    div.orm-header, section.orm-header {
+        border-left: 0.6em solid $orm-background-color;
+        border-right: none;
+    }
+    
+    
+    div.core-header:not(.orm-header), section.core-header:not(.orm-header) {
+        padding-left: 0;
+    }
+    
+    div.orm-header:not(.core-header), section.orm-header:not(.core-header) {
+        padding-right: 0;
     }
 
     div.orm-dependency, section.orm-dependency {
@@ -1324,10 +1409,22 @@ div#dialect-documentation {
     }
 
     div.orm-addin, section.orm-addin {
-        @include card-line-style();
         border-left: .6em solid $orm-background-color;
 
-        padding-left: 10px;
         margin: 10px 0 10px 0;
+
+        padding-left: 1em;
+
+        @media (min-width: $large-min-screen-width) {
+            padding-left: 2em;
+        }
     }
+}
+
+#next-steps > h2 {
+    padding-top: 1.4em;
+}
+
+#footer {
+    background: $body-background-color;
 }
