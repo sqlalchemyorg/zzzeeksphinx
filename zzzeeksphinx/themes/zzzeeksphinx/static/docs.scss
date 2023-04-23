@@ -1396,7 +1396,7 @@ div#dialect-documentation {
     }
     
     
-    div.core-header:not(.orm-header), section.core-header:not(.orm-header) {
+    div.core-header:not(.orm-header):not(.orm-dependency), section.core-header:not(.orm-header):not(.orm-dependency) {
         padding-left: 0;
     }
     
