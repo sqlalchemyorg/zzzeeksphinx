@@ -13,6 +13,10 @@ def setup(app):
         extras,
     )
 
+    # we use jquery.  See
+    # https://www.sphinx-doc.org/en/master/changes.html#id65
+    app.setup_extension("sphinxcontrib.jquery")
+
     autodoc_mods.setup(app)
     dialect_info.setup(app)
     mako.setup(app)
