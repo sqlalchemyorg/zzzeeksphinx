@@ -11,7 +11,7 @@ from sphinx.errors import NoUri
 from sphinx.locale import _
 from sphinx.locale import __
 from sphinx.pycode import ModuleAnalyzer
-from sphinx.util import status_iterator
+from sphinx.util.display import status_iterator
 
 from . import util
 

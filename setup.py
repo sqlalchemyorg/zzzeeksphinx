@@ -39,7 +39,7 @@ setup(
         "libsass",
         "mako",
         "requests",
-        "sphinx>=5.3.0,<6.3",
+        "sphinx>=6.1,<7.1",
         "sphinxcontrib-jquery",
     ],
     include_package_data=True,
