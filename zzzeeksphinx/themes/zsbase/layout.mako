@@ -316,15 +316,6 @@ withsidebar = bool(toc) and (
 
 <%block name="lower_scripts">
 
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '${pathto("", 1)}',
-          VERSION:     '${release|h}',
-          COLLAPSE_MODINDEX: false,
-          FILE_SUFFIX: '${file_suffix}'
-      };
-    </script>
-
     <script type="text/javascript" id="documentation_options" data-url_root="${ pathto('', 1) }" src="${ pathto('_static/documentation_options.js', 1) }"></script>
 
     <!-- begin iterate through sphinx environment script_files -->
