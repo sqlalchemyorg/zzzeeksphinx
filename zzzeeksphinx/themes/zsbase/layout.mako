@@ -316,7 +316,11 @@ withsidebar = bool(toc) and (
 
 <%block name="lower_scripts">
 
-    <script type="text/javascript" id="documentation_options" data-url_root="${ pathto('', 1) }" src="${ pathto('_static/documentation_options.js', 1) }"></script>
+    <script type="text/javascript">
+      ## see https://github.com/sphinx-doc/sphinx/commit/8e730ae303ae686705ea12f44ef11da926a87cf5
+      document.documentElement.dataset.content_root = '${content_root}';
+
+    </script>
 
     <!-- begin iterate through sphinx environment script_files -->
     % for scriptfile in script_files + self.attr.local_script_files:
