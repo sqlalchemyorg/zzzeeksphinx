@@ -84,6 +84,8 @@ withsidebar = bool(toc) and (
         <link rel="prev" title="${prevtopic['title']|util.striptags}" href="${prevtopic['link']|h}" />
     % endif
     <!-- end layout.mako headers -->
+    <script type="text/javascript" id="documentation_options" data-content_root="${ pathto('', 1) }" src="${ pathto('_static/documentation_options.js', 1) }"></script>
+
 
 </%block>
 
@@ -315,8 +317,6 @@ withsidebar = bool(toc) and (
 </div>
 
 <%block name="lower_scripts">
-
-    <script type="text/javascript" id="documentation_options" data-url_root="${ pathto('', 1) }" src="${ pathto('_static/documentation_options.js', 1) }"></script>
 
     <!-- begin iterate through sphinx environment script_files -->
     % for scriptfile in script_files + self.attr.local_script_files:
