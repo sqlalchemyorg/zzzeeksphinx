@@ -3,10 +3,11 @@
 <%!
     import os
     import time
-    import datetime
+    from datetime import datetime, timezone
 
-    now = datetime.datetime.utcfromtimestamp(
-        int(os.environ.get('SOURCE_DATE_EPOCH', time.time()))
+    generated_at = datetime.fromtimestamp(
+        timestamp=int(os.environ.get('SOURCE_DATE_EPOCH', time.time())),
+        tz=timezone.utc if 'SOURCE_DATE_EPOCH' in os.environ else None,
     )
 
     local_script_files = []
@@ -313,7 +314,7 @@ withsidebar = bool(toc) and (
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
 
-    Documentation last generated: ${now.strftime("%c")}
+    Documentation last generated: ${generated_at.strftime("%c%Z")}
 
     </div>
 </div>
