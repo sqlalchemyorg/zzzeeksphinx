@@ -1,7 +1,13 @@
 ## coding: utf-8
 
 <%!
+    import os
+    import time
     import datetime
+
+    now = datetime.datetime.utcfromtimestamp(
+        int(os.environ.get('SOURCE_DATE_EPOCH', time.time()))
+    )
 
     local_script_files = []
 
@@ -307,7 +313,7 @@ withsidebar = bool(toc) and (
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
 
-    Documentation last generated: ${datetime.datetime.now().strftime("%c")}
+    Documentation last generated: ${now.strftime("%c")}
 
     </div>
 </div>
