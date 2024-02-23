@@ -6,7 +6,7 @@
     from datetime import datetime, timezone
 
     generated_at = datetime.fromtimestamp(
-        timestamp=int(os.environ.get('SOURCE_DATE_EPOCH', time.time())),
+        timestamp=float(os.environ.get('SOURCE_DATE_EPOCH', time.time())),
         tz=timezone.utc if 'SOURCE_DATE_EPOCH' in os.environ else None,
     )
 
