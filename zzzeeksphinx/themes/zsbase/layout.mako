@@ -7,7 +7,7 @@
 
     generated_at = datetime.fromtimestamp(
         timestamp=float(os.environ.get('SOURCE_DATE_EPOCH', time.time())),
-        tz=timezone.utc if 'SOURCE_DATE_EPOCH' in os.environ else None,
+        tz=timezone.utc,
     )
 
     local_script_files = []
