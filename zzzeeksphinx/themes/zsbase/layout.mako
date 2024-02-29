@@ -5,10 +5,15 @@
     import time
     from datetime import datetime, timezone
 
-    generated_at = datetime.fromtimestamp(
-        timestamp=float(os.environ.get('SOURCE_DATE_EPOCH', time.time())),
-        tz=timezone.utc,
-    )
+    if "SOURCE_DATE_EPOCH" in os.environ:
+        generated_at = datetime.fromtimestamp(
+            timestamp=float(os.environ['SOURCE_DATE_EPOCH']),
+            tz=timezone.utc
+        )
+    else:
+        generated_at = datetime.fromtimestamp(
+            timestamp=time.time(),
+        ).astimezone()
 
     local_script_files = []
 
