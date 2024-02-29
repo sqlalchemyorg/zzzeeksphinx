@@ -319,7 +319,7 @@ withsidebar = bool(toc) and (
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
 
-    Documentation last generated: ${generated_at.strftime("%c%Z")}
+    Documentation last generated: ${generated_at.strftime("%c %Z")}
 
     </div>
 </div>
