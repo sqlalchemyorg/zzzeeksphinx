@@ -1,7 +1,19 @@
 ## coding: utf-8
 
 <%!
-    import datetime
+    import os
+    import time
+    from datetime import datetime, timezone
+
+    if "SOURCE_DATE_EPOCH" in os.environ:
+        generated_at = datetime.fromtimestamp(
+            timestamp=float(os.environ['SOURCE_DATE_EPOCH']),
+            tz=timezone.utc
+        )
+    else:
+        generated_at = datetime.fromtimestamp(
+            timestamp=time.time(),
+        ).astimezone()
 
     local_script_files = []
 
@@ -307,7 +319,7 @@ withsidebar = bool(toc) and (
         Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
     % endif
 
-    Documentation last generated: ${datetime.datetime.now().strftime("%c")}
+    Documentation last generated: ${generated_at.strftime("%c %Z")}
 
     </div>
 </div>
