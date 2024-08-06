@@ -316,7 +316,7 @@ withsidebar = bool(toc) and (
     <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
 
     % if show_sphinx:
-        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> ${sphinx_version|h}.
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> ${sphinx_version|h}.
     % endif
 
     Documentation last generated: ${generated_at.strftime("%c %Z")}
