@@ -148,7 +148,7 @@ class DialectDirective(SphinxDirective):
             text.append("* - :term:`Fully tested in CI`")
             text.append("  - %s" % content["full_support"])
         if "normal_support" in content:
-            text.append("* - :term:`Normal support`")
+            text.append("* - :term:`Supported version`")
             text.append("  - %s" % content["normal_support"])
         if "best_effort" in content:
             text.append("* - :term:`Best effort`")
@@ -286,12 +286,12 @@ class DialectTableDirective(SphinxDirective):
 
         text = [
             "* - Database",
-            "  - :term:`Fully tested in CI`",
-            "  - :term:`Normal support`",
+            # "  - :term:`Fully tested in CI`",
+            "  - :term:`Supported version`",
             "  - :term:`Best effort`",
             # Mock row. Will be replaced in process_dialect_table
             "* - **placeholder**",
-            "  - placeholder",
+            # "  - placeholder",
             "  - placeholder",
             "  - placeholder",
         ]
@@ -364,12 +364,12 @@ def process_dialect_table(app, doctree, fromdocname):
         for dialect_info in dialect_data:
             row = templateRow.deepcopy()
             text_to_replace = list(row.traverse(nodes.Text))
-            assert len(text_to_replace) == 4
+            assert len(text_to_replace) == 3
             columns = [
                 # TODO: it would be great for this first element to
                 # be hyperlinked
                 dialect_info["name"],
-                dialect_info.get("full_support", "-"),
+                # dialect_info.get("full_support", "-"),
                 dialect_info.get("normal_support", "-"),
                 dialect_info.get("best_effort", "-"),
             ]
