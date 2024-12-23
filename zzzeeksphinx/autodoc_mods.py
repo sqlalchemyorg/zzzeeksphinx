@@ -454,9 +454,9 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                                 adjusted_mod,
                                 supercls,
                                 attrname=attrname,
-                                pytype="attr"
-                                if what == "attribute"
-                                else "meth",
+                                pytype=(
+                                    "attr" if what == "attribute" else "meth"
+                                ),
                                 tilde=True,
                             ),
                             what,
@@ -485,8 +485,17 @@ def work_around_issue_6785():
     # check some assumptions, more as a way of testing if this code changes
     # on the sphinx side
     assert (
+        # our change is already there...as in autobuild
+        autodoc.PropertyDocumenter.priority == -100
+        or
+        # this is how things start out when you first run Sphinx
         autodoc.PropertyDocumenter.priority
         > autodoc.AttributeDocumenter.priority
+    ), (
+        f"autodoc.PropertyDocumenter.priority = "
+        f"{autodoc.PropertyDocumenter.priority}, "
+        f"autodoc.AttributeDocumenter.priority="
+        f"{autodoc.AttributeDocumenter.priority}"
     )
     autodoc.PropertyDocumenter.priority = -100
 
