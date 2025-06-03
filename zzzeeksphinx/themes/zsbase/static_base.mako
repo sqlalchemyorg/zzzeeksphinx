@@ -14,7 +14,7 @@
 
         <%block name="css">
             <!-- begin iterate through site-imported + sphinx environment css_files -->
-            % for cssfile in self.attr.default_css_files + css_files:
+            % for cssfile in self.attr.default_css_files + [css.filename for css in css_files]:
                 <link rel="stylesheet" href="${pathto(cssfile, 1)}" type="text/css" />
             % endfor
             <!-- end iterate through site-imported + sphinx environment css_files -->

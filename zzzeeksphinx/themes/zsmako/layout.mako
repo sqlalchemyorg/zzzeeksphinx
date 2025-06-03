@@ -206,7 +206,7 @@ withsidebar = bool(toc) and current_page_name != 'index'
     </script>
 
     <!-- begin iterate through sphinx environment script_files -->
-    % for scriptfile in script_files + self.attr.local_script_files:
+    % for scriptfile in [script.filename for script in script_files] + self.attr.local_script_files:
         <script type="text/javascript" src="${pathto(scriptfile, 1)}"></script>
     % endfor
     <!-- end iterate through sphinx environment script_files -->

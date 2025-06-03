@@ -43,7 +43,7 @@ class MakoBridge(TOCMixin, TemplateBridge):
                 [
                     dir_
                     for dir_ in builder.theme.get_theme_dirs()
-                    if "zzzeeksphinx" in dir_
+                    if "zzzeeksphinx" in str(dir_)
                 ]
                 if hasattr(builder, "theme")
                 else []
