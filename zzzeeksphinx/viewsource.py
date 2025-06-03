@@ -152,7 +152,7 @@ def vendored_env_merge_info(app, env, docnames, other):
 
 def _get_sphinx_py_module(env):
     base_name = env.temp_data.get("autodoc:module", None)
-    if base_name is not None:
+    if base_name:
         return base_name
     if util.SPHINX_VERSION >= (1, 3):
         base_name = env.ref_context.get("py:module", None)
