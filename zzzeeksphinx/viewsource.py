@@ -317,11 +317,11 @@ class AutoSourceDirective(Directive):
 
         sourcefile = self.state.document.current_source.split(os.pathsep)[0]
         dir_ = os.path.dirname(sourcefile)
-        files = [
+        files = sorted(
             f
             for f in os.listdir(dir_)
             if f.endswith(".py") and f != "__init__.py"
-        ]
+        )
 
         if "files" in content:
             # ordered listing of files to include
