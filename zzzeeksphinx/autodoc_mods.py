@@ -33,7 +33,16 @@ def autodoc_skip_member(app, what, name, obj, skip, options):
 
 
 def _adjust_rendered_mod_name(config, modname, objname):
-    if (modname, objname) in config.autodocmods_convert_modname_w_class:
+    # new keys for autodocmods_convert_modname_w_class to suit sphinx 8
+    # conf comparison scheme
+    if f"{modname}.{objname}" in config.autodocmods_convert_modname_w_class:
+        return config.autodocmods_convert_modname_w_class[
+            f"{modname}.{objname}"
+        ]
+
+    # legacy; sphinx 8 has a conf comparison scheme that breaks with tuples
+    # as dict keys
+    elif (modname, objname) in config.autodocmods_convert_modname_w_class:
         return config.autodocmods_convert_modname_w_class[(modname, objname)]
     elif modname in config.autodocmods_convert_modname:
         return config.autodocmods_convert_modname[modname]
@@ -375,6 +384,11 @@ def autodoc_process_signature(
 def autodoc_process_docstring(app, what, name, obj, options, lines):
     # skipping superclass classlevel docs for now, as these
     # get in the way of using autosummary.
+
+    # NOTE: this whole extension doesn't change how sphinx displays the
+    # class module + name itself, which still puts the full path that
+    # comes out of autodoc, so I dont really see the point of
+    # _adjust_rendered_mod_name() too much.
 
     if what in ("class", "exception"):
         _track_autodoced[name] = obj
