@@ -60,14 +60,15 @@ class MakoBridge(TOCMixin, TemplateBridge):
                 template_name = builder.config["site_adapter_template"]
 
                 template = requests.get(
-                    builder.config["site_base"] + "/" + template_name
+                    builder.config["site_base"] + "/" + template_name,
+                    verify=False,
                 ).content
                 self.lookup.put_string(template_name, template)
 
             py_name = builder.config["site_adapter_py"]
             if py_name:
                 setup_ctx = requests.get(
-                    builder.config["site_base"] + "/" + py_name
+                    builder.config["site_base"] + "/" + py_name, verify=False
                 ).content
                 lcls = {}
                 exec(setup_ctx, lcls)
