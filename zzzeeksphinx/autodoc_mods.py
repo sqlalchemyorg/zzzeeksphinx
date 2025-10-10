@@ -240,8 +240,9 @@ def write_autosummaries(app, doctree):
                 text = nodes.Text("", "")
 
             if ad_node.attributes.get("objtype") == "class":
-                member_nodes = []
+                member_rows = []
 
+                attr_sig = None
                 for attr_desc in ad_node.traverse(addnodes.desc):
                     objtype = attr_desc.attributes.get("objtype")
                     if objtype not in ("classmethod", "method", "attribute"):
@@ -262,8 +263,33 @@ def write_autosummaries(app, doctree):
                     )[0]
                     attr_name_node = attr_name_node.deepcopy()
 
+                    # Get the description (first paragraph of the member's
+                    # docstring)
+                    try:
+                        desc_para = attr_desc[1][0]
+                        if isinstance(desc_para, nodes.paragraph):
+                            desc_text = desc_para.deepcopy()
+                        else:
+                            desc_text = nodes.Text("")
+                    except IndexError:
+                        desc_text = nodes.Text("")
+
                     if objtype in ("classmethod", "method"):
-                        attr_name_node.append(nodes.Text("()"))
+                        # Get the function signature for methods
+                        attr_obj = _track_autodoced.get(attr_ref_id, None)
+                        if inspect.isfunction(attr_obj) or inspect.ismethod(
+                            attr_obj
+                        ):
+                            try:
+                                param_str = _quick_inspect_sig(
+                                    *inspect.getfullargspec(attr_obj)
+                                )
+                            except (TypeError, AttributeError):
+                                param_str = "()"
+                        else:
+                            param_str = "()"
+                    else:
+                        param_str = ""
 
                     attr_ref = nodes.reference(
                         "",
@@ -273,30 +299,62 @@ def write_autosummaries(app, doctree):
                         classes=["reference", "internal"],
                     )
 
-                    member_nodes.append(attr_ref)
+                    # Create a row for this member
+                    member_row = nodes.row("")
 
-                if member_nodes:
-                    method_list = nodes.paragraph("", "", member_nodes[0])
-
-                    for ref in member_nodes[1:]:
-                        method_list.append(nodes.Text(", "))
-                        method_list.append(ref)
-
-                    method_box = nodes.container(
+                    # First column: member name with signature
+                    name_para = nodes.paragraph(
                         "",
-                        nodes.paragraph(
-                            "", "", nodes.strong("", nodes.Text("Members"))
-                        ),
-                        method_list,
-                        classes=["class-members"],
+                        "",
+                        attr_ref,
+                        nodes.Text(param_str),
                     )
+                    member_row.append(
+                        nodes.entry(
+                            "", name_para, classes=["autosummary-name"]
+                        )
+                    )
+
+                    # Second column: description
+                    member_row.append(nodes.entry("", desc_text))
+
+                    member_rows.append(member_row)
+
+                if member_rows:
+                    # Create a table for members
+                    members_table = nodes.table(
+                        "", classes=["longtable", "docutils", "class-members"]
+                    )
+                    members_group = nodes.tgroup("", cols=2)
+
+                    members_table.append(members_group)
+                    members_group.append(nodes.colspec("", colwidth=10))
+                    members_group.append(nodes.colspec("", colwidth=90))
+
+                    members_header = nodes.thead("")
+                    members_header.append(
+                        nodes.row(
+                            "",
+                            nodes.entry("", nodes.Text("Member Name")),
+                            nodes.entry("", nodes.Text("Description")),
+                        )
+                    )
+                    members_group.append(members_header)
+
+                    members_body = nodes.tbody("")
+                    members_group.append(members_body)
+
+                    for member_row in member_rows:
+                        members_body.append(member_row)
+
+                    method_box = members_table
 
                     content = ad_node.traverse(addnodes.desc_content)
                     if content:
                         content = list(content)[0]
                         for i, n in enumerate(content.children):
                             if isinstance(n, (addnodes.index, addnodes.desc)):
-                                content.insert(i - 1, method_box)
+                                content.insert(i, method_box)
                                 break
 
             entry = nodes.entry("", text)
@@ -416,24 +474,13 @@ def autodoc_process_docstring(app, what, name, obj, options, lines):
                 _inherited_names.add("%s.%s" % (adjusted_mod, base.__name__))
 
         if bases:
-            modname, objname = re.match(r"(.*)\.(.*?)$", name).group(1, 2)
 
-            adjusted_mod = _adjust_rendered_mod_name(
-                app.env.config, modname, objname
-            )
-            clsdoc = _superclass_classstring(adjusted_mod, obj)
-
-            lines.extend(
-                [
-                    "",
-                    ".. container:: class_bases",
-                    "    " "",
-                    "    **Class signature**",
-                    "",
-                    "    class %s (%s)" % (clsdoc, ", ".join(bases)),
-                    "",
-                ]
-            )
+            lines[:0] = [
+                ".. container:: inherited_member",
+                "",
+                "    *inherits from* %s" % (", ".join(bases),),
+                "",
+            ]
 
     elif what in ("attribute", "method"):
         m = re.match(r"(.*?)\.([\w_]+)$", name)
