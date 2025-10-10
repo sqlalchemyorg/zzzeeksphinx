@@ -44,13 +44,15 @@ $sidebar-header-color: #222222;
 $notebox-background-color: #eeffef;
 $code-sig-background-color: #efefef;
 $deprecated-background-color: #fcf0f6;
-$legacy-background-color: #fcffc0;
 $warning-background-color: #fcf0f6;
 $deepalchemy-background-color: #f6e8fd;
-$versionchanged-background-color: #f9f9d9;
+$versionchanged-background-color: #e8f4f8;
 $outer-border-style: none;
 $border-style: 1px solid #ccc;
 $index-divider-line-style: 1px solid #ccc;
+$member-table-cell-border: 1px solid #e1e4e5;
+$member-table-cell-padding: 4px 16px;
+$member-table-font-size: .85rem;
 
 $box-top-margin: 10px;
 $box-margin: $box-top-margin 10px 20px 0px;
@@ -73,8 +75,13 @@ $primary-background-color: #ffffff;
 // https://webaim.org/resources/linkcontrastchecker/?fcolor=110000&bcolor=FFFFFF&lcolor=BB0000
 $docs-body-background: #ffffff;
 $text-color: #110000;
-$hyperlink-color: #BB0000;
+$hyperlink-color: #990000;
 $hyperlink-hover-color: #FF0000;
+
+$section-hyperlink-color:  #990000;
+$section-hyperlink-hover-color: #FF0000;
+$section-hyperlink-font-weight: 400;
+$section-hyperlink-code-font-weight: 600;
 
 //$spacing-between-outer-boxes: 10px;
 $spacing-between-outer-boxes: 0;
@@ -134,6 +141,27 @@ a:active {
 a:hover {
     color: $hyperlink-hover-color;
     text-decoration: underline;
+}
+
+/* links within main content sections - dark mauve with underline */
+#docs-body aside.topic a,
+#docs-body .search a,
+#docs-body section a,
+#docs-body div.section a {
+    color: $section-hyperlink-color;
+    /*text-decoration: underline;*/
+    text-underline-offset: 2px;
+    font-weight: $section-hyperlink-font-weight;
+}
+
+#docs-body aside.topic a:hover,
+#docs-body .search a:hover,
+#docs-body section a:hover,
+#docs-body div.section a:hover {
+    color: $section-hyperlink-hover-color;
+    /*text-decoration: underline;*/
+    text-underline-offset: 2px;
+    font-weight: $section-hyperlink-font-weight;
 }
 
 /* paragraph links after sections.
@@ -609,11 +637,14 @@ a.headerlink:hover {
         font-size: .85rem;
         background-color: #f0f0f0;
         border: $border-style;
+        border-radius: 4px;
         padding: 10px;
+        padding-right: 3em;
         margin: $box-margin;
         overflow: auto;
         line-height: 1.3em;
         clear: both;
+        position: relative;
     }
 
     @media only screen and (max-width: ($narrow-max-screen-width + 300)) {
@@ -709,13 +740,13 @@ section > table.docutils {
 
         td,
         th {
-            border: 1px solid #e1e4e5;
+            border: $member-table-cell-border;
             background-color: transparent;
             vertical-align: middle;
-            font-size: 90%;
+            font-size: $member-table-font-size;
             margin: 0;
             overflow: visible;
-            padding: 8px 16px;
+            padding: $member-table-cell-padding;
         }
 
         td.autosummary-name {
@@ -811,35 +842,49 @@ div {
         .admonition-title,
         .sidebar-title,
         .topic-title {
-            background-color: $box-header-color;
-            padding: $box-title-padding;
+            background-color: #d4edda;
+            padding: 8px 12px;
 
-            margin: 0 -20px 20px -20px;
+            margin: -10px -10px 10px -10px;
 
             font-weight: bold;
-            border-left: $border-style;
-            border-right: $border-style;
-            border-bottom: $border-style;
+            border: none;
+            border-radius: 4px 4px 0 0;
         }
 
         > p {
-            font-size: 0.9em;
+            font-size: 0.9rem !important;
         }
 
-        padding: 0 20px 0 20px;
-        background-color: $box-background-color;
-        border: $border-style;
+        padding: 10px;
+        background-color: #ffffff;
+        border: 1px solid #d0d0d0;
+        border-left: 4px solid #5cb85c;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
         margin: $box-margin;
+        font-size: 0.9rem !important;
+
+        * {
+            font-size: inherit !important;
+        }
     }
 }
 
 
-div.sidebar {
-    background-color: #ffffee;
-    float: right;
-    width: 40%;
-    margin: 10px 10px 5px 10px;
+
+aside.sidebar, div.tip {
+    background-color: #ffffff;
+    border-left: 4px solid #909090;
+
+    .sidebar-title, .admonition-title {
+        background-color: #c4e2e0;
+        color: #404040;
+        margin: -10px -10px 10px -10px;
+        padding: 8px 12px;
+        border-radius: 4px 4px 0 0
+    }
 }
 
 div.deprecated,
@@ -847,7 +892,7 @@ div.versionadded,
 div.versionchanged,
 div.versionmodified {
     padding: $box-padding;
-
+    border-radius: 4px;
     margin: $box-margin;
 }
 
@@ -863,57 +908,119 @@ div .version-warning {
 
 div.note,
 div.warning {
+    position: relative;
     > .admonition-title {
-        margin-left: -140px;
+        background-color: #fff8e1;
+        color: #795548;
+        margin: -10px -10px 10px -150px;
+        padding: 8px 12px;
+        border-radius: 4px 4px 0 0;
     }
-    background-image: url("dragons.png");
-    background-color: $notebox-background-color;
-    background-position: 1em top;
-    background-repeat: no-repeat;
+    background-color: #ffffff;
     clear: right;
-    min-height: 140px;
-    padding-left: 140px;
+    min-height: 160px;
+    padding-left: 150px;
+    padding-bottom: 10px;
+    border-left: 4px solid #ffb74d;
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 37px;
+        bottom: 0;
+        width: 130px;
+        background-color: #ffecb3;
+        background-image: url("dragons.png");
+        background-position: 10px -28px;
+        background-repeat: no-repeat;
+        border-right: 1px solid #e0e0e0;
+        border-radius: 0;
+        box-shadow: none;
+        z-index: 0;
+    }
+
+    > * {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 div.warning {
-    background-color: $warning-background-color;
+    > .admonition-title {
+        background-color: #ffebee;
+        color: #721c24;
+    }
+    border-left: 4px solid #ef5350;
+
+    &::before {
+        background-color: #ffcdd2;
+    }
 }
 
 div.deepalchemy {
+    position: relative;
     > .admonition-title {
-        margin-left: -140px;
+        background-color: #e8d5f0;
+        color: #6a1b9a;
+        margin: -10px -10px 10px -150px;
+        padding: 8px 12px;
+        border-radius: 4px 4px 0 0;
     }
-    background-image: url("deepalchemy.png");
-    background-size: auto 100px;
-    background-position: 6px 9px;
-    background-repeat: no-repeat;
-    background-color: $deepalchemy-background-color;
+    background-color: #ffffff;
     clear: right;
-    min-height: 120px;
-    padding-left: 140px;
-}
+    min-height: 140px;
+    padding-left: 150px;
+    padding-bottom: 10px;
+    border-left: 4px solid #9c27b0;
 
-div.legacy {
-    background-color: $legacy-background-color;
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 37px;
+        bottom: 0;
+        width: 130px;
+        background-color: #f3e5f5;
+        background-image: url("deepalchemy.png");
+        background-size: auto 100px;
+        background-position: 20px -3px;
+        background-repeat: no-repeat;
+        border-right: 1px solid #e0e0e0;
+        border-radius: 0;
+        box-shadow: none;
+        z-index: 0;
+    }
+
+    > * {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 @media only screen and (max-width: $narrow-max-screen-width) {
     div.note,
     div.warning {
         > .admonition-title {
-            margin-left: -14px;
+            margin-left: -10px;
             padding-left: 10px;
         }
-        background-image: none;
-        padding-left: 14px;
+        padding-left: 10px;
+
+        &::before {
+            display: none;
+        }
     }
     div.deepalchemy {
         > .admonition-title {
-            margin-left: -14px;
+            margin-left: -10px;
             padding-left: 10px;
         }
-        background-image: none;
-        padding-left: 14px;
+        padding-left: 10px;
+
+        &::before {
+            display: none;
+        }
     }
 }
 
@@ -935,8 +1042,12 @@ div.class-bases, div.class-members {
 
     padding: $box-padding;
 
-    font-size: 0.9em;
+    font-size: 0.9rem !important;
     margin: $box-margin;
+
+    * {
+        font-size: inherit !important;
+    }
 }
 div.class-bases {
     background-color: #eefbfb;
@@ -945,15 +1056,69 @@ div.class-members {
     background-color: #ebedfa;
 }
 
+table.class-members {
+    border: none;
+    border-collapse: collapse;
+    margin: $box-margin;
+    width: 100%;
+    font-size: 0.9rem !important;
+
+    tr {
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+
+        td,
+        th {
+            border: $member-table-cell-border;
+            background-color: transparent;
+            vertical-align: middle;
+            font-size: $member-table-font-size;
+            margin: 0;
+            overflow: visible;
+            padding: $member-table-cell-padding;
+        }
+
+        td.autosummary-name {
+            vertical-align: top;
+        }
+    }
+
+    tr.row-even {
+        td {
+            background-color: #f3f6f6;
+        }
+    }
+
+    thead {
+        tr {
+            th {
+                font-weight: bold;
+            }
+        }
+    }
+
+    * {
+        font-size: inherit !important;
+    }
+}
+
 div.inherited-member {
     border: $border-style;
+    border-radius: 4px;
     padding: 5px 5px;
+    margin-left: 2em;
+    margin-bottom: 1em;
     font-size: 0.9em;
     background-color: #eefbfb;
 
     p {
         margin: 0;
     }
+}
+
+main.docs dl.field-list.simple dd > p {
+    padding-left: 1em !important;
 }
 
 .viewcode-back,
@@ -965,20 +1130,35 @@ dl.function > dt,
 dl.attribute > dt,
 dl.classmethod > dt,
 dl.method > dt,
-dl.class > dt,
 dl.exception > dt {
-    border: $border-style;
-    background-color: $code-sig-background-color;
-    margin: 25px -10px 10px 10px;
-    padding: 8px 10px;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    background-color: transparent;
+    margin: 25px 0 10px 0;
+    padding: 10px 0 0 0;
+}
+
+dl.class > dt {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    background-color: transparent;
+    margin: 25px 0 10px 0;
+    padding: 10px 0 0 0;
+}
+
+dl.function > dd,
+dl.attribute > dd,
+dl.classmethod > dd,
+dl.method > dd,
+dl.class > dd,
+dl.exception > dd {
+    margin-left: 2em;
 }
 
 /* parameters / returns lists for functions and methods */
 dl.field-list {
-    border-left: $border-style;
-    border-right: $border-style;
-    border-bottom: $border-style;
-    margin: $box-top-margin 10px 0 0;
+    border: none;
+    margin: $box-top-margin 0 0 0;
 
     li > p {
         margin: 0.5em 0 0.5em 0;
@@ -986,11 +1166,16 @@ dl.field-list {
 }
 
 dl.field-list > dt {
-    border-top: $border-style;
-    border-bottom: $border-style;
+    border: none;
+    border-bottom: none;
     font-weight: bold;
-    background-color: $code-sig-background-color;
-    padding: $box-title-padding;
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    margin: 0;
+}
+
+dl.field-list > dd {
+    padding: 0.5em 0;
 }
 
 dl.glossary > dt {
@@ -1016,16 +1201,16 @@ span.highlight {
    requires https://sphinx-copybutton.readthedocs.io/
 */
 button.copybtn {
-    top: 1em;
-    right: 1.8em;
-    width: 2.5em;
-    height: 2.5em;
-
+    top: .6em !important;
+    right: 1.2em !important;
+    width: 2.5em !important;
+    height: 2.5em !important;
     svg {
-        width: 2em;
-        height: 2em;
+        width: 2em !important;
+        height: 2em !important;
     }
 }
+
 
 /* sphinx 1.3 now using 'code' and not 'tt' for code / docstring elements */
 /* sphinx 1.4 now using 'span' and not 'code' for code / docstring elements */
@@ -1072,11 +1257,38 @@ a {
     }
 }
 
-/* syntax highlighting overrides */
-.k,
-.kn {
-    color: #0908ce;
+/* override for links with code/span in main content sections */
+#docs-body section a,
+#docs-body div.section a {
+    code,
+    tt {
+        > .pre {
+            color: $section-hyperlink-color;
+            font-weight: $section-hyperlink-code-font-weight;
+        }
+    }
+    span.sig-name,
+    code.sig-name {
+        color: $section-hyperlink-color;
+        font-weight: $section-hyperlink-code-font-weight;
+    }
 }
+
+#docs-body section a:hover,
+#docs-body div.section a:hover {
+    code,
+    tt {
+        > .pre {
+            color: $section-hyperlink-hover-color;
+        }
+    }
+    span.sig-name,
+    code.sig-name {
+        color: $section-hyperlink-hover-color;
+    }
+}
+
+/* syntax highlighting overrides */
 .o {
     color: #bf0005;
 }
