@@ -255,7 +255,10 @@ def write_autosummaries(app, doctree):
                         continue
 
                     attr_ref_id = attr_ids[0]
-                    if not attr_ref_id:
+
+                    # __new__ should ideally be not in the docs with correct
+                    # autodoc rules / config
+                    if not attr_ref_id or attr_ref_id.endswith(".__new__"):
                         continue
 
                     attr_name_node = list(
@@ -267,6 +270,16 @@ def write_autosummaries(app, doctree):
                     # docstring)
                     try:
                         desc_para = attr_desc[1][0]
+                        if (
+                            # if a container, this is usually (hopefully
+                            # always) our "inherits" container, look one
+                            # further
+                            isinstance(desc_para, nodes.container)
+                            and "inherited-member"
+                            in desc_para.attributes["classes"]
+                        ):
+                            desc_para = attr_desc[1][1]
+
                         if isinstance(desc_para, nodes.paragraph):
                             desc_text = desc_para.deepcopy()
                         else:
