@@ -125,6 +125,8 @@ function highlightLinks() {
     var divCollection = [];
     var currentIdx = -1;
     var docHeight = $(document).height();
+    // TODO: add section>dl>dt for code elements, but also we need to
+    // get ids into the <trs> inside of summary tables and get those too
     $("div.section,section").each(function (index) {
         var active = $(this).offset().top - 20;
         divCollection.push({
@@ -166,9 +168,60 @@ function highlightLinks() {
 }
 
 
+function initCollapsibleNav() {
+    /* Adds collapsible functionality to nested navigation lists */
+
+    // Find all list items in the sidebar that have nested ul elements
+    $("#docs-sidebar-inner li").each(function() {
+        var $li = $(this);
+        var $nestedUl = $li.find('> ul');
+
+        if ($nestedUl.length > 0) {
+            // Add a collapse indicator span
+            var $linkContainer = $li.find('> span.link-container');
+            if ($linkContainer.length > 0) {
+                // Check if this item or any of its children is selected/current
+                var isActive = $li.hasClass('selected') ||
+                              $li.hasClass('current') ||
+                              $li.find('li.selected, li.current').length > 0;
+
+                // Create the toggle indicator (triangle-style)
+                var $indicator = $('<span class="nav-toggle">▶</span>');
+                $linkContainer.append($indicator);
+
+                // Initially collapse all nested lists except those in the active path
+                if (!isActive) {
+                    $nestedUl.hide();
+                } else {
+                    $indicator.text('▼');
+                    $indicator.addClass('expanded');
+                }
+
+                // Add click handler to the indicator
+                $indicator.click(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var $this = $(this);
+                    var $ul = $this.closest('li').find('> ul');
+
+                    if ($ul.is(':visible')) {
+                        $ul.slideUp(200);
+                        $this.text('▶').removeClass('expanded');
+                    } else {
+                        $ul.slideDown(200);
+                        $this.text('▼').addClass('expanded');
+                    }
+                });
+            }
+        }
+    });
+}
+
 $(document).ready(function () {
     /*initSQLPopups();*/
     initFloatyThings();
     highlightLinks();
+    initCollapsibleNav();
 });
 

@@ -406,10 +406,33 @@ a.headerlink:hover {
         padding-left: 100px;
         padding-top: 3px;
         padding-bottom: 3px;
+        position: relative;
+        z-index: -1;
     }
 
     li.current > span.link-container {
         background-color: $highlighted-nav-link-background-color;
+    }
+
+    span.nav-toggle {
+        position: absolute;
+        right: 5px;
+        top: 3px;
+        width: 1em;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        font-size: 0.85em;
+        color: #666;
+        z-index: 2;
+
+        &:hover {
+            color: #000;
+        }
+
+        &.expanded {
+            // The rotation is handled by changing the text from ▶ to ▼
+        }
     }
 
     h3,
@@ -442,6 +465,11 @@ a.headerlink:hover {
             margin-top: 0;
             list-style: square outside none;
             margin-left: 20px;
+
+            li {
+                position: relative;
+                z-index: 1;
+            }
         }
     }
 }
