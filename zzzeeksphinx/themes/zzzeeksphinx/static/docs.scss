@@ -410,13 +410,18 @@ a.headerlink:hover {
         z-index: -1;
     }
 
+    li {
+        position: relative;
+        z-index: 1;
+    }
+
     li.current > span.link-container {
         background-color: $highlighted-nav-link-background-color;
     }
 
     span.nav-toggle {
         position: absolute;
-        right: 5px;
+        right: -15px;  // so it lives outside the list items themselves, within the padding area
         top: 3px;
         width: 1em;
         text-align: center;
@@ -466,10 +471,6 @@ a.headerlink:hover {
             list-style: square outside none;
             margin-left: 20px;
 
-            li {
-                position: relative;
-                z-index: 1;
-            }
         }
     }
 }
