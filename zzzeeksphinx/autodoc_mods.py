@@ -143,7 +143,7 @@ def _quick_inspect_sig(
 
 
 def write_autosummaries(app, doctree):
-    for idx, node in enumerate(doctree.traverse(nodes.section)):
+    for node in doctree.traverse(nodes.section):
 
         immediate_autodoc_nodes = [
             n
@@ -232,6 +232,16 @@ def write_autosummaries(app, doctree):
             row.append(nodes.entry("", p, classes=["autosummary-name"]))
             try:
                 para = ad_node[1][0]
+                # if a container, this is usually (hopefully always) our
+                # "inherits" container, look one further
+                if (
+                    isinstance(para, nodes.container)
+                    and "inherited-member" in para.attributes["classes"]
+                ):
+                    # Skip past the inherited-member container to get the
+                    # actual first paragraph of the docstring
+                    para = ad_node[1][1]
+
                 if isinstance(para, nodes.paragraph):
                     text = para.deepcopy()
                 else:
