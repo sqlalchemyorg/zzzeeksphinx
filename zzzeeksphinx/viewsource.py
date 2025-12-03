@@ -170,8 +170,8 @@ def _get_module_docstring(_file):
     content = _file.read()
     module = ast.parse(content)
     for elem in module.body:
-        if isinstance(elem, ast.Expr) and isinstance(elem.value, ast.Str):
-            return elem.value.s
+        if isinstance(elem, ast.Expr) and isinstance(elem.value, ast.Constant):
+            return elem.value.value
     else:
         return None
 
