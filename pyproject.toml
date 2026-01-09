@@ -25,7 +25,7 @@ dependencies = [
     "libsass",
     "mako",
     "requests",
-    "sphinx>=8.2,<8.3",
+    "sphinx>=8.2,<9.2",
     "sphinxcontrib-jquery",
 ]
 
