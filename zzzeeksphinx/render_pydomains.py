@@ -1,6 +1,7 @@
 import re
 
 from docutils import nodes
+from sphinx.addnodes import desc_signature
 from sphinx.addnodes import pending_xref
 from sphinx.util import logging
 
@@ -77,6 +78,54 @@ def replace_synonyms(app, doctree):
         )
 
 
+def apply_annotation_target_precedence(app, doctree):
+    """Establish which object an un-qualified name within a type annotation
+    refers to.
+
+    Type annotations rendered by Sphinx autodoc are turned into Python
+    domain cross references against the plain, un-qualified name that's
+    present in the source annotation, e.g. "Insert", "type".  These are
+    resolved using a "fuzzy" search that matches any documented object
+    whose name ends in that token; when more than one object matches,
+    Sphinx emits a "more than one target found" warning and then links to
+    an arbitrary one of them.
+
+    The ``annotation_target_precedence`` dictionary indicates which object
+    such a name refers to.  A value of ``None`` means the name is not one
+    that's documented here at all, such as a Python builtin, in which case
+    only an exact match is attempted, and the name typically renders
+    unlinked as other builtin and typing names do.
+
+    Only signatures are visited, so that a ``:class:`.Insert``` written
+    within a docstring continues to resolve within the context of the
+    module it's written in.
+
+    """
+
+    precedence = app.env.config.annotation_target_precedence
+    if not precedence:
+        return
+
+    for signature in doctree.traverse(desc_signature):
+        for py_node in signature.traverse(pending_xref):
+            if py_node.attributes.get("refdomain") != "py":
+                continue
+
+            try:
+                target = precedence[py_node.attributes["reftarget"]]
+            except KeyError:
+                continue
+
+            if target is None:
+                # removing "refspecific" turns off the fuzzy search,
+                # leaving only an exact match
+                py_node.attributes.pop("refspecific", None)
+            else:
+                py_node.attributes["reftarget"] = target
+
+
 def setup(app):
     app.connect("doctree-read", replace_synonyms)
+    app.connect("doctree-read", apply_annotation_target_precedence)
     app.add_config_value("zzzeeksphinx_module_prefixes", {}, "env")
+    app.add_config_value("annotation_target_precedence", {}, "env")
